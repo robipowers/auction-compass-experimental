@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { AuctionPlanForm } from "@/components/AuctionPlanForm";
-import { TradingViewChart } from "@/components/TradingViewChart";
 import { ProbabilityTracker } from "@/components/ProbabilityTracker";
 import { TradingCoach } from "@/components/TradingCoach";
 import { AICritique } from "@/components/AICritique";
@@ -350,8 +349,6 @@ export default function CreatePlan() {
           {critique && (
             <AICritique critique={critique} />
           )}
-
-          <TradingViewChart />
         </div>
 
         {/* Right Column - Probability Tracker and Coach */}
