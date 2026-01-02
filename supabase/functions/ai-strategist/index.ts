@@ -236,7 +236,7 @@ STYLE: Institutional tone, AMT terminology from PDFs, reference books by name, b
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: "google/gemini-2.5-pro",
         max_tokens: 12000,
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
