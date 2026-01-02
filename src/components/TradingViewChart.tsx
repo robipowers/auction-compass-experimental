@@ -25,7 +25,7 @@ function TradingViewChartComponent({
       symbol: symbol,
       interval: "15",
       timezone: "Etc/UTC",
-      theme: "dark",
+      theme: "light",
       style: "1",
       locale: "en",
       allow_symbol_change: true,
