@@ -68,35 +68,21 @@ export default function AdminKnowledge() {
 
     setIsUploading(true);
     try {
-      // Create document record
-      const { data: docData, error: docError } = await supabase
-        .from('amt_documents')
-        .insert({
-          title: title.trim(),
-          filename: `${title.trim().toLowerCase().replace(/\s+/g, '-')}.txt`,
-          file_path: 'manual-upload',
-          status: 'pending',
-        })
-        .select()
-        .single();
-
-      if (docError) throw docError;
-
       toast({
-        title: 'Document Created',
-        description: 'Processing content and generating embeddings...',
+        title: 'Processing',
+        description: 'Creating document and generating embeddings...',
       });
 
-      // Process the document
-      const { error: processError } = await supabase.functions.invoke('amt-document-process', {
+      // Process the document via edge function (handles document creation with service role)
+      const { data, error: processError } = await supabase.functions.invoke('amt-document-process', {
         body: {
-          documentId: docData.id,
           content: pdfContent,
           title: title.trim(),
         },
       });
 
       if (processError) throw processError;
+      if (data?.error) throw new Error(data.error);
 
       toast({
         title: 'Success',

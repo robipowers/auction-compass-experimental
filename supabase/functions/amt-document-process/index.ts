@@ -64,16 +64,16 @@ serve(async (req) => {
   }
 
   try {
-    const { documentId, content, title } = await req.json();
+    const { content, title } = await req.json();
     
-    if (!documentId || !content) {
+    if (!content || !title) {
       return new Response(
-        JSON.stringify({ error: 'documentId and content are required' }),
+        JSON.stringify({ error: 'title and content are required' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    console.log(`Processing document: ${title || documentId}`);
+    console.log(`Processing document: ${title}`);
     console.log(`Content length: ${content.length} characters`);
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
@@ -85,11 +85,23 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Update document status to processing
-    await supabase
+    // Create document record using service role (bypasses RLS)
+    const { data: docData, error: docError } = await supabase
       .from('amt_documents')
-      .update({ status: 'processing' })
-      .eq('id', documentId);
+      .insert({
+        title: title.trim(),
+        filename: `${title.trim().toLowerCase().replace(/\s+/g, '-')}.txt`,
+        file_path: 'manual-upload',
+        status: 'processing',
+      })
+      .select()
+      .single();
+
+    if (docError) {
+      throw new Error(`Failed to create document: ${docError.message}`);
+    }
+
+    const documentId = docData.id;
 
     // Chunk the content
     const chunks = chunkText(content);
