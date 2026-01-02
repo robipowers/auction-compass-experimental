@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { TrendingUp, TrendingDown } from "lucide-react";
+import { TrendingUp, TrendingDown, BarChart3 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Scenario, getProbabilityStatus, ProbabilityStatus } from "@/types/auction";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -41,13 +41,13 @@ export function ProbabilityTracker({
   }, [probabilities]);
 
   return (
-    <Card variant="elevated" className="animate-fade-in">
-      <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-warning to-warning/60 text-sm">
-            📊
+    <Card variant="premium" className="animate-fade-in">
+      <CardHeader className="pb-6">
+        <CardTitle className="flex items-center gap-3">
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-warning to-orange-500 shadow-lg shadow-warning/25">
+            <BarChart3 className="h-5 w-5 text-white" />
           </span>
-          Probability Tracker
+          <span className="text-xl">Probability Tracker</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -67,11 +67,14 @@ export function ProbabilityTracker({
               : "neutral";
 
           return (
-            <div key={index} className="space-y-3">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <h4 className="font-semibold text-foreground">
+            <div key={index} className="space-y-3 rounded-xl border border-border bg-card p-4 shadow-[var(--shadow-sm)]">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2.5">
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                      {index + 1}
+                    </span>
+                    <h4 className="font-semibold text-foreground truncate">
                       {scenario.name}
                     </h4>
                     {trend !== "neutral" && (
@@ -80,7 +83,7 @@ export function ProbabilityTracker({
                         animate={{ scale: 1 }}
                         className={cn(
                           "flex h-5 w-5 items-center justify-center rounded-full",
-                          trend === "up" ? "bg-success/20" : "bg-danger/20"
+                          trend === "up" ? "bg-success/15" : "bg-danger/15"
                         )}
                       >
                         {trend === "up" ? (
@@ -91,22 +94,22 @@ export function ProbabilityTracker({
                       </motion.div>
                     )}
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="mt-1 text-xs text-muted-foreground">
                     {scenario.typeOfMove}
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2.5 flex-shrink-0">
                   <motion.span
                     key={probability}
                     initial={{ scale: 1.2, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    className="text-2xl font-bold tabular-nums"
+                    className="text-2xl font-bold tabular-nums mono"
                   >
                     {probability}%
                   </motion.span>
                   <span
                     className={cn(
-                      "rounded px-2 py-0.5 text-xs font-medium",
+                      "rounded-md px-2.5 py-1 text-xs font-semibold",
                       config.className
                     )}
                   >
@@ -115,7 +118,7 @@ export function ProbabilityTracker({
                 </div>
               </div>
 
-              <div className="probability-bar overflow-hidden rounded-full bg-secondary">
+              <div className="probability-bar overflow-hidden rounded-full bg-secondary h-3">
                 <motion.div
                   key={`${index}-${animationKey}`}
                   className={cn(
@@ -132,12 +135,12 @@ export function ProbabilityTracker({
                 />
               </div>
 
-              <div className="flex gap-4 text-xs">
-                <div className="flex items-center gap-1">
+              <div className="flex gap-6 text-xs">
+                <div className="flex items-center gap-1.5">
                   <span className="text-muted-foreground">In Play:</span>
                   <span className="font-medium text-info">{scenario.inPlay}</span>
                 </div>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <span className="text-muted-foreground">LIS:</span>
                   <span className="font-medium text-danger">{scenario.lis}</span>
                 </div>

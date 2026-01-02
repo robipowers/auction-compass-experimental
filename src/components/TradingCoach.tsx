@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Bot, User, Loader2 } from "lucide-react";
+import { Send, Bot, User, Loader2, MessageSquare } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,27 +38,32 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
   };
 
   return (
-    <Card variant="elevated" className="flex h-[500px] flex-col animate-fade-in">
+    <Card variant="premium" className="flex h-[520px] flex-col animate-fade-in">
       <CardHeader className="flex-shrink-0 border-b border-border pb-4">
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent/60 text-sm">
-            💬
+        <CardTitle className="flex items-center gap-3">
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent/70 shadow-lg shadow-accent/25">
+            <MessageSquare className="h-5 w-5 text-white" />
           </span>
-          Trading Coach
+          <span className="text-xl">Trading Coach</span>
         </CardTitle>
       </CardHeader>
 
       <CardContent className="flex flex-1 flex-col overflow-hidden p-0">
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 overflow-y-auto p-5 space-y-4">
           {messages.length === 0 ? (
             <div className="flex h-full items-center justify-center">
-              <div className="text-center text-muted-foreground">
-                <Bot className="mx-auto h-12 w-12 opacity-50" />
-                <p className="mt-2 text-sm">
-                  Ask about current price action and I'll analyze the structure
+              <div className="text-center max-w-xs">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary">
+                  <Bot className="h-7 w-7 text-muted-foreground" />
+                </div>
+                <p className="text-sm font-medium text-foreground">
+                  Ask about current price action
                 </p>
-                <p className="mt-1 text-xs opacity-70">
+                <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
+                  I'll analyze the structure and update scenario probabilities
+                </p>
+                <p className="mt-3 text-xs text-muted-foreground/70 italic">
                   Example: "Price at VAL, seeing rejection"
                 </p>
               </div>
@@ -74,10 +79,10 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
               >
                 <div
                   className={cn(
-                    "flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg",
+                    "flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl",
                     message.role === "user"
-                      ? "bg-primary/20"
-                      : "bg-accent/20"
+                      ? "bg-primary/15"
+                      : "bg-accent/15"
                   )}
                 >
                   {message.role === "user" ? (
@@ -88,17 +93,17 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
                 </div>
                 <div
                   className={cn(
-                    "max-w-[80%] rounded-lg px-4 py-3 text-sm",
+                    "max-w-[80%] rounded-2xl px-4 py-3 text-sm",
                     message.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-secondary"
+                      ? "bg-primary text-primary-foreground rounded-tr-md"
+                      : "bg-secondary rounded-tl-md"
                   )}
                 >
-                  <div className="whitespace-pre-wrap">{message.content}</div>
+                  <div className="whitespace-pre-wrap leading-relaxed">{message.content}</div>
                   {message.probabilities && (
-                    <div className="mt-2 flex gap-2 border-t border-border/50 pt-2 text-xs">
-                      <span className="text-muted-foreground">Probabilities:</span>
-                      <span className="font-mono">
+                    <div className="mt-3 flex gap-2 border-t border-foreground/10 pt-2.5 text-xs">
+                      <span className="text-current/70">Probabilities:</span>
+                      <span className="font-mono font-medium">
                         {message.probabilities.join("% / ")}%
                       </span>
                     </div>
@@ -108,12 +113,16 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
             ))
           )}
           {isLoading && (
-            <div className="flex gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/20">
+            <div className="flex gap-3 animate-fade-in">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/15">
                 <Bot className="h-4 w-4 text-accent" />
               </div>
-              <div className="rounded-lg bg-secondary px-4 py-3">
-                <Loader2 className="h-4 w-4 animate-spin" />
+              <div className="rounded-2xl rounded-tl-md bg-secondary px-4 py-3">
+                <div className="flex items-center gap-1">
+                  <span className="inline-block w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <span className="inline-block w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <span className="inline-block w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: '300ms' }} />
+                </div>
               </div>
             </div>
           )}
@@ -125,21 +134,21 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
           onSubmit={handleSubmit}
           className="flex-shrink-0 border-t border-border p-4"
         >
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <Textarea
               ref={textareaRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Describe the current price action..."
-              className="min-h-[44px] max-h-32 resize-none"
+              className="min-h-[48px] max-h-32 resize-none rounded-xl text-sm"
               disabled={isLoading}
             />
             <Button
               type="submit"
               size="icon"
               disabled={!input.trim() || isLoading}
-              className="flex-shrink-0"
+              className="flex-shrink-0 h-12 w-12 rounded-xl"
             >
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
