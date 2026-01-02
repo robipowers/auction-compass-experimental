@@ -18,56 +18,6 @@ import {
   Scenario,
 } from "@/types/auction";
 
-// Mock AI critique for demo
-const mockCritique: AICritiqueType = {
-  id: "1",
-  planId: "1",
-  coherence: "ALIGNED",
-  coherenceExplanation:
-    "Net Short inventory with inside previous value relationship and balanced structure creates a coherent setup. The market is positioned for potential short covering or continuation lower, depending on how price interacts with yesterday's value area.",
-  structuralObservations:
-    "Yesterday's balanced structure within inside value suggests equilibrium. The market closed near the middle of the range, indicating neither buyers nor sellers were in control by the close. Net Short inventory creates asymmetric potential for upside if shorts need to cover.",
-  scenarios: [
-    {
-      name: "Bearish Continuation",
-      typeOfMove: "Trend type 1TF down",
-      inPlay: "Break VAL 1.17053",
-      lis: "VAH 1.17528",
-      behavior:
-        "Shorts comfortable, new initiative selling enters. Target: prior week low.",
-    },
-    {
-      name: "Short Squeeze",
-      typeOfMove: "Trend type 1TF up",
-      inPlay: "Break VAH 1.17528 with acceptance",
-      lis: "VAL 1.17053",
-      behavior:
-        "Net Short inventory forced to cover. Aggressive move higher possible.",
-    },
-    {
-      name: "Balanced/Rotational",
-      typeOfMove: "2TF ranging",
-      inPlay: "Rejection at both VAH and VAL",
-      lis: "Acceptance outside value",
-      behavior:
-        "Market continues yesterday's balance. Trade edges of value for rotational plays.",
-    },
-  ],
-  primaryRisk:
-    "The main trap is a false break of value that reverses. Given Net Short inventory, a failed break below VAL could trigger aggressive short covering. Watch for acceptance vs. rejection at key levels before committing.",
-  marketContext:
-    "EURUSD showing consolidation after recent directional move. Inside value suggests market participants seeking fair value. Key focus on inventory resolution and whether balance continues or breaks.",
-  dailyChecklist: [
-    "Is overnight range contained within yesterday's value?",
-    "How does price react to yesterday's VAH/VAL in the first 30 minutes?",
-    "Is there initiative activity (volume and momentum) at key levels?",
-    "Are shorts being squeezed or adding to positions?",
-    "Is the VPOC from yesterday attracting price?",
-    "Watch for excess formation at extremes as potential reversal signals",
-    "Monitor for single prints that could fill as value is discovered",
-  ],
-  createdAt: new Date(),
-};
 
 export default function CreatePlan() {
   const { toast } = useToast();
@@ -124,18 +74,43 @@ export default function CreatePlan() {
 
     setIsAnalyzing(true);
     try {
-      // Simulate AI analysis
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setCritique(mockCritique);
+      const { data, error } = await supabase.functions.invoke('ai-strategist', {
+        body: { plan }
+      });
+
+      if (error) {
+        console.error('AI Strategist error:', error);
+        throw new Error(error.message || 'Failed to analyze plan');
+      }
+
+      if (data?.error) {
+        throw new Error(data.error);
+      }
+
+      const critiqueData: AICritiqueType = {
+        id: Date.now().toString(),
+        planId: plan.id,
+        coherence: data.coherence,
+        coherenceExplanation: data.coherenceExplanation,
+        structuralObservations: data.structuralObservations,
+        scenarios: data.scenarios,
+        primaryRisk: data.primaryRisk,
+        marketContext: data.marketContext,
+        dailyChecklist: data.dailyChecklist,
+        createdAt: new Date(),
+      };
+
+      setCritique(critiqueData);
       setProbabilities([33, 33, 34]);
       toast({
         title: "Analysis Complete",
         description: "AI Strategist has generated your structural critique.",
       });
     } catch (error) {
+      console.error('Analysis error:', error);
       toast({
         title: "Error",
-        description: "Failed to analyze plan. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to analyze plan. Please try again.",
         variant: "destructive",
       });
     } finally {

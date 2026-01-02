@@ -2,3 +2,6 @@ project_id = "kaslakjttfjmoxltmwvi"
 
 [functions.trading-coach]
 verify_jwt = false
+
+[functions.ai-strategist]
+verify_jwt = false

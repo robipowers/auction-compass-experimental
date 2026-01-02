@@ -57,6 +57,11 @@ export interface Scenario {
   behavior: string;
 }
 
+export interface ChecklistItem {
+  question: string;
+  answer: string;
+}
+
 export interface AICritique {
   id: string;
   planId: string;
@@ -66,7 +71,7 @@ export interface AICritique {
   scenarios: Scenario[];
   primaryRisk: string;
   marketContext: string;
-  dailyChecklist: string[];
+  dailyChecklist: ChecklistItem[];
   createdAt: Date;
 }
 
