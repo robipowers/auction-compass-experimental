@@ -9,29 +9,26 @@ const corsHeaders = {
 const SYSTEM_PROMPT = `CRITICAL INSTRUCTION: You have access to three authoritative Auction Market Theory reference books in your knowledge base:
 
 1. Mind Over Markets by James Dalton
-2. Steidlmayer on Markets by J. Peter Steidlmayer  
+2. Steidlmayer on Markets by J. Peter Steidlmayer
 3. CBOT Market Profile by Chicago Board of Trade
 
-YOU MUST reference and pull concepts directly from these uploaded PDFs in EVERY response. Do not rely solely on your training data. Before generating any analysis:
+YOU MUST reference and pull concepts directly from these uploaded PDFs in EVERY response. Do not rely solely on your training data.
 
+Before generating any analysis:
 1. Query the knowledge base for relevant AMT concepts
 2. Extract specific terminology, principles, and frameworks from the PDFs
 3. Apply those exact concepts to the current market structure
 4. Use the precise language and terminology from the source material
 
-If you cannot find relevant information in the knowledge base, explicitly state: "Knowledge base does not contain specific guidance on [topic], applying general AMT principles."
-
 Your responses should reflect the depth and precision of the source material, not generic trading advice.
 
-You are an expert institutional trader specializing in Auction Market Theory (AMT). You provide detailed structural analysis focusing on market context, inventory positioning, and value relationships.
+You are an expert institutional trader and Market Profile analyst with deep knowledge of Auction Market Theory (AMT). You analyze market structure with the precision of a hedge fund strategist.
 
-When relevant passages from AMT reference books are provided, you MUST:
-- Incorporate their insights using exact terminology from the sources
-- Reference specific concepts by book title (e.g., "According to Mind Over Markets...")
-- Apply frameworks exactly as described in the source material
-- Use institutional language consistent with the uploaded references
-
-VERIFICATION: Your response must demonstrate knowledge base consultation by using specific terminology found in the PDFs, not generic trading terms.`;
+VERIFICATION REQUIREMENT: Your response must demonstrate knowledge base consultation by:
+- Using specific terminology found in the PDFs (not generic trading terms)
+- Referencing frameworks explicitly described in the source material
+- Citing books by name (e.g., "According to Mind Over Markets...")
+- Applying principles in the exact manner presented in the books`;
 
 // Helper function to search AMT knowledge base
 async function searchAMTKnowledge(query: string, apiKey: string, supabaseUrl: string, supabaseKey: string): Promise<string> {
@@ -167,67 +164,201 @@ but explicitly acknowledge: "Knowledge base does not contain specific guidance o
 
 `;
     
-const userPrompt = `Analyze this EURUSD pre-market setup using Auction Market Theory.
+const userPrompt = `You are the **AMT CRITIQUE ENGINE** - an institutional-grade analysis system for auction market structure.
+
+Your task is to analyze the following trading plan and provide a comprehensive structural critique using concepts from the uploaded PDF knowledge base.
+
 ${knowledgeSection}
 
-## AMT QUICK REFERENCE
+---
 
-**Profile Shapes:** P-Shape = short covering (corrective), b-Shape = long liquidation (initiative)
+## AMT QUICK REFERENCE (From Knowledge Base)
 
-**Inventory Risk:** Net Long = muted upside/violent downside (liquidation fuel). Net Short = muted downside/violent upside (squeeze fuel).
+**Profile Shapes:**
+- P-Shape = short covering (responsive activity, corrective move, NOT bullish strength)
+- b-Shape = long liquidation (initiative selling, bearish conviction)
 
-**Opens:** OIV = neutral, OAV = bullish attempt (needs follow-through), OBV = bearish attempt (needs follow-through), GAP = strong bias
+**Inventory Risk (Asymmetric Risk Profile):**
+- Net Long = muted upside (already positioned) / violent downside (liquidation fuel)
+- Net Short = muted downside (already positioned) / violent upside (squeeze fuel)
 
-**Key Principle:** Positioned inventory creates FUEL for moves in OPPOSITE direction. Coiled spring = tight range + positioned inventory = explosive potential.
+**Open Types:**
+- OIV (Open Inside Value) = neutral, testing ground, two-sided
+- OAV (Open Above Value) = bullish bias, needs follow-through
+- OBV (Open Below Value) = bearish bias, needs follow-through
+- GAP = strong conviction, look for acceptance or rejection
 
-## MARKET DATA
+**Key Principles:**
+- Initiative activity = conviction moves by other-timeframe participants (directional, high volume)
+- Responsive activity = defensive moves by locals (counter-trend, lower volume)
+- Acceptance = time + volume at a level (not just a probe)
+- Rejection = wicks, quick reversals (level holds)
+- Coiled spring = tight range + positioned inventory = explosive potential
+- "Speed and violence" = liquidation-driven moves
 
-MARKET STRUCTURE ANALYSIS:
+---
 
-Date: ${tradingDate}
+## INPUT DATA
 
-YESTERDAY'S CONTEXT:
+**Date:** ${tradingDate}
+
+**Yesterday's Context:**
 - Day Type: ${plan.yesterday.dayType}
 - Value Relationship: ${plan.yesterday.valueRelationship}
 - Structure: ${plan.yesterday.structure}
 - Prominent VPOC: ${plan.yesterday.prominentVpoc}
 
-TODAY'S CONTEXT:
+**Today's Context:**
 - Inventory: ${plan.today.inventory}
 - Open Relation: ${plan.today.openRelation}
 
-REFERENCE LEVELS:
-- Overnight High: ${plan.levels.overnightHigh}
-- Overnight Low: ${plan.levels.overnightLow}
+**Reference Levels:**
+- Overnight High (ONH): ${plan.levels.overnightHigh}
+- Overnight Low (ONL): ${plan.levels.overnightLow}
 - Yesterday VAH: ${plan.levels.yesterdayVah}
 - Yesterday VAL: ${plan.levels.yesterdayVal}
 
-## OUTPUT FORMAT (Complete all 7 sections with full paragraphs - no truncation)
+---
 
-### 1. Market Context
-2-3 paragraphs: Auction stage, positional overextension, structural imbalance.
+## OUTPUT FORMAT
 
-### 2. Structural Observations  
-2-3 paragraphs: P/b-Shape implications, inventory vulnerability, alignment vs conflict.
+You MUST structure your response EXACTLY as follows with complete paragraphs (no placeholder text, no "analysis pending"):
 
-### 3. Key Structural Scenarios
-3 scenarios with context-specific names (e.g., "Bullish Continuation", "Long Liquidation", "Short Squeeze"):
-**Scenario N: [Name]** | Type: [move type] | In Play: [trigger+price] | LIS: [invalidation] | Behavior: [2-3 sentences]
+---
 
-### 4. Inventory Risk Analysis
-2-3 paragraphs: Asymmetric risk, resolution mechanism, time factor.
+### COHERENCE RATING: [ALIGNED | CONFLICTED | NEUTRAL]
 
-### 5. Coherence Rating
-Rating: ALIGNED/CONFLICTED/NEUTRAL
-Explanation: 2-3 sentences (if CONFLICTED, separate what aligns vs conflicts)
+**[ALIGNED or CONFLICTED or NEUTRAL]**
 
-### 6. Primary Structural Risk
-2-3 sentences: Name the risk, explain trigger → cascade → outcome mechanism.
+**Explanation:** [2-3 sentences explaining the primary alignment and primary conflict between inventory, structure, value relationship, and open relation. Be specific about what aligns and what conflicts.]
 
-### 7. Structural Checklist (5 Q&A, 2-3 sentences each)
-Q1: Primary conflict/alignment? Q2: Critical pivots with prices? Q3: Inventory implications? Q4: Yesterday's influence? Q5: What might I miss?
+---
 
-STYLE: Institutional tone, AMT terminology from PDFs, reference books by name, be specific with prices. Write complete paragraphs - no cutoffs.`;
+### Market Context
+
+[Write 2-3 complete paragraphs covering:]
+- Auction stage (discovery vs. balance)
+- Positional overextension (inventory implications)
+- Structural imbalance (yesterday's influence on today)
+- Reference specific concepts from the PDFs and cite by book name
+
+---
+
+### Structural Observations
+
+[Write 2-3 complete paragraphs covering:]
+- P/b-Shape implications (cite CBOT Market Profile)
+- Inventory vulnerability (cite Mind Over Markets)
+- Convergence/Divergence (alignment vs. conflict analysis)
+- Yesterday's influence on today's auction
+- Use exact AMT terminology from the knowledge base
+
+---
+
+### Key Structural Scenarios
+
+Present exactly 3 scenarios in this table format:
+
+| Scenario | Type of Move | In Play | LIS |
+|----------|--------------|---------|-----|
+| 1. [Context-specific name] | [Fast 1TF down/up, Trend type, Rotational, etc.] | [Trigger with specific price] | [Line in Sand with price] |
+| 2. [Context-specific name] | [Type] | [Trigger with price] | [Line in Sand with price] |
+| 3. [Context-specific name] | [Type] | [Trigger with price] | [Line in Sand with price] |
+
+**Suggested Strategy:**
+
+**Scenario 1: [Name]**
+**Type of Move:** [Type]
+**In Play:** [Trigger]
+**LIS:** [Line in Sand]
+**Behavior:** [2-3 sentences explaining what happens if this scenario plays out. Include specific price action, participant behavior (other-timeframe vs locals), and whether it's initiative or responsive activity.]
+
+**Scenario 2: [Name]**
+**Type of Move:** [Type]
+**In Play:** [Trigger]
+**LIS:** [Line in Sand]
+**Behavior:** [2-3 sentences explaining what happens if this scenario plays out.]
+
+**Scenario 3: [Name]**
+**Type of Move:** [Type]
+**In Play:** [Trigger]
+**LIS:** [Line in Sand]
+**Behavior:** [2-3 sentences explaining what happens if this scenario plays out.]
+
+---
+
+### Inventory Risk Analysis
+
+[Write 2-3 complete paragraphs covering:]
+- Asymmetric risk profile (muted vs. violent directions)
+- Resolution mechanism (how inventory resolves - liquidation break or squeeze)
+- Time factor (when does inventory become critical)
+- Cite Mind Over Markets or Steidlmayer on Markets for asymmetric risk framework
+
+---
+
+### Primary Structural Risk
+
+**The single greatest structural threat is [Risk Name] if [specific condition].**
+
+[2-3 sentences explaining the trigger → cascade → outcome mechanism. Be specific with levels and describe the "speed and violence" of the potential move.]
+
+---
+
+### Structural Checklist
+
+**Q1: What is the primary structural conflict or alignment in this setup?**
+**A:** [2-3 sentences with specific reference to inventory, value relationship, open relation, and structure. Explain what aligns and what conflicts.]
+
+**Q2: What are the critical structural pivots and what do they represent?**
+**A:** [List each level (ONH, ONL, VAH, VAL, VPOC) with specific prices. Explain what each represents structurally. Mention the pip range between key levels if relevant.]
+
+**Q3: What does the inventory position tell us about potential price action?**
+**A:** [2-3 sentences explaining asymmetric risk (muted vs. violent), liquidation fuel potential, and whether inventory creates a coiled spring effect. Cite the knowledge base.]
+
+**Q4: How does yesterday's structure influence today's auction?**
+**A:** [2-3 sentences connecting yesterday's day type, value relationship, and structure to today's setup. Explain cause-and-effect relationships.]
+
+**Q5: What structural development am I most likely to miss?**
+**A:** [2-3 sentences identifying the blind spot or hidden risk. Use phrases like "tight proximity", "structural decision point is imminent", "coiled spring effect". Be specific with levels and pip ranges.]
+
+---
+
+## CRITICAL REQUIREMENTS
+
+1. **NO PLACEHOLDER TEXT:** Do not write "analysis pending", "to be determined", or similar phrases. Write complete analysis.
+
+2. **CITE BOOKS BY NAME:** Reference at least 2 of the 3 books explicitly (e.g., "According to Mind Over Markets...", "Steidlmayer describes...", "The CBOT Market Profile framework...")
+
+3. **USE EXACT AMT TERMINOLOGY:**
+   - "Other-timeframe participants" (NOT "big players" or "institutions")
+   - "Initiative activity" vs "Responsive activity" (NOT "aggressive" vs "defensive")
+   - "Acceptance" = time + volume (NOT just "holding a level")
+   - "Liquidation break" (NOT "stop loss cascade")
+   - "Asymmetric risk profile" with "muted" and "violent" directions
+   - "Coiled spring effect" for tight range + positioned inventory
+
+4. **CONTEXT-SPECIFIC SCENARIO NAMES:** Use names like "Inventory Liquidation", "Short Squeeze Rally", "Trap Higher", "Value Rejection" (NOT generic "Bullish Continuation" or "Bearish Breakdown")
+
+5. **COMPLETE PARAGRAPHS:** Every section must have 2-3 complete sentences minimum. No single-sentence sections.
+
+6. **P-SHAPE ANALYSIS:** If P-Shape is present, MUST identify it as "short covering" and "responsive activity", NOT "bullish strength"
+
+7. **CONFLICT RECOGNITION:** If Net Long + OBV or Net Short + OAV, MUST identify as CONFLICT, not alignment
+
+---
+
+## LANGUAGE & TONE
+
+- Use institutional language: "coiled spring", "liquidation fuel", "speed and violence", "trap higher/lower"
+- Be specific with measurements: "8.7-pip zone", "26-pip overnight range"
+- Use active voice: "The market needs..." not "It would be needed..."
+- Be precise: "structural decision point is imminent" not "something might happen soon"
+- Cite books by name throughout the analysis
+
+---
+
+END OF ANALYSIS REQUEST`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -289,9 +420,9 @@ STYLE: Institutional tone, AMT terminology from PDFs, reference books by name, b
 });
 
 function parseAICritique(content: string, plan: any) {
-  // Extract coherence from Section 5
+  // Extract coherence from COHERENCE RATING section (now at top)
   let coherence: "ALIGNED" | "CONFLICTED" | "NEUTRAL" = "NEUTRAL";
-  const coherenceSection = content.match(/### 5\. Coherence Rating[\s\S]*?(?=### 6|$)/i);
+  const coherenceSection = content.match(/### COHERENCE RATING[\s\S]*?(?=### Market Context|$)/i);
   if (coherenceSection) {
     if (coherenceSection[0].includes("ALIGNED")) coherence = "ALIGNED";
     else if (coherenceSection[0].includes("CONFLICTED")) coherence = "CONFLICTED";
@@ -299,19 +430,19 @@ function parseAICritique(content: string, plan: any) {
 
   // Extract coherence explanation
   const coherenceExplanation = coherenceSection 
-    ? coherenceSection[0].replace(/### 5\. Coherence Rating/i, '').replace(/\*\*.*?\*\*/g, '').replace(/ALIGNED|CONFLICTED|NEUTRAL/gi, '').trim().substring(0, 600)
+    ? coherenceSection[0].replace(/### COHERENCE RATING[^\n]*/i, '').replace(/\*\*Explanation:\*\*/gi, '').replace(/\*\*.*?\*\*/g, '').replace(/ALIGNED|CONFLICTED|NEUTRAL/gi, '').trim().substring(0, 600)
     : "Analysis of structural coherence between inventory and market context.";
 
-  // Extract market context (Section 1)
-  const contextMatch = content.match(/### 1\. Market Context[\s\S]*?(?=### 2|$)/i);
+  // Extract market context
+  const contextMatch = content.match(/### Market Context[\s\S]*?(?=### Structural Observations|$)/i);
   const marketContext = contextMatch
-    ? contextMatch[0].replace(/### 1\. Market Context/i, '').replace(/\*\*.*?\*\*/g, '').trim()
+    ? contextMatch[0].replace(/### Market Context/i, '').trim()
     : "Current market conditions require careful level monitoring.";
 
-  // Extract structural observations (Section 2)
-  const structuralMatch = content.match(/### 2\. Structural Observations[\s\S]*?(?=### 3|$)/i);
+  // Extract structural observations
+  const structuralMatch = content.match(/### Structural Observations[\s\S]*?(?=### Key Structural Scenarios|$)/i);
   const structuralObservations = structuralMatch
-    ? structuralMatch[0].replace(/### 2\. Structural Observations/i, '').replace(/\*\*.*?\*\*/g, '').trim()
+    ? structuralMatch[0].replace(/### Structural Observations/i, '').trim()
     : "Structural analysis pending.";
 
   // Extract scenarios (Section 3) - new format
@@ -393,18 +524,24 @@ function parseAICritique(content: string, plan: any) {
     }
   }
 
-  // Extract primary risk (Section 6)
-  const riskMatch = content.match(/### 6\. Primary Structural Risk[\s\S]*?(?=### 7|$)/i);
+  // Extract inventory risk analysis
+  const inventoryRiskMatch = content.match(/### Inventory Risk Analysis[\s\S]*?(?=### Primary Structural Risk|$)/i);
+  const inventoryRiskAnalysis = inventoryRiskMatch
+    ? inventoryRiskMatch[0].replace(/### Inventory Risk Analysis/i, '').trim()
+    : "";
+
+  // Extract primary risk
+  const riskMatch = content.match(/### Primary Structural Risk[\s\S]*?(?=### Structural Checklist|$)/i);
   const primaryRisk = riskMatch
-    ? riskMatch[0].replace(/### 6\. Primary Structural Risk/i, '').replace(/\*\*.*?\*\*/g, '').trim().substring(0, 500)
+    ? riskMatch[0].replace(/### Primary Structural Risk/i, '').trim().substring(0, 500)
     : "Monitor for failed breakouts that could reverse quickly with speed and violence.";
 
-  // Extract structural checklist Q&A (Section 7)
+  // Extract structural checklist Q&A
   const checklistItems = [];
-  const checklistSection = content.match(/### 7\. Structural Checklist[\s\S]*$/i);
+  const checklistSection = content.match(/### Structural Checklist[\s\S]*$/i);
   
   if (checklistSection) {
-    const qaRegex = /Q(\d):\s*([^\n]+)\s*\nA:\s*([^\n]+(?:\n(?!Q\d:)[^\n#]*)*)/gi;
+    const qaRegex = /\*\*Q(\d):\s*([^*]+)\*\*\s*\n\*\*A:\*\*\s*([^\n]+(?:\n(?!\*\*Q\d:)[^\n#]*)*)/gi;
     let qaMatch;
     
     while ((qaMatch = qaRegex.exec(checklistSection[0])) !== null) {
