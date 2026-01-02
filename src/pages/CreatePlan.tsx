@@ -94,6 +94,7 @@ export default function CreatePlan() {
         coherenceExplanation: data.coherenceExplanation,
         structuralObservations: data.structuralObservations,
         scenarios: data.scenarios,
+        inventoryRiskAnalysis: data.inventoryRiskAnalysis,
         primaryRisk: data.primaryRisk,
         marketContext: data.marketContext,
         dailyChecklist: data.dailyChecklist,

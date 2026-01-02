@@ -104,6 +104,49 @@ export function AICritique({ critique }: AICritiqueProps) {
           </div>
         </div>
 
+        {/* Suggested Strategy */}
+        <div>
+          <h4 className="mb-3 text-sm font-medium text-muted-foreground">
+            Suggested Strategy
+          </h4>
+          <div className="space-y-3">
+            {critique.scenarios.map((scenario, index) => (
+              <div
+                key={index}
+                className="rounded-lg border border-border bg-secondary/20 p-4"
+              >
+                <p className="text-sm font-medium">Scenario {index + 1}: {scenario.name}</p>
+                <div className="mt-2 grid gap-2 text-sm sm:grid-cols-2">
+                  <div>
+                    <span className="text-muted-foreground">Type of Move:</span> {scenario.typeOfMove}
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">In Play:</span> {scenario.inPlay}
+                  </div>
+                  <div className="sm:col-span-2">
+                    <span className="text-muted-foreground">LIS:</span> {scenario.lis}
+                  </div>
+                </div>
+                <div className="mt-3 rounded-md bg-background/50 p-3">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    <span className="font-medium text-foreground">Behavior:</span> {scenario.behavior}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Inventory Risk Analysis */}
+        {critique.inventoryRiskAnalysis && critique.inventoryRiskAnalysis.trim().length > 0 && (
+          <div>
+            <h4 className="mb-2 text-sm font-medium text-muted-foreground">
+              Inventory Risk Analysis
+            </h4>
+            <p className="text-sm whitespace-pre-wrap">{critique.inventoryRiskAnalysis}</p>
+          </div>
+        )}
+
         {/* Primary Risk */}
         <div className="rounded-lg border border-danger/30 bg-danger/10 p-4">
           <h4 className="mb-2 flex items-center gap-2 text-sm font-medium text-danger">
