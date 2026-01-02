@@ -4,15 +4,16 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const cardVariants = cva(
-  "rounded-xl border text-card-foreground",
+  "rounded-xl border text-card-foreground transition-all duration-300",
   {
     variants: {
       variant: {
-        default: "bg-card border-border shadow-sm",
+        default: "bg-card border-border shadow-[var(--shadow-sm)]",
         glass: "backdrop-blur-xl bg-secondary/20 border-border/50",
-        elevated: "bg-card border-border shadow-xl shadow-black/20",
-        feature: "bg-gradient-to-br from-card to-secondary/30 border-border hover:border-primary/50 transition-all duration-300",
-        interactive: "bg-card border-border hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 cursor-pointer",
+        elevated: "bg-card border-border shadow-[var(--shadow-lg)]",
+        feature: "bg-card border-border shadow-[var(--shadow-md)] hover:shadow-[var(--shadow-lg)] hover:border-primary/30",
+        interactive: "bg-card border-border shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-lg)] hover:border-primary/40 cursor-pointer",
+        premium: "bg-gradient-to-br from-card via-card to-secondary/20 border-border/80 shadow-[var(--shadow-lg)]",
       },
     },
     defaultVariants: {
@@ -38,21 +39,21 @@ Card.displayName = "Card";
 
 const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
+    <div ref={ref} className={cn("flex flex-col space-y-1.5 p-6 pb-4", className)} {...props} />
   ),
 );
 CardHeader.displayName = "CardHeader";
 
 const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
   ({ className, ...props }, ref) => (
-    <h3 ref={ref} className={cn("text-2xl font-semibold leading-none tracking-tight", className)} {...props} />
+    <h3 ref={ref} className={cn("text-lg font-semibold leading-none tracking-tight", className)} {...props} />
   ),
 );
 CardTitle.displayName = "CardTitle";
 
 const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
-    <p ref={ref} className={cn("text-sm text-muted-foreground", className)} {...props} />
+    <p ref={ref} className={cn("text-sm text-muted-foreground leading-relaxed", className)} {...props} />
   ),
 );
 CardDescription.displayName = "CardDescription";

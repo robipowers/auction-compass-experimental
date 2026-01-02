@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Save, Loader2 } from "lucide-react";
+import { Save, Loader2, Calendar, TrendingUp, Target } from "lucide-react";
 import {
   YesterdayContext,
   TodayContext,
@@ -66,25 +66,27 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
       <Card variant="feature" className="animate-fade-in">
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
-            <span className="section-icon">📊</span>
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-info shadow-lg shadow-primary/20">
+              <Calendar className="h-5 w-5 text-white" />
+            </span>
             <div>
-              <div className="text-xl">Yesterday's Context</div>
+              <div className="text-lg font-semibold">Yesterday's Context</div>
               <div className="text-sm font-normal text-muted-foreground">
                 Prior Session Structure
               </div>
             </div>
           </CardTitle>
         </CardHeader>
-        <CardContent className="grid gap-4 sm:grid-cols-2">
+        <CardContent className="grid gap-5 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label htmlFor="dayType">Day Type</Label>
+            <Label htmlFor="dayType" className="text-sm font-medium">Day Type</Label>
             <Select
               value={yesterday.dayType}
               onValueChange={(v) =>
                 setYesterday((prev) => ({ ...prev, dayType: v as DayType }))
               }
             >
-              <SelectTrigger id="dayType">
+              <SelectTrigger id="dayType" className="h-11">
                 <SelectValue placeholder="Select day type" />
               </SelectTrigger>
               <SelectContent>
@@ -98,7 +100,7 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="valueRelationship">Value Relationship</Label>
+            <Label htmlFor="valueRelationship" className="text-sm font-medium">Value Relationship</Label>
             <Select
               value={yesterday.valueRelationship}
               onValueChange={(v) =>
@@ -108,7 +110,7 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
                 }))
               }
             >
-              <SelectTrigger id="valueRelationship">
+              <SelectTrigger id="valueRelationship" className="h-11">
                 <SelectValue placeholder="Select relationship" />
               </SelectTrigger>
               <SelectContent>
@@ -122,14 +124,14 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="structure">Structure</Label>
+            <Label htmlFor="structure" className="text-sm font-medium">Structure</Label>
             <Select
               value={yesterday.structure}
               onValueChange={(v) =>
                 setYesterday((prev) => ({ ...prev, structure: v as Structure }))
               }
             >
-              <SelectTrigger id="structure">
+              <SelectTrigger id="structure" className="h-11">
                 <SelectValue placeholder="Select structure" />
               </SelectTrigger>
               <SelectContent>
@@ -143,7 +145,7 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="prominentVpoc">Prominent VPOC</Label>
+            <Label htmlFor="prominentVpoc" className="text-sm font-medium">Prominent VPOC</Label>
             <Input
               id="prominentVpoc"
               placeholder="e.g., 1.17285"
@@ -151,6 +153,7 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
               onChange={(e) =>
                 setYesterday((prev) => ({ ...prev, prominentVpoc: e.target.value }))
               }
+              className="h-11 font-mono"
             />
           </div>
         </CardContent>
@@ -160,25 +163,27 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
       <Card variant="feature" className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
-            <span className="section-icon">📈</span>
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent/70 shadow-lg shadow-accent/20">
+              <TrendingUp className="h-5 w-5 text-white" />
+            </span>
             <div>
-              <div className="text-xl">Today's Context</div>
+              <div className="text-lg font-semibold">Today's Context</div>
               <div className="text-sm font-normal text-muted-foreground">
                 Current Market State
               </div>
             </div>
           </CardTitle>
         </CardHeader>
-        <CardContent className="grid gap-4 sm:grid-cols-2">
+        <CardContent className="grid gap-5 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label htmlFor="inventory">Inventory</Label>
+            <Label htmlFor="inventory" className="text-sm font-medium">Inventory</Label>
             <Select
               value={today.inventory}
               onValueChange={(v) =>
                 setToday((prev) => ({ ...prev, inventory: v as Inventory }))
               }
             >
-              <SelectTrigger id="inventory">
+              <SelectTrigger id="inventory" className="h-11">
                 <SelectValue placeholder="Select inventory" />
               </SelectTrigger>
               <SelectContent>
@@ -192,14 +197,14 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="openRelation">Open Relation</Label>
+            <Label htmlFor="openRelation" className="text-sm font-medium">Open Relation</Label>
             <Select
               value={today.openRelation}
               onValueChange={(v) =>
                 setToday((prev) => ({ ...prev, openRelation: v as OpenRelation }))
               }
             >
-              <SelectTrigger id="openRelation">
+              <SelectTrigger id="openRelation" className="h-11">
                 <SelectValue placeholder="Select open relation" />
               </SelectTrigger>
               <SelectContent>
@@ -218,18 +223,20 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
       <Card variant="feature" className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
-            <span className="section-icon">🎯</span>
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-warning to-warning/70 shadow-lg shadow-warning/20">
+              <Target className="h-5 w-5 text-white" />
+            </span>
             <div>
-              <div className="text-xl">Reference Levels</div>
+              <div className="text-lg font-semibold">Reference Levels</div>
               <div className="text-sm font-normal text-muted-foreground">
                 Key Structural Pivots
               </div>
             </div>
           </CardTitle>
         </CardHeader>
-        <CardContent className="grid gap-4 sm:grid-cols-2">
+        <CardContent className="grid gap-5 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label htmlFor="overnightHigh">Overnight High</Label>
+            <Label htmlFor="overnightHigh" className="text-sm font-medium">Overnight High</Label>
             <Input
               id="overnightHigh"
               placeholder="e.g., 1.18024"
@@ -237,11 +244,12 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
               onChange={(e) =>
                 setLevels((prev) => ({ ...prev, overnightHigh: e.target.value }))
               }
+              className="h-11 font-mono"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="overnightLow">Overnight Low</Label>
+            <Label htmlFor="overnightLow" className="text-sm font-medium">Overnight Low</Label>
             <Input
               id="overnightLow"
               placeholder="e.g., 1.17761"
@@ -249,11 +257,12 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
               onChange={(e) =>
                 setLevels((prev) => ({ ...prev, overnightLow: e.target.value }))
               }
+              className="h-11 font-mono"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="yesterdayVah">Yesterday VAH</Label>
+            <Label htmlFor="yesterdayVah" className="text-sm font-medium">Yesterday VAH</Label>
             <Input
               id="yesterdayVah"
               placeholder="e.g., 1.17528"
@@ -261,11 +270,12 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
               onChange={(e) =>
                 setLevels((prev) => ({ ...prev, yesterdayVah: e.target.value }))
               }
+              className="h-11 font-mono"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="yesterdayVal">Yesterday VAL</Label>
+            <Label htmlFor="yesterdayVal" className="text-sm font-medium">Yesterday VAL</Label>
             <Input
               id="yesterdayVal"
               placeholder="e.g., 1.17053"
@@ -273,28 +283,29 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
               onChange={(e) =>
                 setLevels((prev) => ({ ...prev, yesterdayVal: e.target.value }))
               }
+              className="h-11 font-mono"
             />
           </div>
         </CardContent>
       </Card>
 
       {/* Save Button */}
-      <div className="flex justify-end">
+      <div className="flex justify-end pt-2">
         <Button
           variant="hero"
-          size="lg"
+          size="xl"
           onClick={handleSave}
           disabled={isLoading}
-          className="min-w-[200px]"
+          className="min-w-[220px]"
         >
           {isLoading ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
               Saving Plan...
             </>
           ) : (
             <>
-              <Save className="mr-2 h-4 w-4" />
+              <Save className="mr-2 h-5 w-5" />
               Save Auction Plan
             </>
           )}

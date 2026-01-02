@@ -310,71 +310,77 @@ export default function CreatePlan() {
   };
 
   return (
-    <div className="container py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Create Auction Plan</h1>
-        <p className="mt-2 text-muted-foreground">
-          Build your pre-market analysis for EURUSD
-        </p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <div className="container max-w-7xl py-8 lg:py-12">
+        {/* Page Header */}
+        <header className="mb-10">
+          <h1 className="text-3xl font-bold tracking-tight lg:text-4xl">
+            Create Auction Plan
+          </h1>
+          <p className="mt-2 text-muted-foreground text-base">
+            Build your pre-market analysis for EURUSD
+          </p>
+        </header>
 
-      <div className="grid gap-8 xl:grid-cols-2">
-        {/* Left Column - Form and Chart */}
-        <div className="space-y-8">
-          <AuctionPlanForm onSave={handleSavePlan} isLoading={isSaving} />
+        <div className="grid gap-10 xl:grid-cols-2">
+          {/* Left Column - Form and Analysis */}
+          <div className="space-y-8">
+            <AuctionPlanForm onSave={handleSavePlan} isLoading={isSaving} />
 
-          {plan && !critique && (
-            <div className="flex justify-center">
-              <Button
-                variant="hero"
-                size="lg"
-                onClick={handleAnalyzePlan}
-                disabled={isAnalyzing}
-              >
-                {isAnalyzing ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Analyzing...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    Analyze with AI Strategist
-                  </>
-                )}
-              </Button>
-            </div>
-          )}
-
-          {critique && (
-            <AICritique critique={critique} />
-          )}
-        </div>
-
-        {/* Right Column - Probability Tracker and Coach */}
-        <div className="space-y-8">
-          {critique && (
-            <>
-              <div className="flex justify-end">
-                <Button variant="outline" onClick={handleExportReport}>
-                  <Download className="mr-2 h-4 w-4" />
-                  Export Report
+            {plan && !critique && (
+              <div className="flex justify-center py-4">
+                <Button
+                  variant="hero"
+                  size="xl"
+                  onClick={handleAnalyzePlan}
+                  disabled={isAnalyzing}
+                  className="min-w-[260px]"
+                >
+                  {isAnalyzing ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Analyzing...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="mr-2 h-5 w-5" />
+                      Analyze with AI Strategist
+                    </>
+                  )}
                 </Button>
               </div>
+            )}
 
-              <ProbabilityTracker
-                scenarios={critique.scenarios}
-                probabilities={probabilities}
-                previousProbabilities={previousProbabilities}
-              />
+            {critique && (
+              <AICritique critique={critique} />
+            )}
+          </div>
 
-              <TradingCoach
-                messages={messages}
-                onSendMessage={handleSendMessage}
-                isLoading={isCoachLoading}
-              />
-            </>
-          )}
+          {/* Right Column - Probability Tracker and Coach */}
+          <div className="space-y-8">
+            {critique && (
+              <>
+                <div className="flex justify-end">
+                  <Button variant="outline" size="default" onClick={handleExportReport}>
+                    <Download className="mr-2 h-4 w-4" />
+                    Export Report
+                  </Button>
+                </div>
+
+                <ProbabilityTracker
+                  scenarios={critique.scenarios}
+                  probabilities={probabilities}
+                  previousProbabilities={previousProbabilities}
+                />
+
+                <TradingCoach
+                  messages={messages}
+                  onSendMessage={handleSendMessage}
+                  isLoading={isCoachLoading}
+                />
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
