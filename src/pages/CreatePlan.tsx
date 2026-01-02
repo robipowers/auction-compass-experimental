@@ -6,6 +6,7 @@ import { TradingCoach } from "@/components/TradingCoach";
 import { AICritique } from "@/components/AICritique";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import { Sparkles, Download, Loader2 } from "lucide-react";
 import {
   YesterdayContext,
@@ -195,143 +196,39 @@ export default function CreatePlan() {
     setIsCoachLoading(true);
 
     try {
-      // Simulate AI response with structured probability updates
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Build chat history for context (exclude current message)
+      const chatHistory = messages.map(m => ({
+        role: m.role,
+        content: m.content
+      }));
 
-      const lowerContent = content.toLowerCase();
-      const scenario1 = critique.scenarios[0];
-      const scenario2 = critique.scenarios[1];
-      const scenario3 = critique.scenarios[2];
+      // Call the real AI edge function
+      const { data, error } = await supabase.functions.invoke('trading-coach', {
+        body: {
+          message: content,
+          planContext: {
+            yesterday: plan.yesterday,
+            today: plan.today,
+            levels: plan.levels
+          },
+          scenarios: critique.scenarios,
+          chatHistory
+        }
+      });
+
+      if (error) {
+        console.error('Trading Coach error:', error);
+        throw new Error(error.message || 'Failed to get coach response');
+      }
+
+      if (data?.error) {
+        throw new Error(data.error);
+      }
+
+      const responseContent = data?.content || '';
+      const newProbabilities: [number, number, number] = data?.probabilities || [33, 33, 34];
       
-      let responseContent = "";
-
-      // VAH rejection pattern
-      if (lowerContent.includes("vah") && (lowerContent.includes("rejection") || lowerContent.includes("reject") || lowerContent.includes("wicks"))) {
-        responseContent = `**Scenario Analysis:**
-Scenario 1 (${scenario1.name}) is strengthening. VAH rejection with ${plan.today.inventory} inventory shows sellers defending yesterday's value high. The ${plan.yesterday.structure} structure from yesterday supports continued selling pressure.
-
-**Structural Implications:**
-Rejection at VAH ${plan.levels.yesterdayVah} means yesterday's sellers are active. With ${plan.today.inventory} inventory, this creates downside bias. Watch for break below ONL ${plan.levels.overnightLow} as next confirmation.
-
-**Watch Next:**
-If price breaks ONL with volume → Scenario 1 confirmed (85%+)
-If price accepts above VAH → Scenario 2 (${scenario2.name}) activates
-
-[PROBABILITIES: 65, 25, 10]`;
-      }
-      // VAL rejection pattern
-      else if (lowerContent.includes("val") && (lowerContent.includes("rejection") || lowerContent.includes("reject") || lowerContent.includes("wicks"))) {
-        responseContent = `**Scenario Analysis:**
-Scenario 2 (${scenario2.name}) is strengthening. VAL rejection with ${plan.today.inventory} inventory shows buyers defending yesterday's value low. The structural support at ${plan.levels.yesterdayVal} is holding.
-
-**Structural Implications:**
-Rejection at VAL ${plan.levels.yesterdayVal} indicates responsive buying. With ${plan.today.inventory} inventory, this creates potential squeeze if VAL holds. Watch for acceptance back above ONL ${plan.levels.overnightLow}.
-
-**Watch Next:**
-If price breaks above ONH ${plan.levels.overnightHigh} with volume → Scenario 2 confirmed (85%+)
-If price breaks VAL → Scenario 1 (${scenario1.name}) activates
-
-[PROBABILITIES: 25, 55, 20]`;
-      }
-      // VAH break pattern
-      else if (lowerContent.includes("break") && lowerContent.includes("vah")) {
-        responseContent = `**Scenario Analysis:**
-Scenario 2 (${scenario2.name}) is now CONFIRMED. VAH break with acceptance shows initiative buying. ${plan.today.inventory} inventory is being forced to cover.
-
-**Structural Implications:**
-Initiative break of VAH ${plan.levels.yesterdayVah} confirms upside bias. Price discovery higher is now in play. Prior structural resistance becomes new support.
-
-**Watch Next:**
-LIS for continuation is now VAL ${plan.levels.yesterdayVal}
-If price holds above VAH → continuation to prior swing highs
-If price reverses below VAH → trap setup, reassess
-
-[PROBABILITIES: 5, 85, 10]`;
-      }
-      // VAL break pattern
-      else if (lowerContent.includes("break") && lowerContent.includes("val")) {
-        responseContent = `**Scenario Analysis:**
-Scenario 1 (${scenario1.name}) is strengthening significantly. VAL break confirms initiative selling. Buyers defending at ${plan.levels.yesterdayVal} have failed.
-
-**Structural Implications:**
-Initiative break of VAL shows sellers in control. ${plan.today.inventory} inventory adds pressure. Price discovery lower is active toward prior structural support.
-
-**Watch Next:**
-If price holds below VAL → Scenario 1 confirmed (85%+)
-Quick reversal above VAL → short trap, Scenario 3 in play
-LIS remains VAH ${plan.levels.yesterdayVah}
-
-[PROBABILITIES: 70, 15, 15]`;
-      }
-      // ONL break pattern
-      else if (lowerContent.includes("break") && (lowerContent.includes("onl") || lowerContent.includes("overnight low"))) {
-        responseContent = `**Scenario Analysis:**
-Scenario 1 (${scenario1.name}) is now CONFIRMED. Breaking ONL ${plan.levels.overnightLow} with volume shows initiative selling. Price discovery lower is active.
-
-**Structural Implications:**
-Overnight range failed to contain price. This confirms bearish bias with next target at VAL ${plan.levels.yesterdayVal} and prior swing lows. ${plan.today.inventory} inventory supporting the move.
-
-**Watch Next:**
-Next structural target: VAL ${plan.levels.yesterdayVal}
-LIS: VAH ${plan.levels.yesterdayVah}
-If price accepts below ONL → acceleration expected
-
-[PROBABILITIES: 85, 5, 10]`;
-      }
-      // ONH break pattern
-      else if (lowerContent.includes("break") && (lowerContent.includes("onh") || lowerContent.includes("overnight high"))) {
-        responseContent = `**Scenario Analysis:**
-Scenario 2 (${scenario2.name}) is strengthening. Breaking ONH ${plan.levels.overnightHigh} shows initiative buying developing.
-
-**Structural Implications:**
-Overnight high break indicates buyers gaining control. ${plan.today.inventory} inventory may need to cover, adding fuel. Watch for acceptance above ONH to confirm.
-
-**Watch Next:**
-If price holds above ONH → continuation to VAH ${plan.levels.yesterdayVah}
-Quick reversal below ONH → failed breakout, Scenario 3 active
-LIS: VAL ${plan.levels.yesterdayVal}
-
-[PROBABILITIES: 20, 60, 20]`;
-      }
-      // Rotation/balance pattern
-      else if (lowerContent.includes("rotat") || lowerContent.includes("balance") || lowerContent.includes("inside") || lowerContent.includes("range")) {
-        responseContent = `**Scenario Analysis:**
-Scenario 3 (${scenario3.name}) is developing. Price rotating inside value shows neither buyers nor sellers have taken control.
-
-**Structural Implications:**
-Balance day developing with VAH ${plan.levels.yesterdayVah} and VAL ${plan.levels.yesterdayVal} containing price. Rotational trade opportunities at range extremes.
-
-**Watch Next:**
-Fade extremes of value range
-Break + acceptance outside value → directional scenario activates
-Watch for initiative activity at VAH/VAL
-
-[PROBABILITIES: 25, 25, 50]`;
-      }
-      // Default contextual response
-      else {
-        responseContent = `**Scenario Analysis:**
-Analyzing in context of ${plan.today.inventory} inventory and ${plan.today.openRelation} open. All three scenarios remain possible.
-
-**Structural Implications:**
-Yesterday: ${plan.yesterday.dayType} with ${plan.yesterday.structure}
-Key levels: VAH ${plan.levels.yesterdayVah}, VAL ${plan.levels.yesterdayVal}
-ONH ${plan.levels.overnightHigh}, ONL ${plan.levels.overnightLow}
-
-**Watch Next:**
-Describe specific price action at key levels (e.g., "VAH rejection with wicks" or "broke ONL with volume") for targeted scenario assessment.
-
-Scenarios:
-1. ${scenario1.name}: ${scenario1.inPlay} → LIS ${scenario1.lis}
-2. ${scenario2.name}: ${scenario2.inPlay} → LIS ${scenario2.lis}
-3. ${scenario3.name}: ${scenario3.inPlay} → LIS ${scenario3.lis}
-
-[PROBABILITIES: 33, 33, 34]`;
-      }
-
-      // Extract and update probabilities
-      const extractedProbs = extractProbabilities(responseContent);
-      const newProbabilities: [number, number, number] = extractedProbs || probabilities;
+      // Strip probability tag from displayed content
       const displayContent = stripProbabilityTag(responseContent);
 
       setPreviousProbabilities([...probabilities]);
@@ -348,9 +245,10 @@ Scenarios:
 
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
+      console.error('Coach error:', error);
       toast({
         title: "Error",
-        description: "Failed to get coach response. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to get coach response. Please try again.",
         variant: "destructive",
       });
     } finally {
