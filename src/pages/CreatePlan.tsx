@@ -177,7 +177,7 @@ export default function CreatePlan() {
         content: m.content
       }));
 
-      // Call the real AI edge function
+      // Call the real AI edge function with previous probabilities for fallback
       const { data, error } = await supabase.functions.invoke('trading-coach', {
         body: {
           message: content,
@@ -187,7 +187,8 @@ export default function CreatePlan() {
             levels: plan.levels
           },
           scenarios: critique.scenarios,
-          chatHistory
+          chatHistory,
+          previousProbabilities: probabilities
         }
       });
 
