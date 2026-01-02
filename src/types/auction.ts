@@ -69,6 +69,7 @@ export interface AICritique {
   coherenceExplanation: string;
   structuralObservations: string;
   scenarios: Scenario[];
+  inventoryRiskAnalysis?: string;
   primaryRisk: string;
   marketContext: string;
   dailyChecklist: ChecklistItem[];

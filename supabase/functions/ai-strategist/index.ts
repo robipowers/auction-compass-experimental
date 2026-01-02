@@ -257,6 +257,8 @@ Present exactly 3 scenarios in this table format:
 | 2. [Context-specific name] | [Type] | [Trigger with price] | [Line in Sand with price] |
 | 3. [Context-specific name] | [Type] | [Trigger with price] | [Line in Sand with price] |
 
+YOU MUST INCLUDE the following subsection immediately after the table (do not skip it):
+
 **Suggested Strategy:**
 
 **Scenario 1: [Name from table]**  
@@ -278,6 +280,8 @@ Present exactly 3 scenarios in this table format:
 **Behavior:** [Write 2-3 complete sentences with the same level of detail as Scenario 1.]
 
 ---
+
+YOU MUST INCLUDE this section BEFORE "Primary Structural Risk" (do not skip it):
 
 ### Inventory Risk Analysis
 
@@ -417,6 +421,13 @@ END OF ANALYSIS REQUEST`;
 });
 
 function parseAICritique(content: string, plan: any) {
+  const truncateOnWord = (text: string, maxChars: number) => {
+    if (text.length <= maxChars) return text;
+    const sliced = text.slice(0, maxChars);
+    const lastSpace = sliced.lastIndexOf(" ");
+    return (lastSpace > 120 ? sliced.slice(0, lastSpace) : sliced).trimEnd() + "…";
+  };
+
   // Extract coherence from COHERENCE RATING section (now at top)
   let coherence: "ALIGNED" | "CONFLICTED" | "NEUTRAL" = "NEUTRAL";
   const coherenceSection = content.match(/### COHERENCE RATING[\s\S]*?(?=### Market Context|$)/i);
@@ -426,8 +437,16 @@ function parseAICritique(content: string, plan: any) {
   }
 
   // Extract coherence explanation
-  const coherenceExplanation = coherenceSection 
-    ? coherenceSection[0].replace(/### COHERENCE RATING[^\n]*/i, '').replace(/\*\*Explanation:\*\*/gi, '').replace(/\*\*.*?\*\*/g, '').replace(/ALIGNED|CONFLICTED|NEUTRAL/gi, '').trim().substring(0, 600)
+  const coherenceExplanation = coherenceSection
+    ? truncateOnWord(
+        coherenceSection[0]
+          .replace(/### COHERENCE RATING[^\n]*/i, "")
+          .replace(/\*\*Explanation:\*\*/gi, "")
+          .replace(/\*\*.*?\*\*/g, "")
+          .replace(/ALIGNED|CONFLICTED|NEUTRAL/gi, "")
+          .trim(),
+        1200,
+      )
     : "Analysis of structural coherence between inventory and market context.";
 
   // Extract market context
