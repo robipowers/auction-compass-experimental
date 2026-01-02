@@ -237,7 +237,7 @@ STYLE: Institutional tone, AMT terminology from PDFs, reference books by name, b
       },
       body: JSON.stringify({
         model: "openai/gpt-5",
-        max_tokens: 12000,
+        max_completion_tokens: 12000,
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: userPrompt }
