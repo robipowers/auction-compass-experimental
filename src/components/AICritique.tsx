@@ -29,6 +29,29 @@ const coherenceConfig: Record<
   },
 };
 
+// Helper to render text with proper paragraph breaks
+function FormattedText({ text, className }: { text: string; className?: string }) {
+  // Split by common paragraph indicators
+  const paragraphs = text
+    .split(/(?:---|\n\n|Paragraph \d+[:\s-]+|(?=According to|Per the|Mind Over Markets|Steidlmayer|The \d+[\d.-]*pip))/gi)
+    .map(p => p.trim())
+    .filter(p => p.length > 0);
+
+  if (paragraphs.length <= 1) {
+    return <p className={cn("text-[15px] leading-[1.8] text-foreground/90", className)}>{text}</p>;
+  }
+
+  return (
+    <div className={cn("space-y-4", className)}>
+      {paragraphs.map((paragraph, index) => (
+        <p key={index} className="text-[15px] leading-[1.8] text-foreground/90">
+          {paragraph}
+        </p>
+      ))}
+    </div>
+  );
+}
+
 export function AICritique({ critique }: AICritiqueProps) {
   const coherence = coherenceConfig[critique.coherence];
   const CoherenceIcon = coherence.icon;
@@ -58,15 +81,15 @@ export function AICritique({ critique }: AICritiqueProps) {
               {coherence.label}
             </Badge>
           </div>
-          <p className="text-sm leading-relaxed text-foreground/90">{critique.coherenceExplanation}</p>
+          <FormattedText text={critique.coherenceExplanation} />
         </section>
 
         {/* Structural Observations */}
-        <section>
-          <h4 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        <section className="rounded-xl border border-border bg-card p-5 shadow-[var(--shadow-sm)]">
+          <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Structural Observations
           </h4>
-          <p className="text-sm leading-relaxed text-foreground/90">{critique.structuralObservations}</p>
+          <FormattedText text={critique.structuralObservations} />
         </section>
 
         {/* Scenarios Table */}
@@ -150,31 +173,29 @@ export function AICritique({ critique }: AICritiqueProps) {
 
         {/* Inventory Risk Analysis */}
         {critique.inventoryRiskAnalysis && critique.inventoryRiskAnalysis.trim().length > 0 && (
-          <section>
-            <h4 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          <section className="rounded-xl border border-warning/30 bg-warning/5 p-5">
+            <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-warning">
               Inventory Risk Analysis
             </h4>
-            <div className="rounded-xl border border-warning/30 bg-warning/5 p-5">
-              <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">{critique.inventoryRiskAnalysis}</p>
-            </div>
+            <FormattedText text={critique.inventoryRiskAnalysis} />
           </section>
         )}
 
         {/* Primary Risk */}
         <section className="rounded-xl border border-danger/30 bg-danger/5 p-5">
-          <h4 className="mb-3 flex items-center gap-2 text-sm font-semibold text-danger">
+          <h4 className="mb-4 flex items-center gap-2 text-sm font-semibold text-danger">
             <AlertTriangle className="h-4 w-4" />
             Primary Risk
           </h4>
-          <p className="text-sm leading-relaxed text-foreground/90">{critique.primaryRisk}</p>
+          <FormattedText text={critique.primaryRisk} />
         </section>
 
         {/* Market Context */}
-        <section>
-          <h4 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        <section className="rounded-xl border border-border bg-card p-5 shadow-[var(--shadow-sm)]">
+          <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Market Context
           </h4>
-          <p className="text-sm leading-relaxed text-foreground/90">{critique.marketContext}</p>
+          <FormattedText text={critique.marketContext} />
         </section>
 
         {/* Structural Checklist Q&A */}
