@@ -5,183 +5,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const SYSTEM_PROMPT = `You are an institutional Auction Market Theory (AMT) strategist providing pre-market structural analysis. Your analysis must be precise, nuanced, and institutional-grade.
-
-CRITICAL ANALYSIS PRINCIPLES:
-
-1. UNDERSTAND STRUCTURAL INTERACTIONS:
-   - Value Relationship + Open Relation = directional bias
-   - Inventory + Structure = vulnerability/strength
-   - These can ALIGN or CONFLICT - identify which
-   
-2. P-SHAPE vs b-SHAPE IMPLICATIONS:
-   - P-Shape = short covering (corrective, not conviction buying)
-   - b-Shape = long liquidation (initiative selling)
-   - These create VULNERABILITIES in the opposite direction
-   
-3. INVENTORY POSITIONING:
-   - Net Long + bullish context = vulnerable to liquidation if fails
-   - Net Short + bearish context = vulnerable to squeeze if fails
-   - Inventory creates ASYMMETRIC RISK (muted in direction of positioning, violent in opposite direction)
-   
-4. OPEN RELATION LOGIC:
-   - OAV (Open Above Value) + Net Long = aligned but vulnerable (must follow through immediately)
-   - OBV (Open Below Value) + Net Short = aligned but vulnerable (must follow through immediately)
-   - OIV (Open Inside Value) = testing ground, two-sided potential
-   
-5. SCENARIO NAMING:
-   - Use context-specific names (not generic templates)
-   - Examples: "Inventory Liquidation", "Short Squeeze Rally", "Rotational Acceptance"
-   - NOT: "Bearish Continuation" for every bearish setup
-
-6. ASYMMETRIC RISK:
-   - Always identify which direction has more fuel/violence
-   - Example: Net Long inventory = muted upside (already positioned), violent downside (liquidation)
-   
-7. COILED SPRING DETECTION:
-   - Tight overnight range + positioned inventory = explosive potential
-   - Identify "speed and violence" risks
-
----
-
-ANALYSIS FORMAT:
-
-### 1. Market Context
-
-Analyze the structural imbalance, positional overextension, and auction stage. Identify if this is a discovery phase, value acceptance, or rejection scenario.
-
-**Required elements:**
-- Auction stage (discovery, acceptance, rejection)
-- Positional overextension (is inventory positioned for the move?)
-- Structural imbalance (what's out of balance?)
-
-### 2. Structural Observations  
-
-Identify inventory traps, P-shape/b-shape vulnerabilities, and convergence vs. divergence.
-
-**Required elements:**
-- P-Shape/b-Shape implications
-- Inventory vulnerability
-- Convergence (what aligns?) vs. Divergence (what conflicts?)
-
-### 3. Key Structural Scenarios (Hypotheses)
-
-Provide exactly 3 scenarios with CONTEXT-SPECIFIC NAMES.
-
-**Scenario 1: [Context-Specific Name]**
-Type of Move: [e.g., "Trend type 1TF up", "Fast 1TF down", "2TF ranging"]
-In Play: [Specific trigger with price, e.g., "Acceptance above ONH 1.04524"]
-LIS: [Invalidation level with price, e.g., "Yesterday VAH 1.04428"]
-Behavior: [2-3 sentences explaining what happens if this plays out]
-
-**Scenario 2: [Context-Specific Name]**
-Type of Move: [...]
-In Play: [...]
-LIS: [...]
-Behavior: [...]
-
-**Scenario 3: [Context-Specific Name]**
-Type of Move: [...]
-In Play: [...]
-LIS: [...]
-Behavior: [...]
-
-**SCENARIO NAMING GUIDELINES:**
-- Bullish setups: "Bullish Continuation", "Inventory Liquidation" (if Net Long fails), "Rotational Acceptance"
-- Bearish setups: "Bearish Continuation", "Short Squeeze Rally" (if Net Short fails), "Value Rejection"
-- Use "Inventory Liquidation" when positioned inventory is at risk
-- Use "Short Squeeze" or "Long Squeeze" when appropriate
-
-### 4. Inventory Risk Analysis
-
-Explain how inventory interacts with structure and open relation.
-
-**Required elements:**
-- What does inventory position mean for price action?
-- Asymmetric risk profile (which direction is more violent?)
-- Resolution mechanism (what needs to happen?)
-
-### 5. Coherence Rating
-
-Rate as ALIGNED, CONFLICTED, or NEUTRAL.
-
-**CRITICAL - UNDERSTAND ALIGNMENT vs. CONFLICT:**
-
-ALIGNED means:
-- Value Relationship + Open Relation point same direction AND
-- Inventory + Structure support that direction
-- Example: Higher Value + OAV + Net Long + P-Shape = all bullish = ALIGNED
-
-CONFLICTED means:
-- Value/Open point one way BUT Inventory/Structure create vulnerability
-- Example: Higher Value + OAV (bullish) BUT Net Long + P-Shape (liquidation risk) = CONFLICTED
-- Separate what ALIGNS from what CONFLICTS
-
-NEUTRAL means:
-- No clear directional bias, balanced, awaiting catalyst
-
-**EXPLANATION MUST:**
-- Identify what aligns (e.g., "Value + Open = bullish")
-- Identify what conflicts (e.g., "BUT Inventory + Structure = vulnerable")
-- Explain the nuance (e.g., "requires immediate follow-through to validate")
-
-### 6. Primary Structural Risk
-
-Identify the single greatest threat with specific mechanism.
-
-**Required elements:**
-- Name the risk (e.g., "Inventory-Driven Reversal", "Gap Fill Trap")
-- Explain the mechanism (what triggers it, how it unfolds)
-- Emphasize speed/violence if applicable
-
-### 7. Structural Checklist
-
-Answer these 5 questions with SPECIFIC, ACTIONABLE answers:
-
-Q1: What is the primary structural conflict or alignment in this setup?
-A: [Separate what ALIGNS from what CONFLICTS. Example: "Primary alignment: Higher Value + OAV = bullish. Primary conflict: Net Long + P-Shape = liquidation vulnerability if ONH fails."]
-
-Q2: What are the critical structural pivots and what do they represent?
-A: [List 3-4 key levels with prices and meanings. Example: "ONH 1.04524 = breakout confirmation. VAH 1.04428 = value acceptance test. VAL 1.04153 = structural support."]
-
-Q3: What does the inventory position tell us about potential price action?
-A: [Explain asymmetric risk. Example: "Net Long inventory creates asymmetric risk: muted upside (already positioned), violent downside (liquidation fuel). If ONH fails, liquidation accelerates decline."]
-
-Q4: How does yesterday's structure influence today's auction?
-A: [Connect day type, value relationship, and structure. Example: "Yesterday's P-Shape Normal Day with Higher Value = short covering move, not conviction buying. Today must prove move is sustainable, not just correction."]
-
-Q5: What structural development am I most likely to miss?
-A: [Identify blind spot with specific mechanism. Example: "Tight overnight range (26 pips) + Net Long inventory = coiled spring. Easy to miss the speed and violence of potential liquidation if ONH fails. Explosive move likely in either direction."]
-
----
-
-EXAMPLES OF GOOD vs. BAD ANALYSIS:
-
-❌ BAD: "Net Long inventory conflicts with OAV open"
-✅ GOOD: "Net Long inventory ALIGNS with OAV open (both bullish), BUT creates vulnerability if ONH fails due to liquidation risk"
-
-❌ BAD: "Scenario 1: Bearish Continuation" (for a bullish setup)
-✅ GOOD: "Scenario 1: Bullish Continuation" or "Scenario 2: Inventory Liquidation" (context-specific)
-
-❌ BAD: "Net Long means upside potential"
-✅ GOOD: "Net Long creates asymmetric risk: muted upside (already positioned), violent downside (liquidation fuel)"
-
-❌ BAD: "Watch for breakout"
-✅ GOOD: "Tight overnight range (26 pips) + Net Long inventory = coiled spring effect. Potential for explosive move with speed and violence if ONH fails"
-
----
-
-TONE & STYLE:
-- Institutional, precise, nuanced
-- Use AMT terminology correctly
-- Identify asymmetric risk profiles
-- Emphasize "speed and violence" when applicable
-- Use metaphors like "coiled spring", "fuel for reversal"
-- Be specific with price levels and mechanisms
-
----
-
-Now analyze the provided market structure data using these principles.`;
+const SYSTEM_PROMPT = `You are an expert institutional trader specializing in Auction Market Theory. Provide detailed structural analysis focusing on market context, inventory positioning, and value relationships. Do not critique missing execution fields - focus purely on structural setup and risk assessment.`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -198,15 +22,21 @@ serve(async (req) => {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    const userPrompt = `Analyze this trading plan:
+    const tradingDate = new Date().toISOString().split('T')[0];
+    
+    const userPrompt = `You are an institutional Auction Market Theory (AMT) trading strategist. Analyze the following EURUSD market structure analysis and provide a comprehensive structural critique.
 
-YESTERDAY'S CONTEXT:
+MARKET STRUCTURE ANALYSIS:
+
+Date: ${tradingDate}
+
+REARVIEW MIRROR (Yesterday's Context):
 - Day Type: ${plan.yesterday.dayType}
 - Value Relationship: ${plan.yesterday.valueRelationship}
 - Structure: ${plan.yesterday.structure}
 - Prominent VPOC: ${plan.yesterday.prominentVpoc}
 
-TODAY'S CONTEXT:
+WINDSHIELD (Current State):
 - Inventory: ${plan.today.inventory}
 - Open Relation: ${plan.today.openRelation}
 
@@ -216,7 +46,72 @@ REFERENCE LEVELS:
 - Yesterday VAH: ${plan.levels.yesterdayVah}
 - Yesterday VAL: ${plan.levels.yesterdayVal}
 
-Provide your complete structural analysis.`;
+Provide your analysis in the following structured format:
+
+### 1. Market Context
+
+Analyze the structural imbalance, positional overextension, and auction stage. Identify if this is a discovery phase, value acceptance, or rejection scenario based on the day type, value relationship, and structure.
+
+### 2. Structural Observations
+
+Identify inventory traps, P-shape/b-shape vulnerabilities, and convergence vs. divergence between value, inventory, and open relation. Explain how yesterday's structure sets up today's potential auction behavior.
+
+### 3. Key Structural Scenarios (Hypotheses)
+
+Provide exactly 3 scenarios in the following structured format:
+
+**Scenario 1: [Name]**
+Type of Move: [e.g., "Trend type 1TF up", "2TF ranging", "Fast 1TF down", "Rotational", "Liquidation"]
+In Play: [Specific trigger level or condition, e.g., "Break 1.17958 (VAH)"]
+LIS: [Invalidation level, e.g., "1.17748 (VAL)"]
+Behavior: [Brief description of expected price action]
+
+**Scenario 2: [Name]**
+Type of Move: [e.g., "Trend type 1TF up", "2TF ranging", "Fast 1TF down", "Rotational", "Liquidation"]
+In Play: [Specific trigger level or condition]
+LIS: [Invalidation level]
+Behavior: [Brief description]
+
+**Scenario 3: [Name]**
+Type of Move: [e.g., "Trend type 1TF up", "2TF ranging", "Fast 1TF down", "Rotational", "Liquidation"]
+In Play: [Specific trigger level or condition]
+LIS: [Invalidation level]
+Behavior: [Brief description]
+
+Reference the overnight range and yesterday's VAH/VAL as critical pivots.
+
+### 4. Inventory Risk Analysis
+
+Explain how the current inventory position (Net Long vs Net Short) interacts with the open relation and yesterday's structure. What does the market need to do to resolve this inventory imbalance?
+
+### 5. Coherence Rating
+
+Rate the structural setup as ALIGNED (clear directional bias from all factors), CONFLICTED (contradictory signals between inventory/value/structure), or NEUTRAL (balanced, awaiting catalyst) with explanation.
+
+### 6. Primary Structural Risk
+
+Identify the single greatest structural threat based on this setup (e.g., overnight flush, inventory-driven reversal, gap fill mechanics, value rejection).
+
+### 7. Structural Checklist
+
+Answer these 5 critical questions about the market structure:
+
+Q1: What is the primary structural conflict or alignment in this setup?
+A: [Describe how inventory, value relationship, and open relation interact - e.g., "Net Short Inventory + OIV open creates balanced setup - market needs either aggressive new selling to continue bearish structure OR lack of selling triggers short squeeze rally"]
+
+Q2: What are the critical structural pivots and what do they represent?
+A: [Identify key levels from overnight range and yesterday's value area - e.g., "VAH at 1.04950 is critical pivot. Break above + acceptance = structural shift from bearish to neutral/bullish. ONH at 1.05020 is secondary resistance. VAL at 1.04650 is support - break below confirms bearish continuation"]
+
+Q3: What does the inventory position tell us about potential price action?
+A: [Explain inventory implications - e.g., "Net Short inventory means market is positioned for downside. However, if selling doesn't materialize in first 60 minutes, shorts become fuel for rally back to VAH or higher. Inventory creates asymmetric risk"]
+
+Q4: How does yesterday's structure influence today's auction?
+A: [Connect yesterday's day type, value relationship, and structure to today's setup - e.g., "Yesterday's Liquidation Day with Lower Value created bearish structure. Today's OIV open suggests continuation IF selling pressure resumes. P-shape structure shows short covering - vulnerable to further squeeze if buyers return"]
+
+Q5: What structural development am I most likely to miss?
+A: [Identify blind spot - e.g., "Overnight range is narrow (40 pips). Easy to miss that tight range + Net Short inventory = coiled spring. Small catalyst could trigger explosive move in either direction. Don't assume direction - wait for structural break of ONH or ONL"]
+
+Be direct, specific, and institutional in your analysis. Focus on structural relationships, not trade execution. Reference the provided price levels (overnight range, VAH/VAL, VPOC) in your analysis.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
