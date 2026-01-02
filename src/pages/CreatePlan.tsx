@@ -205,133 +205,126 @@ export default function CreatePlan() {
       
       let responseContent = "";
 
+      // VAH rejection pattern
+      if (lowerContent.includes("vah") && (lowerContent.includes("rejection") || lowerContent.includes("reject") || lowerContent.includes("wicks"))) {
+        responseContent = `**Scenario Analysis:**
+Scenario 1 (${scenario1.name}) is strengthening. VAH rejection with ${plan.today.inventory} inventory shows sellers defending yesterday's value high. The ${plan.yesterday.structure} structure from yesterday supports continued selling pressure.
+
+**Structural Implications:**
+Rejection at VAH ${plan.levels.yesterdayVah} means yesterday's sellers are active. With ${plan.today.inventory} inventory, this creates downside bias. Watch for break below ONL ${plan.levels.overnightLow} as next confirmation.
+
+**Watch Next:**
+If price breaks ONL with volume → Scenario 1 confirmed (85%+)
+If price accepts above VAH → Scenario 2 (${scenario2.name}) activates
+
+[PROBABILITIES: 65, 25, 10]`;
+      }
       // VAL rejection pattern
-      if (lowerContent.includes("val") && (lowerContent.includes("rejection") || lowerContent.includes("reject"))) {
-        responseContent = `**Structural Read:**
+      else if (lowerContent.includes("val") && (lowerContent.includes("rejection") || lowerContent.includes("reject") || lowerContent.includes("wicks"))) {
+        responseContent = `**Scenario Analysis:**
+Scenario 2 (${scenario2.name}) is strengthening. VAL rejection with ${plan.today.inventory} inventory shows buyers defending yesterday's value low. The structural support at ${plan.levels.yesterdayVal} is holding.
 
-VAL rejection with ${plan.today.inventory} inventory is structurally significant. This aligns with **${scenario2.name}** as the rejection at ${plan.levels.yesterdayVal} suggests buyers are defending the lower extreme of yesterday's value area.
+**Structural Implications:**
+Rejection at VAL ${plan.levels.yesterdayVal} indicates responsive buying. With ${plan.today.inventory} inventory, this creates potential squeeze if VAL holds. Watch for acceptance back above ONL ${plan.levels.overnightLow}.
 
-**Key Observations:**
-- Rejection at VAL ${plan.levels.yesterdayVal} indicates responsive buying
-- ${plan.today.inventory} inventory creates asymmetric squeeze potential if VAL holds
-- Watch for acceptance back above the overnight low ${plan.levels.overnightLow}
+**Watch Next:**
+If price breaks above ONH ${plan.levels.overnightHigh} with volume → Scenario 2 confirmed (85%+)
+If price breaks VAL → Scenario 1 (${scenario1.name}) activates
 
-**Scenario Update:**
-- **${scenario1.name}** is weakening as VAL holds against initiative selling
-- **${scenario2.name}** gains probability with structural support evident
-- **${scenario3.name}** remains possible if we rotate back to mid-value
-
-**Next Steps:**
-If price breaks above ONH ${plan.levels.overnightHigh} with volume, ${scenario2.name} strengthens significantly. Monitor for acceptance vs. rejection at key structural levels.
-
-[PROBABILITIES: 25, 50, 25]`;
+[PROBABILITIES: 25, 55, 20]`;
       }
       // VAH break pattern
       else if (lowerContent.includes("break") && lowerContent.includes("vah")) {
-        responseContent = `**Structural Read:**
+        responseContent = `**Scenario Analysis:**
+Scenario 2 (${scenario2.name}) is now CONFIRMED. VAH break with acceptance shows initiative buying. ${plan.today.inventory} inventory is being forced to cover.
 
-VAH break with acceptance is a significant structural shift. **${scenario2.name} is now CONFIRMED.** Initiative buying has emerged, and ${plan.today.inventory} inventory is being forced to cover.
+**Structural Implications:**
+Initiative break of VAH ${plan.levels.yesterdayVah} confirms upside bias. Price discovery higher is now in play. Prior structural resistance becomes new support.
 
-**Key Observations:**
-- Initiative break of VAH ${plan.levels.yesterdayVah} confirms upside bias
-- ${plan.today.inventory} positions are likely covering, adding fuel to the move
-- Price discovery higher is now in play toward prior structural targets
-
-**Scenario Update:**
-- **${scenario1.name}** is effectively INVALIDATED - LIS ${scenario1.lis} broken
-- **${scenario2.name}** is now primary with high confidence
-- **${scenario3.name}** no longer applicable with trend developing
-
-**Invalidation:**
-LIS for continuation higher is now VAL ${plan.levels.yesterdayVal}. Price acceptance below this level would invalidate the squeeze.
+**Watch Next:**
+LIS for continuation is now VAL ${plan.levels.yesterdayVal}
+If price holds above VAH → continuation to prior swing highs
+If price reverses below VAH → trap setup, reassess
 
 [PROBABILITIES: 5, 85, 10]`;
       }
       // VAL break pattern
       else if (lowerContent.includes("break") && lowerContent.includes("val")) {
-        responseContent = `**Structural Read:**
+        responseContent = `**Scenario Analysis:**
+Scenario 1 (${scenario1.name}) is strengthening significantly. VAL break confirms initiative selling. Buyers defending at ${plan.levels.yesterdayVal} have failed.
 
-VAL break confirms initiative selling pressure. **${scenario1.name} is strengthening.** The break below ${plan.levels.yesterdayVal} shows sellers are in control.
+**Structural Implications:**
+Initiative break of VAL shows sellers in control. ${plan.today.inventory} inventory adds pressure. Price discovery lower is active toward prior structural support.
 
-**Key Observations:**
-- Initiative break of VAL ${plan.levels.yesterdayVal} confirms bearish bias
-- ${plan.today.inventory} participants may be adding to positions
-- Price discovery lower is now in play
-
-**Scenario Update:**
-- **${scenario1.name}** gains significant probability with structural confirmation
-- **${scenario2.name}** is weakening as key support breaks
-- **${scenario3.name}** less likely with directional move developing
-
-**Next Steps:**
-Watch for acceptance below VAL. If price holds below with time, expect continuation toward prior structural support. Quick reversal back above VAL would trap new shorts.
+**Watch Next:**
+If price holds below VAL → Scenario 1 confirmed (85%+)
+Quick reversal above VAL → short trap, Scenario 3 in play
+LIS remains VAH ${plan.levels.yesterdayVah}
 
 [PROBABILITIES: 70, 15, 15]`;
       }
       // ONL break pattern
       else if (lowerContent.includes("break") && (lowerContent.includes("onl") || lowerContent.includes("overnight low"))) {
-        responseContent = `**Structural Read:**
+        responseContent = `**Scenario Analysis:**
+Scenario 1 (${scenario1.name}) is now CONFIRMED. Breaking ONL ${plan.levels.overnightLow} with volume shows initiative selling. Price discovery lower is active.
 
-Breaking overnight low ${plan.levels.overnightLow} with volume shows initiative selling. **${scenario1.name} is now CONFIRMED.** Price discovery lower is active.
+**Structural Implications:**
+Overnight range failed to contain price. This confirms bearish bias with next target at VAL ${plan.levels.yesterdayVal} and prior swing lows. ${plan.today.inventory} inventory supporting the move.
 
-**Key Observations:**
-- Initiative break of ONL confirms bearish price discovery
-- Overnight range failed to contain price - expansion expected
-- Next structural target is VAL ${plan.levels.yesterdayVal}, then prior swing lows
+**Watch Next:**
+Next structural target: VAL ${plan.levels.yesterdayVal}
+LIS: VAH ${plan.levels.yesterdayVah}
+If price accepts below ONL → acceleration expected
 
-**Scenario Update:**
-- **${scenario1.name}** is now high probability with structural confirmation
-- **${scenario2.name}** largely invalidated by ONL break
-- **${scenario3.name}** no longer applicable
+[PROBABILITIES: 85, 5, 10]`;
+      }
+      // ONH break pattern
+      else if (lowerContent.includes("break") && (lowerContent.includes("onh") || lowerContent.includes("overnight high"))) {
+        responseContent = `**Scenario Analysis:**
+Scenario 2 (${scenario2.name}) is strengthening. Breaking ONH ${plan.levels.overnightHigh} shows initiative buying developing.
 
-**Invalidation:**
-LIS remains VAH ${plan.levels.yesterdayVah}. Price acceptance above VAH would invalidate bearish scenario.
+**Structural Implications:**
+Overnight high break indicates buyers gaining control. ${plan.today.inventory} inventory may need to cover, adding fuel. Watch for acceptance above ONH to confirm.
 
-[PROBABILITIES: 80, 10, 10]`;
+**Watch Next:**
+If price holds above ONH → continuation to VAH ${plan.levels.yesterdayVah}
+Quick reversal below ONH → failed breakout, Scenario 3 active
+LIS: VAL ${plan.levels.yesterdayVal}
+
+[PROBABILITIES: 20, 60, 20]`;
       }
       // Rotation/balance pattern
-      else if (lowerContent.includes("rotat") || lowerContent.includes("balance") || lowerContent.includes("inside")) {
-        responseContent = `**Structural Read:**
+      else if (lowerContent.includes("rotat") || lowerContent.includes("balance") || lowerContent.includes("inside") || lowerContent.includes("range")) {
+        responseContent = `**Scenario Analysis:**
+Scenario 3 (${scenario3.name}) is developing. Price rotating inside value shows neither buyers nor sellers have taken control.
 
-Price rotating inside value suggests **${scenario3.name}** is developing. Neither buyers nor sellers have taken control.
+**Structural Implications:**
+Balance day developing with VAH ${plan.levels.yesterdayVah} and VAL ${plan.levels.yesterdayVal} containing price. Rotational trade opportunities at range extremes.
 
-**Key Observations:**
-- Price contained between VAH ${plan.levels.yesterdayVah} and VAL ${plan.levels.yesterdayVal}
-- Balance day developing with rotational trade opportunities
-- Watch for initiative activity at range extremes
-
-**Scenario Update:**
-- **${scenario1.name}** remains possible but needs VAL break for confirmation
-- **${scenario2.name}** needs VAH break with acceptance
-- **${scenario3.name}** is primary while price stays inside value
-
-**Trading Implications:**
-Fade extremes of the range. Look for rejection candles at VAH/VAL. Break and acceptance outside value changes the scenario.
+**Watch Next:**
+Fade extremes of value range
+Break + acceptance outside value → directional scenario activates
+Watch for initiative activity at VAH/VAL
 
 [PROBABILITIES: 25, 25, 50]`;
       }
       // Default contextual response
       else {
-        responseContent = `**Structural Read:**
+        responseContent = `**Scenario Analysis:**
+Analyzing in context of ${plan.today.inventory} inventory and ${plan.today.openRelation} open. All three scenarios remain possible.
 
-Analyzing your observation in context of today's ${plan.today.inventory} inventory and ${plan.today.openRelation} open relation. The ${plan.yesterday.structure} structure from yesterday provides the backdrop.
+**Structural Implications:**
+Yesterday: ${plan.yesterday.dayType} with ${plan.yesterday.structure}
+Key levels: VAH ${plan.levels.yesterdayVah}, VAL ${plan.levels.yesterdayVal}
+ONH ${plan.levels.overnightHigh}, ONL ${plan.levels.overnightLow}
 
-**Current Context:**
-- **Yesterday:** ${plan.yesterday.dayType} day with ${plan.yesterday.valueRelationship} value relationship
-- **Structure:** ${plan.yesterday.structure} suggests ${plan.yesterday.structure.includes("b-Shape") ? "initiative selling pressure" : plan.yesterday.structure.includes("P-Shape") ? "initiative buying pressure" : "balanced activity"}
-- **VPOC:** ${plan.yesterday.prominentVpoc} is a key reference for fair value
+**Watch Next:**
+Describe specific price action at key levels (e.g., "VAH rejection with wicks" or "broke ONL with volume") for targeted scenario assessment.
 
-**Reference Levels:**
-- ONH: ${plan.levels.overnightHigh} | ONL: ${plan.levels.overnightLow}
-- VAH: ${plan.levels.yesterdayVah} | VAL: ${plan.levels.yesterdayVal}
-
-**Scenario Status:**
-- **${scenario1.name}**: In Play if ${scenario1.inPlay} | LIS: ${scenario1.lis}
-- **${scenario2.name}**: In Play if ${scenario2.inPlay} | LIS: ${scenario2.lis}
-- **${scenario3.name}**: In Play if ${scenario3.inPlay} | LIS: ${scenario3.lis}
-
-**Next Steps:**
-Describe specific price action at key levels (e.g., "VAL rejection with wicks" or "broke ONL with volume") for targeted scenario assessment.
+Scenarios:
+1. ${scenario1.name}: ${scenario1.inPlay} → LIS ${scenario1.lis}
+2. ${scenario2.name}: ${scenario2.inPlay} → LIS ${scenario2.lis}
+3. ${scenario3.name}: ${scenario3.inPlay} → LIS ${scenario3.lis}
 
 [PROBABILITIES: 33, 33, 34]`;
       }
