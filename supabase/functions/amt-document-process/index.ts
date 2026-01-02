@@ -44,7 +44,7 @@ async function generateEmbedding(text: string, apiKey: string): Promise<number[]
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "google/text-embedding-004",
+      model: "text-embedding-3-small",
       input: text,
     }),
   });
