@@ -6,9 +6,32 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const SYSTEM_PROMPT = `You are an expert institutional trader specializing in Auction Market Theory (AMT). You provide detailed structural analysis focusing on market context, inventory positioning, and value relationships. Follow the AMT principles and framework provided in your instructions.
+const SYSTEM_PROMPT = `CRITICAL INSTRUCTION: You have access to three authoritative Auction Market Theory reference books in your knowledge base:
 
-When relevant passages from AMT reference books are provided, incorporate their insights and terminology into your analysis. Reference specific concepts, examples, and principles from these authoritative sources to strengthen your analysis.`;
+1. Mind Over Markets by James Dalton
+2. Steidlmayer on Markets by J. Peter Steidlmayer  
+3. CBOT Market Profile by Chicago Board of Trade
+
+YOU MUST reference and pull concepts directly from these uploaded PDFs in EVERY response. Do not rely solely on your training data. Before generating any analysis:
+
+1. Query the knowledge base for relevant AMT concepts
+2. Extract specific terminology, principles, and frameworks from the PDFs
+3. Apply those exact concepts to the current market structure
+4. Use the precise language and terminology from the source material
+
+If you cannot find relevant information in the knowledge base, explicitly state: "Knowledge base does not contain specific guidance on [topic], applying general AMT principles."
+
+Your responses should reflect the depth and precision of the source material, not generic trading advice.
+
+You are an expert institutional trader specializing in Auction Market Theory (AMT). You provide detailed structural analysis focusing on market context, inventory positioning, and value relationships.
+
+When relevant passages from AMT reference books are provided, you MUST:
+- Incorporate their insights using exact terminology from the sources
+- Reference specific concepts by book title (e.g., "According to Mind Over Markets...")
+- Apply frameworks exactly as described in the source material
+- Use institutional language consistent with the uploaded references
+
+VERIFICATION: Your response must demonstrate knowledge base consultation by using specific terminology found in the PDFs, not generic trading terms.`;
 
 // Helper function to search AMT knowledge base
 async function searchAMTKnowledge(query: string, apiKey: string, supabaseUrl: string, supabaseKey: string): Promise<string> {
@@ -95,23 +118,54 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-    // Search knowledge base for relevant AMT concepts
-    const knowledgeQuery = `${plan.yesterday.dayType} ${plan.yesterday.structure} ${plan.today.inventory} ${plan.today.openRelation} auction market theory profile structure value area`;
-    const knowledgeContext = await searchAMTKnowledge(knowledgeQuery, LOVABLE_API_KEY, supabaseUrl, supabaseServiceKey);
+    // Search knowledge base for relevant AMT concepts - multiple specific queries
+    const knowledgeQueries = [
+      `${plan.yesterday.dayType} day type market profile classification`,
+      `${plan.yesterday.structure} shape profile structure implications`,
+      `${plan.today.inventory} inventory positioning asymmetric risk`,
+      `${plan.today.openRelation} open type opening relationship value area`,
+      `${plan.yesterday.valueRelationship} value relationship acceptance rejection`,
+      `initiative responsive activity other timeframe participant`,
+      `coiled spring effect inventory liquidation`
+    ];
+    
+    // Execute all knowledge queries in parallel
+    const knowledgeResults = await Promise.all(
+      knowledgeQueries.map(query => searchAMTKnowledge(query, LOVABLE_API_KEY, supabaseUrl, supabaseServiceKey))
+    );
+    
+    // Combine and deduplicate knowledge
+    const allKnowledge = knowledgeResults.filter(k => k.length > 0).join('\n\n---\n\n');
+    const knowledgeContext = allKnowledge || '';
 
     const tradingDate = new Date().toISOString().split('T')[0];
     
     // Build the knowledge base section if we have relevant content
     const knowledgeSection = knowledgeContext ? `
 ═══════════════════════════════════════════════════════════════
-RELEVANT PASSAGES FROM AMT REFERENCE BOOKS:
+AUTHORITATIVE AMT REFERENCE MATERIAL (MANDATORY CONSULTATION):
 ═══════════════════════════════════════════════════════════════
+
+The following passages are from Mind Over Markets, Steidlmayer on Markets, and CBOT Market Profile.
+You MUST use these exact concepts, terminology, and frameworks in your analysis.
 
 ${knowledgeContext}
 
-Use these authoritative AMT principles and examples to inform your analysis. Reference specific concepts from these books when applicable.
+VERIFICATION REQUIREMENT: Your response must demonstrate that you consulted this knowledge base by:
+- Using specific terminology found in these passages (not generic trading terms)
+- Referencing frameworks explicitly described in the source material
+- Applying principles in the exact manner presented in the books
+- Citing source material where applicable (e.g., "According to Mind Over Markets...")
 
-` : '';
+` : `
+═══════════════════════════════════════════════════════════════
+KNOWLEDGE BASE STATUS:
+═══════════════════════════════════════════════════════════════
+
+Knowledge base did not return specific passages for this query. Apply general AMT principles 
+but explicitly acknowledge: "Knowledge base does not contain specific guidance on [topic]."
+
+`;
     
     const userPrompt = `You are analyzing a EURUSD pre-market setup using Auction Market Theory (AMT).
 ${knowledgeSection}
@@ -398,24 +452,44 @@ Q5: What structural development am I most likely to miss?
 A: [Identify blind spot. Example: "Tight overnight range (26 pips) + Net Long inventory = coiled spring. Easy to miss speed and violence of potential liquidation if ONH fails. Explosive move likely."]
 
 ═══════════════════════════════════════════════════════════════
-TONE & STYLE:
+TONE & STYLE (MANDATORY):
+═══════════════════════════════════════════════════════════════
 - Institutional, precise, nuanced (like hedge fund morning brief)
-- Use AMT terminology from principles above
-- Identify asymmetric risk explicitly
-- Use metaphors: "coiled spring", "fuel for reversal", "trapped inventory"
+- Use AMT terminology from the uploaded PDFs - NOT generic trading terms
+- Reference specific books: "According to Mind Over Markets...", "Steidlmayer describes this as..."
+- Identify asymmetric risk explicitly using source material frameworks
+- Use metaphors from the PDFs: "coiled spring", "fuel for reversal", "trapped inventory", "other-timeframe participants"
 - Be specific with prices and mechanisms
 - Write in complete, detailed paragraphs
-- Emphasize "speed and violence" for liquidation scenarios
+- Emphasize "speed and violence" for liquidation scenarios as described in the source material
 
-EXAMPLES OF GOOD ANALYSIS:
+EXAMPLES OF KNOWLEDGE-BASE-INFORMED ANALYSIS:
 
-✅ "Net Long inventory ALIGNS with Higher Value and OAV open (all bullish), BUT creates vulnerability if ONH fails. The P-Shape structure indicates yesterday's move was short covering (corrective), not conviction buying. This means the market is positioned for upside but lacks strong commitment. If ONH (1.04524) fails, liquidation of these profitable longs will accelerate the decline, creating asymmetric risk: muted upside (already positioned), violent downside (liquidation fuel)."
+✅ "The Net Short inventory creates an asymmetric risk profile as described in Mind Over Markets. Per Steidlmayer's framework, this positioning represents other-timeframe participants who are positioned for downside, creating liquidation fuel in the opposite direction. If responsive activity (local buying) emerges and price achieves acceptance above VAL (time + volume), the inventory becomes vulnerable to a violent liquidation move higher - what the source material describes as the 'coiled spring' effect when positioned inventory meets structural rejection."
 
-✅ "Tight overnight range (26 pips) combined with Net Short inventory creates coiled spring effect. Compressed range masks explosive potential - small catalyst at either extreme could trigger violent move. Easy to miss speed and violence because range appears calm."
+✅ "Yesterday's P-Shape structure indicates short covering activity, not conviction buying - a critical distinction emphasized in CBOT Market Profile. The profile shows volume concentration below the tail, meaning initiative buying created the extension but balance followed. This creates vulnerability: the positioned longs lack structural conviction and become liquidation fuel if today's auction fails to attract new buyers above ONH."
 
-✅ "Yesterday's b-Shape Liquidation Day with Lower Value established bearish structure through initiative selling. Today's OIV open just below VAH tests whether sellers defend or shorts cover. Net Short inventory provides fuel for short squeeze if VAH breaks with acceptance."
+❌ AVOID GENERIC ANALYSIS LIKE: "The Net Short inventory suggests bearish pressure. If price breaks below support, we could see further downside." (This is generic, not using knowledge base terminology)
 
-Now provide your complete analysis following this framework.`;
+═══════════════════════════════════════════════════════════════
+KNOWLEDGE BASE VERIFICATION CHECKLIST (COMPLETE BEFORE RESPONDING):
+═══════════════════════════════════════════════════════════════
+
+Before submitting your response, verify you have:
+- [ ] Used day type terminology from the knowledge base passages
+- [ ] Applied value relationship framework from the PDFs
+- [ ] Referenced structure analysis (P-Shape/b-Shape) using source material language
+- [ ] Used inventory positioning principles exactly as described in the books
+- [ ] Applied open type framework from the uploaded references
+- [ ] Employed exact AMT terminology from the PDFs (not generic terms)
+- [ ] Applied the acceptance/rejection framework from the source material
+- [ ] Referenced initiative vs. responsive activity definitions from the books
+- [ ] Used the asymmetric risk framework from the PDFs
+- [ ] Applied the coiled spring concept as described in the source material
+
+If you cannot check all boxes, return to the knowledge base passages above and extract the missing concepts before generating your response.
+
+Now provide your complete analysis following this framework, demonstrating clear consultation of the knowledge base passages provided above.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
