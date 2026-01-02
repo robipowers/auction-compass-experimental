@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
-import { TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { TrendingUp, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Scenario, getProbabilityStatus, ProbabilityStatus } from "@/types/auction";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -31,6 +32,14 @@ export function ProbabilityTracker({
   probabilities,
   previousProbabilities,
 }: ProbabilityTrackerProps) {
+  // Track animation key to force re-render on probability changes
+  const [animationKey, setAnimationKey] = useState(0);
+
+  useEffect(() => {
+    // Trigger animation when probabilities change
+    setAnimationKey((prev) => prev + 1);
+  }, [probabilities]);
+
   return (
     <Card variant="elevated" className="animate-fade-in">
       <CardHeader className="pb-4">
@@ -106,12 +115,20 @@ export function ProbabilityTracker({
                 </div>
               </div>
 
-              <div className="probability-bar">
+              <div className="probability-bar overflow-hidden rounded-full bg-secondary">
                 <motion.div
-                  className={cn("probability-fill", barColors[status])}
-                  initial={{ width: 0 }}
+                  key={`${index}-${animationKey}`}
+                  className={cn(
+                    "h-full rounded-full transition-colors duration-300",
+                    barColors[status]
+                  )}
+                  initial={{ width: previousProb !== undefined ? `${previousProb}%` : 0 }}
                   animate={{ width: `${probability}%` }}
-                  transition={{ duration: 0.7, ease: "easeOut" }}
+                  transition={{ 
+                    duration: 0.8, 
+                    ease: [0.4, 0, 0.2, 1],
+                    delay: index * 0.1 
+                  }}
                 />
               </div>
 

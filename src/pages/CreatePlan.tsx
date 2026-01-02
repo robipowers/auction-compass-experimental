@@ -142,12 +142,50 @@ export default function CreatePlan() {
     }
   };
 
+  // Extract probabilities from AI response using [PROBABILITIES: X, Y, Z] format
+  const extractProbabilities = (content: string): [number, number, number] | null => {
+    const match = content.match(/\[PROBABILITIES:\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\]/i);
+    
+    if (!match) {
+      console.warn('No probabilities found in AI response');
+      return null;
+    }
+    
+    const probs: [number, number, number] = [
+      parseInt(match[1], 10),
+      parseInt(match[2], 10),
+      parseInt(match[3], 10)
+    ];
+    
+    // Validate they sum to 100
+    const sum = probs.reduce((a, b) => a + b, 0);
+    if (sum !== 100) {
+      console.warn(`Probabilities sum to ${sum}, normalizing to 100`);
+      const normalized: [number, number, number] = [
+        Math.round((probs[0] / sum) * 100),
+        Math.round((probs[1] / sum) * 100),
+        Math.round((probs[2] / sum) * 100)
+      ];
+      // Fix rounding errors
+      const diff = 100 - normalized.reduce((a, b) => a + b, 0);
+      normalized[0] += diff;
+      return normalized;
+    }
+    
+    return probs;
+  };
+
+  // Strip probability tag from displayed content
+  const stripProbabilityTag = (content: string): string => {
+    return content.replace(/\[PROBABILITIES:\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\]/gi, '').trim();
+  };
+
   const handleSendMessage = async (content: string) => {
-    if (!critique) return;
+    if (!critique || !plan) return;
 
     const userMessage: CoachMessage = {
       id: Date.now().toString(),
-      planId: plan?.id || "",
+      planId: plan.id,
       role: "user",
       content,
       createdAt: new Date(),
@@ -157,31 +195,160 @@ export default function CreatePlan() {
     setIsCoachLoading(true);
 
     try {
-      // Simulate AI response
+      // Simulate AI response with structured probability updates
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      // Mock response based on content
+      const lowerContent = content.toLowerCase();
+      const scenario1 = critique.scenarios[0];
+      const scenario2 = critique.scenarios[1];
+      const scenario3 = critique.scenarios[2];
+      
       let responseContent = "";
-      let newProbabilities: [number, number, number] = [...probabilities];
 
-      if (content.toLowerCase().includes("val") && content.toLowerCase().includes("rejection")) {
-        responseContent = `**Structural Read:**\nVAL rejection with Net Short inventory is significant. This suggests shorts may be uncomfortable and starting to cover. The rejection at the lower extreme indicates buyers are stepping in.\n\n**Scenario Update:**\n- Scenario 1 (Bearish Continuation) is weakening as VAL holds\n- Scenario 2 (Short Squeeze) gains probability as rejection develops\n- Scenario 3 (Balanced) remains possible if we rotate back to mid-value\n\n**What to Watch:**\nMonitor for acceptance back inside value. If price establishes above yesterday's POC (${plan?.levels.yesterdayVah || "1.17285"}), squeeze probability increases further.`;
-        newProbabilities = [25, 50, 25];
-      } else if (content.toLowerCase().includes("break") && content.toLowerCase().includes("vah")) {
-        responseContent = `**Structural Read:**\nVAH break with acceptance confirms the Short Squeeze scenario. Initiative buying is present, and shorts are likely covering.\n\n**Scenario Update:**\n- Scenario 1 (Bearish) is effectively invalidated\n- Scenario 2 (Short Squeeze) is now primary with high confidence\n- Scenario 3 (Balanced) no longer applicable\n\n**Key Level:**\nThe LIS for the squeeze is now yesterday's VAL. As long as price stays above it, upside continuation is favored.`;
-        newProbabilities = [10, 75, 15];
-      } else {
-        responseContent = `**Structural Read:**\nThe price action you're describing needs to be contextualized within today's inventory (${plan?.today.inventory || "Net Short"}) and structure.\n\n**Guidance:**\n- Watch how price interacts with the overnight range\n- Key levels to monitor: VAH ${plan?.levels.yesterdayVah || "N/A"}, VAL ${plan?.levels.yesterdayVal || "N/A"}\n- Look for acceptance or rejection at these pivots\n\n**Next Steps:**\nProvide more specific price action details (e.g., "price at VAL seeing rejection" or "broke VAH with volume") for targeted scenario assessment.`;
+      // VAL rejection pattern
+      if (lowerContent.includes("val") && (lowerContent.includes("rejection") || lowerContent.includes("reject"))) {
+        responseContent = `**Structural Read:**
+
+VAL rejection with ${plan.today.inventory} inventory is structurally significant. This aligns with **${scenario2.name}** as the rejection at ${plan.levels.yesterdayVal} suggests buyers are defending the lower extreme of yesterday's value area.
+
+**Key Observations:**
+- Rejection at VAL ${plan.levels.yesterdayVal} indicates responsive buying
+- ${plan.today.inventory} inventory creates asymmetric squeeze potential if VAL holds
+- Watch for acceptance back above the overnight low ${plan.levels.overnightLow}
+
+**Scenario Update:**
+- **${scenario1.name}** is weakening as VAL holds against initiative selling
+- **${scenario2.name}** gains probability with structural support evident
+- **${scenario3.name}** remains possible if we rotate back to mid-value
+
+**Next Steps:**
+If price breaks above ONH ${plan.levels.overnightHigh} with volume, ${scenario2.name} strengthens significantly. Monitor for acceptance vs. rejection at key structural levels.
+
+[PROBABILITIES: 25, 50, 25]`;
+      }
+      // VAH break pattern
+      else if (lowerContent.includes("break") && lowerContent.includes("vah")) {
+        responseContent = `**Structural Read:**
+
+VAH break with acceptance is a significant structural shift. **${scenario2.name} is now CONFIRMED.** Initiative buying has emerged, and ${plan.today.inventory} inventory is being forced to cover.
+
+**Key Observations:**
+- Initiative break of VAH ${plan.levels.yesterdayVah} confirms upside bias
+- ${plan.today.inventory} positions are likely covering, adding fuel to the move
+- Price discovery higher is now in play toward prior structural targets
+
+**Scenario Update:**
+- **${scenario1.name}** is effectively INVALIDATED - LIS ${scenario1.lis} broken
+- **${scenario2.name}** is now primary with high confidence
+- **${scenario3.name}** no longer applicable with trend developing
+
+**Invalidation:**
+LIS for continuation higher is now VAL ${plan.levels.yesterdayVal}. Price acceptance below this level would invalidate the squeeze.
+
+[PROBABILITIES: 5, 85, 10]`;
+      }
+      // VAL break pattern
+      else if (lowerContent.includes("break") && lowerContent.includes("val")) {
+        responseContent = `**Structural Read:**
+
+VAL break confirms initiative selling pressure. **${scenario1.name} is strengthening.** The break below ${plan.levels.yesterdayVal} shows sellers are in control.
+
+**Key Observations:**
+- Initiative break of VAL ${plan.levels.yesterdayVal} confirms bearish bias
+- ${plan.today.inventory} participants may be adding to positions
+- Price discovery lower is now in play
+
+**Scenario Update:**
+- **${scenario1.name}** gains significant probability with structural confirmation
+- **${scenario2.name}** is weakening as key support breaks
+- **${scenario3.name}** less likely with directional move developing
+
+**Next Steps:**
+Watch for acceptance below VAL. If price holds below with time, expect continuation toward prior structural support. Quick reversal back above VAL would trap new shorts.
+
+[PROBABILITIES: 70, 15, 15]`;
+      }
+      // ONL break pattern
+      else if (lowerContent.includes("break") && (lowerContent.includes("onl") || lowerContent.includes("overnight low"))) {
+        responseContent = `**Structural Read:**
+
+Breaking overnight low ${plan.levels.overnightLow} with volume shows initiative selling. **${scenario1.name} is now CONFIRMED.** Price discovery lower is active.
+
+**Key Observations:**
+- Initiative break of ONL confirms bearish price discovery
+- Overnight range failed to contain price - expansion expected
+- Next structural target is VAL ${plan.levels.yesterdayVal}, then prior swing lows
+
+**Scenario Update:**
+- **${scenario1.name}** is now high probability with structural confirmation
+- **${scenario2.name}** largely invalidated by ONL break
+- **${scenario3.name}** no longer applicable
+
+**Invalidation:**
+LIS remains VAH ${plan.levels.yesterdayVah}. Price acceptance above VAH would invalidate bearish scenario.
+
+[PROBABILITIES: 80, 10, 10]`;
+      }
+      // Rotation/balance pattern
+      else if (lowerContent.includes("rotat") || lowerContent.includes("balance") || lowerContent.includes("inside")) {
+        responseContent = `**Structural Read:**
+
+Price rotating inside value suggests **${scenario3.name}** is developing. Neither buyers nor sellers have taken control.
+
+**Key Observations:**
+- Price contained between VAH ${plan.levels.yesterdayVah} and VAL ${plan.levels.yesterdayVal}
+- Balance day developing with rotational trade opportunities
+- Watch for initiative activity at range extremes
+
+**Scenario Update:**
+- **${scenario1.name}** remains possible but needs VAL break for confirmation
+- **${scenario2.name}** needs VAH break with acceptance
+- **${scenario3.name}** is primary while price stays inside value
+
+**Trading Implications:**
+Fade extremes of the range. Look for rejection candles at VAH/VAL. Break and acceptance outside value changes the scenario.
+
+[PROBABILITIES: 25, 25, 50]`;
+      }
+      // Default contextual response
+      else {
+        responseContent = `**Structural Read:**
+
+Analyzing your observation in context of today's ${plan.today.inventory} inventory and ${plan.today.openRelation} open relation. The ${plan.yesterday.structure} structure from yesterday provides the backdrop.
+
+**Current Context:**
+- **Yesterday:** ${plan.yesterday.dayType} day with ${plan.yesterday.valueRelationship} value relationship
+- **Structure:** ${plan.yesterday.structure} suggests ${plan.yesterday.structure.includes("b-Shape") ? "initiative selling pressure" : plan.yesterday.structure.includes("P-Shape") ? "initiative buying pressure" : "balanced activity"}
+- **VPOC:** ${plan.yesterday.prominentVpoc} is a key reference for fair value
+
+**Reference Levels:**
+- ONH: ${plan.levels.overnightHigh} | ONL: ${plan.levels.overnightLow}
+- VAH: ${plan.levels.yesterdayVah} | VAL: ${plan.levels.yesterdayVal}
+
+**Scenario Status:**
+- **${scenario1.name}**: In Play if ${scenario1.inPlay} | LIS: ${scenario1.lis}
+- **${scenario2.name}**: In Play if ${scenario2.inPlay} | LIS: ${scenario2.lis}
+- **${scenario3.name}**: In Play if ${scenario3.inPlay} | LIS: ${scenario3.lis}
+
+**Next Steps:**
+Describe specific price action at key levels (e.g., "VAL rejection with wicks" or "broke ONL with volume") for targeted scenario assessment.
+
+[PROBABILITIES: 33, 33, 34]`;
       }
 
-      setPreviousProbabilities(probabilities);
+      // Extract and update probabilities
+      const extractedProbs = extractProbabilities(responseContent);
+      const newProbabilities: [number, number, number] = extractedProbs || probabilities;
+      const displayContent = stripProbabilityTag(responseContent);
+
+      setPreviousProbabilities([...probabilities]);
       setProbabilities(newProbabilities);
 
       const assistantMessage: CoachMessage = {
         id: (Date.now() + 1).toString(),
-        planId: plan?.id || "",
+        planId: plan.id,
         role: "assistant",
-        content: responseContent,
+        content: displayContent,
         probabilities: newProbabilities,
         createdAt: new Date(),
       };
