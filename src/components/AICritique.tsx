@@ -121,24 +121,33 @@ export function AICritique({ critique }: AICritiqueProps) {
           <p className="text-sm">{critique.marketContext}</p>
         </div>
 
-        {/* Daily Checklist */}
+        {/* Structural Checklist Q&A */}
         <div>
           <h4 className="mb-3 text-sm font-medium text-muted-foreground">
-            Daily Checklist
+            Structural Checklist
           </h4>
-          <ul className="space-y-2">
+          <div className="space-y-4">
             {critique.dailyChecklist.map((item, index) => (
-              <li
+              <div
                 key={index}
-                className="flex items-start gap-3 rounded-lg bg-secondary/30 p-3 text-sm"
+                className="rounded-lg border border-border bg-secondary/20 p-4"
               >
-                <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary/20 text-xs font-medium text-primary">
-                  {index + 1}
-                </span>
-                {item}
-              </li>
+                <div className="mb-2 flex items-start gap-2">
+                  <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary/20 text-xs font-medium text-primary">
+                    Q{index + 1}
+                  </span>
+                  <p className="text-sm font-medium text-foreground">
+                    {item.question}
+                  </p>
+                </div>
+                <div className="ml-7 rounded-md bg-background/50 p-3">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {item.answer}
+                  </p>
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </CardContent>
     </Card>
