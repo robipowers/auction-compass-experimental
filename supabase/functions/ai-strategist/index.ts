@@ -154,15 +154,7 @@ VERIFICATION REQUIREMENT: Your response must demonstrate that you consulted this
 - Applying principles in the exact manner presented in the books
 - Citing source material where applicable (e.g., "According to Mind Over Markets...")
 
-` : `
-═══════════════════════════════════════════════════════════════
-KNOWLEDGE BASE STATUS:
-═══════════════════════════════════════════════════════════════
-
-Knowledge base did not return specific passages for this query. Apply general AMT principles 
-but explicitly acknowledge: "Knowledge base does not contain specific guidance on [topic]."
-
-`;
+` : ``;
     
 const userPrompt = `You are the **AMT CRITIQUE ENGINE** - an institutional-grade analysis system for auction market structure.
 
@@ -265,35 +257,37 @@ Present exactly 3 scenarios in this table format:
 | 2. [Context-specific name] | [Type] | [Trigger with price] | [Line in Sand with price] |
 | 3. [Context-specific name] | [Type] | [Trigger with price] | [Line in Sand with price] |
 
-**Suggested Strategy:**
+**Suggested Strategy:** (MANDATORY SECTION - DO NOT SKIP)
 
 **Scenario 1: [Name]**
 **Type of Move:** [Type]
-**In Play:** [Trigger]
-**LIS:** [Line in Sand]
-**Behavior:** [2-3 sentences explaining what happens if this scenario plays out. Include specific price action, participant behavior (other-timeframe vs locals), and whether it's initiative or responsive activity.]
+**In Play:** [Trigger with specific price]
+**LIS:** [Line in Sand with specific price]
+**Behavior:** [REQUIRED: Write 2-3 detailed sentences explaining what happens if this scenario plays out. Include specific price action, participant behavior (other-timeframe vs locals), and whether it's initiative or responsive activity. Reference AMT principles from the knowledge base.]
 
 **Scenario 2: [Name]**
 **Type of Move:** [Type]
-**In Play:** [Trigger]
-**LIS:** [Line in Sand]
-**Behavior:** [2-3 sentences explaining what happens if this scenario plays out.]
+**In Play:** [Trigger with specific price]
+**LIS:** [Line in Sand with specific price]
+**Behavior:** [REQUIRED: Write 2-3 detailed sentences explaining the price action, who is driving it (other-timeframe buyers/sellers vs locals), and the expected speed/character of the move.]
 
 **Scenario 3: [Name]**
 **Type of Move:** [Type]
-**In Play:** [Trigger]
-**LIS:** [Line in Sand]
-**Behavior:** [2-3 sentences explaining what happens if this scenario plays out.]
+**In Play:** [Trigger with specific price]
+**LIS:** [Line in Sand with specific price]
+**Behavior:** [REQUIRED: Write 2-3 detailed sentences explaining the price action, participant dynamics, and how inventory resolves in this scenario.]
 
 ---
 
-### Inventory Risk Analysis
+### Inventory Risk Analysis (MANDATORY SECTION - DO NOT SKIP)
 
-[Write 2-3 complete paragraphs covering:]
-- Asymmetric risk profile (muted vs. violent directions)
-- Resolution mechanism (how inventory resolves - liquidation break or squeeze)
-- Time factor (when does inventory become critical)
-- Cite Mind Over Markets or Steidlmayer on Markets for asymmetric risk framework
+[REQUIRED: Write 2-3 complete paragraphs covering the following - this section is critical:]
+
+**Paragraph 1 - Asymmetric Risk Profile:** Explain the muted vs. violent directions based on current inventory. Per Mind Over Markets, Net Long = muted upside (already positioned) / violent downside (liquidation fuel). Net Short = muted downside (already positioned) / violent upside (squeeze fuel). Apply this specifically to the current setup.
+
+**Paragraph 2 - Resolution Mechanism:** How will inventory resolve? Will it be a liquidation break (speed and violence to downside) or short squeeze (speed and violence to upside)? What trigger would force this resolution? Reference Steidlmayer's work on how positioned participants create fuel for counter-moves.
+
+**Paragraph 3 - Time Factor & Coiled Spring:** When does inventory become critical? Is there a "coiled spring effect" where tight range + positioned inventory = explosive potential? What would trigger the spring to release?
 
 ---
 
@@ -308,19 +302,19 @@ Present exactly 3 scenarios in this table format:
 ### Structural Checklist
 
 **Q1: What is the primary structural conflict or alignment in this setup?**
-**A:** [2-3 sentences with specific reference to inventory, value relationship, open relation, and structure. Explain what aligns and what conflicts.]
+**A:** [REQUIRED: Write 2-3 detailed sentences with specific reference to inventory, value relationship, open relation, and structure. Explain what aligns (e.g., "Net Short + OBV + Lower Value = bearish alignment") and what conflicts (e.g., "P-Shape suggests short covering already occurred"). Reference Mind Over Markets or Steidlmayer on Markets for the conflict/alignment framework. Be specific about participant positioning.]
 
 **Q2: What are the critical structural pivots and what do they represent?**
-**A:** [List each level (ONH, ONL, VAH, VAL, VPOC) with specific prices. Explain what each represents structurally. Mention the pip range between key levels if relevant.]
+**A:** [REQUIRED: Write 2-3 sentences listing each level (ONH, ONL, VAH, VAL, VPOC) with specific prices. Explain what each represents structurally using AMT terminology - acceptance/rejection zones, initiative vs responsive levels. Calculate and mention pip ranges between key levels (e.g., "The 24-pip overnight range from ONL to ONH..."). Reference CBOT Market Profile for level significance.]
 
 **Q3: What does the inventory position tell us about potential price action?**
-**A:** [2-3 sentences explaining asymmetric risk (muted vs. violent), liquidation fuel potential, and whether inventory creates a coiled spring effect. Cite the knowledge base.]
+**A:** [REQUIRED: Write 2-3 sentences explaining asymmetric risk profile per Mind Over Markets - muted direction (already positioned) vs violent direction (liquidation/squeeze fuel). Explain whether current positioning creates a "coiled spring effect" and what the resolution mechanism would be. Use exact phrases: "liquidation fuel", "squeeze potential", "speed and violence".]
 
 **Q4: How does yesterday's structure influence today's auction?**
-**A:** [2-3 sentences connecting yesterday's day type, value relationship, and structure to today's setup. Explain cause-and-effect relationships.]
+**A:** [REQUIRED: Write 2-3 sentences connecting yesterday's day type, value relationship, and structure to today's setup. Reference Steidlmayer's work on how profile shapes (P-Shape = short covering, b-Shape = liquidation) influence next-day behavior. Explain cause-and-effect: "Yesterday's P-Shape short covering means shorts already exited, reducing continuation fuel..."]
 
 **Q5: What structural development am I most likely to miss?**
-**A:** [2-3 sentences identifying the blind spot or hidden risk. Use phrases like "tight proximity", "structural decision point is imminent", "coiled spring effect". Be specific with levels and pip ranges.]
+**A:** [REQUIRED: Write 2-3 sentences identifying the blind spot or hidden risk. Use specific AMT phrases: "tight proximity to structural pivot", "coiled spring effect", "speed and violence potential". Be specific with levels and pip ranges. Reference how Mind Over Markets describes the psychology of missing structural shifts.]
 
 ---
 
