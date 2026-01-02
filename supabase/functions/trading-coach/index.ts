@@ -338,6 +338,7 @@ Use these authoritative insights when applicable to your coaching response.`;
       },
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
+        max_tokens: 4096,
         messages,
       }),
     });
