@@ -5,7 +5,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const SYSTEM_PROMPT = `You are an expert institutional trader specializing in Auction Market Theory (AMT). You will receive market structure data and provide detailed structural analysis. Follow the AMT principles and terminology provided in the instructions.`;
+const SYSTEM_PROMPT = `You are an expert institutional trader specializing in Auction Market Theory (AMT). You provide detailed structural analysis focusing on market context, inventory positioning, and value relationships. Follow the AMT principles and framework provided in your instructions.`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -24,61 +24,155 @@ serve(async (req) => {
 
     const tradingDate = new Date().toISOString().split('T')[0];
     
-    const userPrompt = `You are analyzing a EURUSD pre-market setup using Auction Market Theory (AMT). First, understand these core AMT concepts:
+    const userPrompt = `You are analyzing a EURUSD pre-market setup using Auction Market Theory (AMT).
 
 ═══════════════════════════════════════════════════════════════
-AMT CORE CONCEPTS (CRITICAL - READ CAREFULLY):
+AMT CORE PRINCIPLES (READ FIRST):
 ═══════════════════════════════════════════════════════════════
 
-1. DAY TYPES:
-   - Liquidation: Strong directional move, initiative activity dominates
-   - Trend: Sustained directional move with conviction
-   - Normal/Variation: Balanced auction, two-sided trade, rotation within range
-   - Neutral: Confusion, no clear direction
+1. PROFILE SHAPES & MEANING:
 
-2. VALUE RELATIONSHIP (Yesterday vs. Previous Day):
-   - Higher Value: Yesterday's value area moved higher (bullish)
-   - Lower Value: Yesterday's value area moved lower (bearish)
-   - Inside/Unchanged: Yesterday's value overlapped previous day (balance)
+P-SHAPE (Upper Distribution):
+- Initiative buying early, then balance
+- Volume concentration BELOW the tail
+- **CRITICAL**: P-Shape = SHORT COVERING (corrective move), NOT conviction buying
+- **VULNERABILITY**: Prone to reversal if new buyers don't follow through
+- Creates liquidation risk for Net Long inventory
 
-3. STRUCTURE (Profile Shape):
-   - P-Shape: Upper distribution, initiative buying THEN balance = SHORT COVERING (corrective move, not conviction)
-   - b-Shape: Lower distribution, initiative selling THEN balance = LONG LIQUIDATION (aggressive selling)
-   - Balanced: Normal distribution, two-sided trade
-   
-   **CRITICAL UNDERSTANDING:**
-   - P-Shape = SHORT COVERING (not strong buying) → vulnerable to reversal if buyers don't follow through
-   - b-Shape = LONG LIQUIDATION (initiative selling) → vulnerable to short squeeze if sellers don't follow through
+b-SHAPE (Lower Distribution):
+- Initiative selling early, then balance  
+- Volume concentration ABOVE the tail
+- **CRITICAL**: b-Shape = LONG LIQUIDATION (initiative selling)
+- **VULNERABILITY**: If sellers don't continue, shorts become squeeze fuel
+- Creates squeeze risk for Net Short inventory
 
-4. INVENTORY POSITIONING:
-   - Net Long: Market participants positioned LONG (above settlement) → positioned for upside
-   - Net Short: Market participants positioned SHORT (below settlement) → positioned for downside
-   
-   **ASYMMETRIC RISK:**
-   - Net Long inventory = MUTED upside (already positioned), VIOLENT downside (liquidation fuel)
-   - Net Short inventory = MUTED downside (already positioned), VIOLENT upside (short squeeze fuel)
+NORMAL DAY (Bell Curve):
+- Balanced distribution, two-sided trade
+- Value area in middle
+- No strong directional conviction
+- Most common day type
 
-5. OPEN RELATION:
-   - OIV (Open Inside Value): Opened within yesterday's value area → testing ground, two-sided potential
-   - OAV (Open Above Value): Opened above yesterday's VAH → bullish continuation attempt
-   - OBV (Open Below Value): Opened below yesterday's VAL → bearish continuation attempt
-   - GAP (Open Outside Range): Gap open → strong directional bias
+TREND DAY:
+- Continuous directional movement
+- Narrow value area at one extreme
+- Strong other timeframe conviction
+- Rare but powerful
 
-6. REFERENCE LEVELS:
-   - VAH (Value Area High): Top 70% of volume, key resistance
-   - VAL (Value Area Low): Bottom 70% of volume, key support
-   - VPOC (Volume Point of Control): Highest volume price, fair value
-   - ONH (Overnight High): Overnight session high
-   - ONL (Overnight Low): Overnight session low
+2. INVENTORY & ASYMMETRIC RISK:
 
-7. STRUCTURAL LOGIC:
-   - ALIGNMENT: Value Relationship + Open Relation point same direction
-   - CONFLICT: Inventory + Structure create vulnerability opposite to alignment
-   - Example: Higher Value + OAV = bullish alignment, BUT Net Long + P-Shape = liquidation vulnerability
+NET LONG INVENTORY:
+- Market positioned ABOVE settlement (already long)
+- **ASYMMETRIC RISK**: MUTED upside (already positioned), VIOLENT downside (liquidation fuel)
+- If move fails, long liquidation ACCELERATES decline
+- Creates "fuel" for downside moves
 
-8. COILED SPRING EFFECT:
-   - Tight overnight range + Positioned inventory = Explosive potential
-   - Small catalyst → violent move due to compressed energy
+NET SHORT INVENTORY:
+- Market positioned BELOW settlement (already short)
+- **ASYMMETRIC RISK**: MUTED downside (already positioned), VIOLENT upside (short squeeze fuel)
+- If move fails, short covering ACCELERATES rally
+- Creates "fuel" for upside moves
+
+**KEY INSIGHT**: Positioned inventory creates FUEL for moves in the OPPOSITE direction.
+
+3. OPEN RELATIONS:
+
+OIV (Open Inside Value):
+- Opened within yesterday's value area
+- NEUTRAL starting point, testing ground
+- Two-sided potential
+- No immediate directional bias
+
+OAV (Open Above Value):
+- Opened above yesterday's VAH
+- Bullish continuation ATTEMPT
+- Requires IMMEDIATE follow-through
+- Failure = gap fill back to value
+
+OBV (Open Below Value):
+- Opened below yesterday's VAL
+- Bearish continuation ATTEMPT
+- Requires IMMEDIATE follow-through
+- Failure = gap fill back to value
+
+GAP (Open Outside Range):
+- Opened outside yesterday's entire range
+- Strong directional bias
+- Often driven by news
+- High gap-fill probability if conviction lacks
+
+4. VALUE RELATIONSHIP:
+
+HIGHER VALUE:
+- Today's value moved higher than yesterday
+- Bullish structural development
+- Buyers accepting higher prices
+
+LOWER VALUE:
+- Today's value moved lower than yesterday
+- Bearish structural development
+- Sellers accepting lower prices
+
+INSIDE/UNCHANGED VALUE:
+- Today's value overlaps yesterday
+- Balanced, consolidation phase
+- Awaiting catalyst
+
+5. STRUCTURAL LOGIC:
+
+ALIGNMENT (What points same direction):
+- Value Relationship + Open Relation = directional bias
+- Example: Higher Value + OAV = bullish alignment
+
+CONFLICT (What creates vulnerability):
+- Inventory + Structure = risk opposite to alignment
+- Example: Net Long + P-Shape = liquidation vulnerability
+
+**CRITICAL FRAMEWORK**:
+When analyzing, SEPARATE what aligns from what conflicts:
+- "Primary alignment: Higher Value + OAV = bullish"
+- "Primary conflict: Net Long + P-Shape = liquidation risk if fails"
+
+6. COILED SPRING EFFECT:
+
+SETUP:
+- Tight overnight range (compressed)
+- + Positioned inventory (Net Long or Net Short)
+- = EXPLOSIVE POTENTIAL
+
+MECHANISM:
+- Compressed range masks underlying tension
+- Small catalyst triggers VIOLENT move
+- Inventory liquidation ACCELERATES the move
+- "Speed and violence" characterize breakout
+
+EXAMPLE:
+- 30-pip overnight range + Net Short inventory
+- Break ONH → violent short squeeze
+- Break ONL → violent continuation lower
+
+7. INITIATIVE vs. RESPONSIVE ACTIVITY:
+
+INITIATIVE:
+- Other timeframe entering aggressively
+- DRIVES price discovery (range extension)
+- Creates directional conviction
+- Example: Breaking out of value with volume
+
+RESPONSIVE:
+- Reacting to price extremes
+- FADING moves back toward value
+- Provides liquidity at extremes
+- Example: Buying at VAL, selling at VAH
+
+**KEY**: Initiative MOVES markets; responsive STABILIZES them.
+
+8. REFERENCE LEVELS:
+
+VAH (Value Area High): Top 70% of volume, key resistance/support
+VAL (Value Area Low): Bottom 70% of volume, key support/resistance
+VPOC (Volume Point of Control): Highest volume price, fair value magnet
+ONH (Overnight High): Overnight session high, breakout level
+ONL (Overnight Low): Overnight session low, breakdown level
 
 ═══════════════════════════════════════════════════════════════
 Now analyze this specific setup:
@@ -104,40 +198,36 @@ REFERENCE LEVELS:
 - Yesterday VAL: ${plan.levels.yesterdayVal}
 
 ═══════════════════════════════════════════════════════════════
-ANALYSIS FRAMEWORK:
+ANALYSIS REQUIREMENTS:
 ═══════════════════════════════════════════════════════════════
 
 ### 1. Market Context
 
 Analyze the structural imbalance, positional overextension, and auction stage.
 
-**Required elements:**
-- Auction stage: Discovery (seeking new value), Acceptance (confirming value), or Rejection (denying value)
-- Positional overextension: Is inventory already positioned for the expected move?
-- Structural imbalance: What's creating tension in the setup?
-
-**Write 2-3 detailed paragraphs** explaining the current market state.
+Write 2-3 detailed paragraphs covering:
+- Auction stage (Discovery/Acceptance/Rejection)
+- Positional overextension (is inventory positioned for the move?)
+- Structural imbalance (what creates tension?)
 
 ### 2. Structural Observations
 
-Identify inventory traps, P-shape/b-shape vulnerabilities, and convergence vs. divergence.
+Identify inventory traps, P-shape/b-shape vulnerabilities, convergence vs. divergence.
 
-**Required elements:**
-- P-Shape/b-Shape implications (remember: P-Shape = short covering, b-Shape = long liquidation)
-- Inventory vulnerability (asymmetric risk profile)
+Write 2-3 detailed paragraphs covering:
+- P-Shape/b-Shape implications (remember: P=short covering, b=long liquidation)
+- Inventory vulnerability (asymmetric risk)
 - Convergence (what aligns?) vs. Divergence (what conflicts?)
 
-**Write 2-3 detailed paragraphs** with specific observations.
+### 3. Key Structural Scenarios
 
-### 3. Key Structural Scenarios (Hypotheses)
-
-Provide exactly 3 scenarios with CONTEXT-SPECIFIC NAMES (not generic templates).
+Provide exactly 3 scenarios with CONTEXT-SPECIFIC NAMES.
 
 **Scenario 1: [Context-Specific Name]**
 Type of Move: [e.g., "Trend type 1TF up", "Fast 1TF down", "2TF ranging"]
 In Play: [Specific trigger with price, e.g., "Acceptance above ONH 1.04524"]
 LIS: [Invalidation level with price, e.g., "Yesterday VAH 1.04428"]
-Behavior: [2-3 sentences explaining what happens if this plays out, including who gets trapped and why]
+Behavior: [2-3 sentences: what happens if this plays out, who gets trapped, why]
 
 **Scenario 2: [Context-Specific Name]**
 Type of Move: [...]
@@ -151,94 +241,89 @@ In Play: [...]
 LIS: [...]
 Behavior: [...]
 
-**NAMING GUIDELINES:**
-- Use "Bullish Continuation" when Higher Value + bullish open align
-- Use "Inventory Liquidation" when positioned inventory is at risk (e.g., Net Long failing = Long Liquidation)
-- Use "Short Squeeze Rally" when Net Short inventory vulnerable to upside
-- Use "Rotational Acceptance" for balanced/ranging scenarios
-- Use "Value Rejection" when testing value area boundaries
+**NAMING RULES**:
+- Bullish setups: "Bullish Continuation", "Long Liquidation" (if Net Long fails), "Rotational Acceptance"
+- Bearish setups: "Bearish Continuation", "Short Squeeze Rally" (if Net Short fails), "Value Rejection"
+- Use "Inventory Liquidation" when positioned inventory at risk
+- Use "Short Squeeze" or "Long Squeeze" when appropriate
+- NEVER use generic names that don't match context
 
 ### 4. Inventory Risk Analysis
 
 Explain how inventory interacts with structure and open relation.
 
-**Required elements:**
-- Asymmetric risk profile (which direction is muted? which is violent?)
-- Resolution mechanism (what needs to happen to resolve the imbalance?)
-- Time factor (how long can the imbalance persist?)
-
-**Write 2-3 detailed paragraphs.**
+Write 2-3 detailed paragraphs covering:
+- Asymmetric risk profile (muted vs. violent directions)
+- Resolution mechanism (what needs to happen?)
+- Time factor (how long can imbalance persist?)
 
 ### 5. Coherence Rating
 
 Rate as ALIGNED, CONFLICTED, or NEUTRAL.
 
-**CRITICAL LOGIC:**
+**LOGIC**:
 
 ALIGNED:
-- Value Relationship + Open Relation point same direction AND
-- Inventory + Structure support that direction
-- Example: Higher Value + OAV + Net Long + P-Shape = all bullish = ALIGNED
+- Value + Open point same direction AND Inventory + Structure support it
+- Example: Higher Value + OAV + Net Long + P-Shape = all bullish
 
 CONFLICTED:
-- Value/Open point one direction BUT Inventory/Structure create vulnerability
-- Example: Higher Value + OAV (bullish) BUT Net Long + P-Shape (liquidation risk if fails) = CONFLICTED
-- **MUST separate what ALIGNS from what CONFLICTS**
+- Value/Open point one way BUT Inventory/Structure create vulnerability
+- Example: Higher Value + OAV (bullish) BUT Net Long + P-Shape (liquidation risk)
+- **MUST SEPARATE**: "Primary alignment: [X]. Primary conflict: [Y]."
 
 NEUTRAL:
-- No clear directional bias, balanced, awaiting catalyst
+- No clear bias, balanced, awaiting catalyst
 
-**Format:**
+**FORMAT**:
 Rating: [ALIGNED/CONFLICTED/NEUTRAL]
-Explanation: [2-3 sentences. If CONFLICTED, clearly state: "Primary alignment: [X]. Primary conflict: [Y]."]
+Explanation: [2-3 sentences. If CONFLICTED, clearly state what aligns vs. what conflicts]
 
 ### 6. Primary Structural Risk
 
 Identify the single greatest threat with specific mechanism.
 
-**Required elements:**
-- Name the risk (e.g., "Inventory-Driven Reversal", "Gap Fill Trap", "Coiled Spring Explosion")
-- Explain the mechanism (trigger → cascade → outcome)
+Write 2-3 detailed sentences covering:
+- Name the risk (e.g., "Inventory-Driven Reversal", "Coiled Spring Explosion")
+- Explain mechanism (trigger → cascade → outcome)
 - Emphasize "speed and violence" if applicable
-
-**Write 2-3 detailed sentences.**
 
 ### 7. Structural Checklist
 
 Answer these 5 questions with SPECIFIC, ACTIONABLE answers (2-3 sentences each):
 
 Q1: What is the primary structural conflict or alignment in this setup?
-A: [Separate what ALIGNS from what CONFLICTS. Example: "Primary alignment: Higher Value + OAV = bullish. Primary conflict: Net Long + P-Shape = liquidation vulnerability if ONH fails. Market requires immediate follow-through to validate long positioning."]
+A: [Separate alignment from conflict. Example: "Primary alignment: Higher Value + OAV = bullish. Primary conflict: Net Long + P-Shape = liquidation vulnerability if ONH fails. Requires immediate follow-through."]
 
 Q2: What are the critical structural pivots and what do they represent?
-A: [List 3-4 key levels with prices and meanings. Example: "ONH 1.04524 = breakout confirmation. VAH 1.04428 = value acceptance test. VPOC 1.04285 = fair value magnet. VAL 1.04153 = structural support. Key test is ONH - acceptance confirms bulls, failure triggers liquidation."]
+A: [List 3-4 levels with prices and meanings. Example: "ONH 1.04524 = breakout confirmation. VAH 1.04428 = value test. VPOC 1.04285 = fair value. VAL 1.04153 = structural support. Key test is ONH."]
 
 Q3: What does the inventory position tell us about potential price action?
-A: [Explain asymmetric risk. Example: "Net Long inventory creates asymmetric risk: muted upside (already positioned), violent downside (liquidation fuel). If ONH fails, long liquidation accelerates decline as profitable positions exit. If ONH holds, move may be slow as inventory already committed."]
+A: [Explain asymmetric risk. Example: "Net Long inventory creates asymmetric risk: muted upside (already positioned), violent downside (liquidation fuel). If ONH fails, liquidation accelerates decline."]
 
 Q4: How does yesterday's structure influence today's auction?
-A: [Connect day type, value relationship, and structure. Example: "Yesterday's P-Shape Normal Day with Higher Value = short covering move, not conviction buying. Today must prove move is sustainable, not just correction. OAV open tests whether new buyers enter or if shorts re-establish."]
+A: [Connect structure to today. Example: "Yesterday's P-Shape Normal Day with Higher Value = short covering move, not conviction buying. Today must prove sustainability. OAV open tests whether new buyers enter."]
 
 Q5: What structural development am I most likely to miss?
-A: [Identify blind spot with specific mechanism. Example: "Tight overnight range (26 pips) + Net Long inventory = coiled spring effect. Easy to miss the speed and violence of potential liquidation if ONH fails. Compressed range masks explosive potential - small catalyst triggers violent move in either direction."]
+A: [Identify blind spot. Example: "Tight overnight range (26 pips) + Net Long inventory = coiled spring. Easy to miss speed and violence of potential liquidation if ONH fails. Explosive move likely."]
 
 ═══════════════════════════════════════════════════════════════
-TONE & STYLE REQUIREMENTS:
-- Institutional, precise, nuanced (like a hedge fund morning brief)
-- Use AMT terminology correctly (refer to concepts above)
-- Identify asymmetric risk profiles explicitly
+TONE & STYLE:
+- Institutional, precise, nuanced (like hedge fund morning brief)
+- Use AMT terminology from principles above
+- Identify asymmetric risk explicitly
 - Use metaphors: "coiled spring", "fuel for reversal", "trapped inventory"
-- Be specific with price levels and mechanisms
-- Write in complete, detailed paragraphs (not bullet points)
-- Emphasize "speed and violence" when describing liquidation scenarios
+- Be specific with prices and mechanisms
+- Write in complete, detailed paragraphs
+- Emphasize "speed and violence" for liquidation scenarios
 
 EXAMPLES OF GOOD ANALYSIS:
 
-✅ "Net Long inventory ALIGNS with Higher Value and OAV open (all bullish), BUT creates vulnerability if ONH fails. The P-Shape structure indicates yesterday's move was short covering (corrective), not conviction buying. This means the market is positioned for upside but lacks strong commitment. If the ONH (1.04524) fails to hold, the liquidation of these profitable longs will accelerate the decline, creating asymmetric risk: muted upside (already positioned), violent downside (liquidation fuel)."
+✅ "Net Long inventory ALIGNS with Higher Value and OAV open (all bullish), BUT creates vulnerability if ONH fails. The P-Shape structure indicates yesterday's move was short covering (corrective), not conviction buying. This means the market is positioned for upside but lacks strong commitment. If ONH (1.04524) fails, liquidation of these profitable longs will accelerate the decline, creating asymmetric risk: muted upside (already positioned), violent downside (liquidation fuel)."
 
-✅ "The tight overnight range (26 pips) combined with Net Short inventory creates a coiled spring effect. The compressed range masks the explosive potential - a small catalyst at either extreme (ONH or ONL) could trigger a violent move. Easy to miss the speed and violence of this setup because the range appears calm."
+✅ "Tight overnight range (26 pips) combined with Net Short inventory creates coiled spring effect. Compressed range masks explosive potential - small catalyst at either extreme could trigger violent move. Easy to miss speed and violence because range appears calm."
 
-✅ "Yesterday's b-Shape Liquidation Day with Lower Value established clear bearish structure through initiative selling. Today's OIV open just below VAH tests whether yesterday's sellers will defend or if shorts will cover. The Net Short inventory provides fuel for a short squeeze if VAH breaks with acceptance."
+✅ "Yesterday's b-Shape Liquidation Day with Lower Value established bearish structure through initiative selling. Today's OIV open just below VAH tests whether sellers defend or shorts cover. Net Short inventory provides fuel for short squeeze if VAH breaks with acceptance."
 
 Now provide your complete analysis following this framework.`;
 
