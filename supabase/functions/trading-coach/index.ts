@@ -48,7 +48,44 @@ CRITICAL RULES:
 - ALWAYS include [PROBABILITIES: X, Y, Z] at the end where X+Y+Z=100
 - Reference specific scenarios by name
 - Use AMT terminology (acceptance, rejection, inventory, discovery)
-- Do NOT prescribe trades, only analyze structure`;
+- Do NOT prescribe trades, only analyze structure
+
+═══════════════════════════════════════════════════════════════
+CRITICAL REQUIREMENT - READ THIS CAREFULLY:
+═══════════════════════════════════════════════════════════════
+
+You MUST end EVERY SINGLE RESPONSE with probabilities in this EXACT format:
+
+[PROBABILITIES: X, Y, Z]
+
+Where:
+- X = Scenario 1 probability (integer 0-100)
+- Y = Scenario 2 probability (integer 0-100)  
+- Z = Scenario 3 probability (integer 0-100)
+- X + Y + Z MUST equal 100
+
+This line is MANDATORY. Do not forget it. Do not skip it. Do not modify the format.
+
+EXAMPLES OF CORRECT ENDINGS:
+When Scenario 1 is confirmed:
+[PROBABILITIES: 90, 5, 5]
+
+When Scenario 2 is confirmed:
+[PROBABILITIES: 5, 90, 5]
+
+When Scenario 1 is strengthening:
+[PROBABILITIES: 65, 25, 10]
+
+When Scenario 2 is strengthening:
+[PROBABILITIES: 25, 60, 15]
+
+When balanced/uncertain:
+[PROBABILITIES: 33, 33, 34]
+
+When Scenario 1 is weakening after being strong:
+[PROBABILITIES: 35, 40, 25]
+
+REMINDER: Every response must end with this line. No exceptions.`;
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -57,7 +94,7 @@ serve(async (req) => {
   }
 
   try {
-    const { message, planContext, scenarios, chatHistory } = await req.json();
+    const { message, planContext, scenarios, chatHistory, previousProbabilities } = await req.json();
     
     console.log("Trading Coach request received:", { message, planContext });
 
@@ -126,8 +163,9 @@ SCENARIOS:
     
     console.log("AI response received:", aiContent.substring(0, 200));
 
-    // Extract probabilities from AI response
-    const probabilities = extractProbabilities(aiContent);
+    // Extract probabilities from AI response with fallback to previous
+    const prevProbs = previousProbabilities || [33, 33, 34];
+    const probabilities = extractProbabilities(aiContent, prevProbs);
     
     return new Response(JSON.stringify({ 
       content: aiContent,
@@ -147,12 +185,23 @@ SCENARIOS:
   }
 });
 
-function extractProbabilities(content: string): [number, number, number] {
+function extractProbabilities(content: string, previousProbs: number[] = [33, 33, 34]): [number, number, number] {
   const match = content.match(/\[PROBABILITIES:\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\]/i);
   
   if (!match) {
-    console.warn('No probabilities found in AI response, using default');
-    return [33, 33, 34];
+    console.error('❌ AI did not return probabilities in required format!');
+    console.error('Response end:', content.substring(content.length - 200));
+    
+    // Try to infer from text as fallback
+    const inferredProbs = inferProbabilitiesFromText(content, previousProbs);
+    if (inferredProbs) {
+      console.warn('⚠️ Using inferred probabilities:', inferredProbs);
+      return inferredProbs;
+    }
+    
+    // Last resort: use previous probabilities
+    console.warn('⚠️ Using previous probabilities as fallback:', previousProbs);
+    return [previousProbs[0], previousProbs[1], previousProbs[2]];
   }
   
   let probs: [number, number, number] = [
@@ -164,7 +213,7 @@ function extractProbabilities(content: string): [number, number, number] {
   // Validate they sum to 100
   const sum = probs.reduce((a, b) => a + b, 0);
   if (sum !== 100) {
-    console.warn(`Probabilities sum to ${sum}, normalizing to 100`);
+    console.warn(`⚠️ Probabilities sum to ${sum}, normalizing to 100`);
     const normalized: [number, number, number] = [
       Math.round((probs[0] / sum) * 100),
       Math.round((probs[1] / sum) * 100),
@@ -176,5 +225,48 @@ function extractProbabilities(content: string): [number, number, number] {
     return normalized;
   }
   
+  console.log('✅ Probabilities extracted successfully:', probs);
   return probs;
+}
+
+// Helper function to infer probabilities from text when format is missing
+function inferProbabilitiesFromText(text: string, previousProbs: number[]): [number, number, number] | null {
+  const lowerText = text.toLowerCase();
+  
+  // Scenario 1 confirmed
+  if (lowerText.includes('scenario 1') && (lowerText.includes('confirmed') || lowerText.includes('is confirmed'))) {
+    return [90, 5, 5];
+  }
+  
+  // Scenario 2 confirmed
+  if (lowerText.includes('scenario 2') && (lowerText.includes('confirmed') || lowerText.includes('is confirmed'))) {
+    return [5, 90, 5];
+  }
+  
+  // Scenario 3 confirmed
+  if (lowerText.includes('scenario 3') && (lowerText.includes('confirmed') || lowerText.includes('is confirmed'))) {
+    return [5, 5, 90];
+  }
+  
+  // Scenario 1 strengthening
+  if (lowerText.includes('scenario 1') && lowerText.includes('strengthening')) {
+    return [65, 25, 10];
+  }
+  
+  // Scenario 2 strengthening
+  if (lowerText.includes('scenario 2') && lowerText.includes('strengthening')) {
+    return [25, 60, 15];
+  }
+  
+  // Scenario 1 weakening
+  if (lowerText.includes('scenario 1') && lowerText.includes('weakening')) {
+    return [35, 40, 25];
+  }
+  
+  // Scenario 2 weakening
+  if (lowerText.includes('scenario 2') && lowerText.includes('weakening')) {
+    return [40, 35, 25];
+  }
+  
+  return null;
 }
