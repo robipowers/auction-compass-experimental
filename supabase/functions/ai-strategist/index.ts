@@ -600,6 +600,7 @@ function parseAICritique(content: string, plan: any) {
     coherenceExplanation,
     structuralObservations,
     scenarios: scenarios.slice(0, 3),
+    inventoryRiskAnalysis,
     primaryRisk,
     marketContext,
     dailyChecklist: checklistItems.slice(0, 5)
