@@ -37,7 +37,7 @@ function chunkText(text: string, chunkSize: number = CHUNK_SIZE, overlap: number
 }
 
 async function generateEmbedding(text: string, apiKey: string): Promise<number[]> {
-  const response = await fetch("https://ai.gateway.lovable.dev/v1/embeddings", {
+  const response = await fetch("https://api.openai.com/v1/embeddings", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -76,9 +76,9 @@ serve(async (req) => {
     console.log(`Processing document: ${title}`);
     console.log(`Content length: ${content.length} characters`);
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY is not configured');
+    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
+    if (!OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY is not configured');
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -115,7 +115,7 @@ serve(async (req) => {
       try {
         console.log(`Processing chunk ${i + 1}/${chunks.length}`);
         
-        const embedding = await generateEmbedding(chunks[i], LOVABLE_API_KEY);
+        const embedding = await generateEmbedding(chunks[i], OPENAI_API_KEY);
         
         if (!embedding || embedding.length === 0) {
           throw new Error('Empty embedding returned');
