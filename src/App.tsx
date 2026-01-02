@@ -7,6 +7,7 @@ import { Header } from "@/components/Header";
 import Index from "./pages/Index";
 import CreatePlan from "./pages/CreatePlan";
 import History from "./pages/History";
+import AdminKnowledge from "./pages/AdminKnowledge";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/plan" element={<CreatePlan />} />
             <Route path="/history" element={<History />} />
+            <Route path="/admin/knowledge" element={<AdminKnowledge />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

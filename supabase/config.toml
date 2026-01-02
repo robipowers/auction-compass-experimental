@@ -5,3 +5,9 @@ verify_jwt = false
 
 [functions.ai-strategist]
 verify_jwt = false
+
+[functions.amt-knowledge-search]
+verify_jwt = false
+
+[functions.amt-document-process]
+verify_jwt = false

@@ -1,11 +1,81 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const SYSTEM_PROMPT = `You are an expert institutional trader specializing in Auction Market Theory (AMT). You provide detailed structural analysis focusing on market context, inventory positioning, and value relationships. Follow the AMT principles and framework provided in your instructions.`;
+const SYSTEM_PROMPT = `You are an expert institutional trader specializing in Auction Market Theory (AMT). You provide detailed structural analysis focusing on market context, inventory positioning, and value relationships. Follow the AMT principles and framework provided in your instructions.
+
+When relevant passages from AMT reference books are provided, incorporate their insights and terminology into your analysis. Reference specific concepts, examples, and principles from these authoritative sources to strengthen your analysis.`;
+
+// Helper function to search AMT knowledge base
+async function searchAMTKnowledge(query: string, apiKey: string, supabaseUrl: string, supabaseKey: string): Promise<string> {
+  try {
+    // Generate embedding for the query
+    const embeddingResponse = await fetch("https://ai.gateway.lovable.dev/v1/embeddings", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/text-embedding-004",
+        input: query,
+      }),
+    });
+
+    if (!embeddingResponse.ok) {
+      console.warn('Failed to generate embedding for knowledge search');
+      return '';
+    }
+
+    const embeddingData = await embeddingResponse.json();
+    const queryEmbedding = embeddingData.data?.[0]?.embedding;
+
+    if (!queryEmbedding) {
+      return '';
+    }
+
+    // Search for similar chunks
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    const { data: chunks, error } = await supabase.rpc('search_amt_knowledge', {
+      query_embedding: `[${queryEmbedding.join(',')}]`,
+      match_threshold: 0.65,
+      match_count: 4,
+    });
+
+    if (error || !chunks || chunks.length === 0) {
+      console.log('No relevant knowledge found');
+      return '';
+    }
+
+    // Get document titles
+    const documentIds = [...new Set(chunks.map((c: any) => c.document_id))];
+    const { data: docs } = await supabase
+      .from('amt_documents')
+      .select('id, title')
+      .in('id', documentIds);
+    
+    const docTitles: Record<string, string> = (docs || []).reduce((acc: Record<string, string>, doc: any) => {
+      acc[doc.id] = doc.title;
+      return acc;
+    }, {});
+
+    // Format knowledge context
+    const knowledgeContext = chunks.map((chunk: any) => {
+      const source = docTitles[chunk.document_id] || 'AMT Reference';
+      return `[From "${source}"]: ${chunk.content}`;
+    }).join('\n\n---\n\n');
+
+    console.log(`Found ${chunks.length} relevant knowledge chunks`);
+    return knowledgeContext;
+  } catch (error) {
+    console.error('Error searching AMT knowledge:', error);
+    return '';
+  }
+}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -22,9 +92,29 @@ serve(async (req) => {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+
+    // Search knowledge base for relevant AMT concepts
+    const knowledgeQuery = `${plan.yesterday.dayType} ${plan.yesterday.structure} ${plan.today.inventory} ${plan.today.openRelation} auction market theory profile structure value area`;
+    const knowledgeContext = await searchAMTKnowledge(knowledgeQuery, LOVABLE_API_KEY, supabaseUrl, supabaseServiceKey);
+
     const tradingDate = new Date().toISOString().split('T')[0];
     
+    // Build the knowledge base section if we have relevant content
+    const knowledgeSection = knowledgeContext ? `
+═══════════════════════════════════════════════════════════════
+RELEVANT PASSAGES FROM AMT REFERENCE BOOKS:
+═══════════════════════════════════════════════════════════════
+
+${knowledgeContext}
+
+Use these authoritative AMT principles and examples to inform your analysis. Reference specific concepts from these books when applicable.
+
+` : '';
+    
     const userPrompt = `You are analyzing a EURUSD pre-market setup using Auction Market Theory (AMT).
+${knowledgeSection}
 
 ═══════════════════════════════════════════════════════════════
 AMT CORE PRINCIPLES (READ FIRST):

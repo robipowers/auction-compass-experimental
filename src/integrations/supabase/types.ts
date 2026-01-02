@@ -14,13 +14,99 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      amt_chunks: {
+        Row: {
+          chunk_index: number
+          content: string
+          created_at: string
+          document_id: string
+          embedding: string | null
+          id: string
+          metadata: Json | null
+        }
+        Insert: {
+          chunk_index: number
+          content: string
+          created_at?: string
+          document_id: string
+          embedding?: string | null
+          id?: string
+          metadata?: Json | null
+        }
+        Update: {
+          chunk_index?: number
+          content?: string
+          created_at?: string
+          document_id?: string
+          embedding?: string | null
+          id?: string
+          metadata?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "amt_chunks_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "amt_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      amt_documents: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          file_path: string
+          filename: string
+          id: string
+          status: string
+          title: string
+          total_chunks: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          file_path: string
+          filename: string
+          id?: string
+          status?: string
+          title: string
+          total_chunks?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          file_path?: string
+          filename?: string
+          id?: string
+          status?: string
+          title?: string
+          total_chunks?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      search_amt_knowledge: {
+        Args: {
+          match_count?: number
+          match_threshold?: number
+          query_embedding: string
+        }
+        Returns: {
+          content: string
+          document_id: string
+          id: string
+          metadata: Json
+          similarity: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
