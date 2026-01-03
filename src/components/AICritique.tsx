@@ -1,8 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, AlertTriangle, MinusCircle, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CheckCircle, AlertTriangle, MinusCircle, Sparkles, Copy, Check } from "lucide-react";
 import { AICritique as AICritiqueType, Coherence } from "@/types/auction";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface AICritiqueProps {
   critique: AICritiqueType;
@@ -53,17 +56,81 @@ function FormattedText({ text, className }: { text: string; className?: string }
 }
 
 export function AICritique({ critique }: AICritiqueProps) {
+  const [copied, setCopied] = useState(false);
   const coherence = coherenceConfig[critique.coherence];
   const CoherenceIcon = coherence.icon;
+
+  const formatCritiqueForCopy = () => {
+    const lines = [
+      "AI STRATEGIST ANALYSIS",
+      "=".repeat(50),
+      "",
+      `COHERENCE: ${coherence.label}`,
+      critique.coherenceExplanation,
+      "",
+      "STRUCTURAL OBSERVATIONS",
+      "-".repeat(30),
+      critique.structuralObservations,
+      "",
+      "KEY STRUCTURAL SCENARIOS",
+      "-".repeat(30),
+      ...critique.scenarios.map((s, i) => 
+        `${i + 1}. ${s.name}\n   Type: ${s.typeOfMove}\n   In Play: ${s.inPlay}\n   LIS: ${s.lis}${s.behavior ? `\n   Behavior: ${s.behavior}` : ""}`
+      ),
+      "",
+    ];
+
+    if (critique.inventoryRiskAnalysis?.trim()) {
+      lines.push("INVENTORY RISK ANALYSIS", "-".repeat(30), critique.inventoryRiskAnalysis, "");
+    }
+
+    lines.push(
+      "PRIMARY RISK",
+      "-".repeat(30),
+      critique.primaryRisk,
+      "",
+      "MARKET CONTEXT",
+      "-".repeat(30),
+      critique.marketContext,
+      "",
+      "STRUCTURAL CHECKLIST",
+      "-".repeat(30),
+      ...critique.dailyChecklist.map((item, i) => `${i + 1}. Q: ${item.question}\n   A: ${item.answer}`)
+    );
+
+    return lines.join("\n");
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(formatCritiqueForCopy());
+      setCopied(true);
+      toast.success("Analysis copied to clipboard");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("Failed to copy");
+    }
+  };
 
   return (
     <Card variant="premium" className="animate-fade-in">
       <CardHeader className="pb-6">
-        <CardTitle className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg shadow-purple-500/25">
-            <Sparkles className="h-5 w-5 text-white" />
-          </span>
-          <span className="text-xl">AI Strategist Analysis</span>
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg shadow-purple-500/25">
+              <Sparkles className="h-5 w-5 text-white" />
+            </span>
+            <span className="text-xl">AI Strategist Analysis</span>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleCopy}
+            className="gap-2"
+          >
+            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+            {copied ? "Copied" : "Copy"}
+          </Button>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-8">
