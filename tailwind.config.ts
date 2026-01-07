@@ -74,6 +74,16 @@ export default {
           DEFAULT: "hsl(var(--info))",
           foreground: "hsl(var(--info-foreground))",
         },
+        // Teal accent
+        teal: {
+          DEFAULT: "hsl(var(--teal))",
+          foreground: "hsl(var(--teal-foreground))",
+          muted: "hsl(var(--teal-muted))",
+        },
+        // Scenario colors
+        bullish: "hsl(var(--bullish))",
+        bearish: "hsl(var(--bearish))",
+        rotational: "hsl(var(--rotational))",
         // Probability states
         prob: {
           confirmed: "hsl(var(--prob-confirmed))",
@@ -87,6 +97,9 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      lineHeight: {
+        'relaxed-plus': '1.8',
       },
       keyframes: {
         "accordion-down": {
@@ -109,6 +122,10 @@ export default {
           "0%, 100%": { boxShadow: "0 0 20px hsl(var(--primary) / 0.3)" },
           "50%": { boxShadow: "0 0 40px hsl(var(--primary) / 0.5)" },
         },
+        "glow-teal": {
+          "0%, 100%": { boxShadow: "0 0 15px hsl(165 80% 45% / 0.2)" },
+          "50%": { boxShadow: "0 0 30px hsl(165 80% 45% / 0.4)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -116,6 +133,7 @@ export default {
         "fade-in": "fade-in 0.5s ease-out",
         "slide-in-right": "slide-in-right 0.4s ease-out",
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "glow-teal": "glow-teal 2s ease-in-out infinite",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
