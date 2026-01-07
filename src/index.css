@@ -6,80 +6,142 @@
 
 @layer base {
   :root {
-    --background: 150 20% 98%;
-    --foreground: 160 25% 10%;
+    --background: 220 20% 97%;
+    --foreground: 220 25% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 160 25% 10%;
+    --card-foreground: 220 25% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 160 25% 10%;
+    --popover-foreground: 220 25% 10%;
 
-    --primary: 217 91% 60%;
+    --primary: 220 70% 50%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 214 15% 93%;
-    --secondary-foreground: 217 20% 25%;
+    --secondary: 220 15% 92%;
+    --secondary-foreground: 220 25% 20%;
 
-    --muted: 214 15% 90%;
-    --muted-foreground: 217 10% 45%;
+    --muted: 220 15% 94%;
+    --muted-foreground: 220 10% 45%;
 
-    --accent: 217 70% 50%;
+    --accent: 165 60% 40%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 72% 50%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 15% 85%;
-    --input: 214 15% 90%;
-    --ring: 217 91% 60%;
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 220 70% 50%;
 
-    --radius: 0.75rem;
+    --radius: 0.625rem;
 
     /* Trading-specific semantic tokens */
-    --success: 145 70% 40%;
+    --success: 152 60% 40%;
     --success-foreground: 0 0% 100%;
     --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
-    --danger: 0 72% 50%;
+    --warning-foreground: 220 25% 10%;
+    --danger: 0 72% 51%;
     --danger-foreground: 0 0% 100%;
-    --info: 217 91% 60%;
+    --info: 210 100% 50%;
     --info-foreground: 0 0% 100%;
 
     /* Probability states */
-    --prob-confirmed: 145 70% 40%;
+    --prob-confirmed: 152 60% 40%;
     --prob-strengthening: 38 92% 50%;
-    --prob-balanced: 217 91% 60%;
+    --prob-balanced: 220 70% 50%;
     --prob-weakening: 25 95% 53%;
-    --prob-invalidated: 0 72% 50%;
+    --prob-invalidated: 0 72% 51%;
 
     /* Premium gradient tokens */
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(214 15% 97%) 100%);
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(230 70% 55%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(230 70% 55%) 0%, hsl(217 91% 60%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(214 20% 98%) 0%, hsl(214 15% 95%) 100%);
-    --gradient-premium: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(250 80% 60%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(220 20% 98%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(220 70% 50%) 0%, hsl(210 100% 50%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(165 60% 40%) 0%, hsl(165 60% 50%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(220 20% 97%) 0%, hsl(220 15% 94%) 100%);
+    --gradient-premium: linear-gradient(135deg, hsl(220 70% 50%) 0%, hsl(280 60% 55%) 100%);
 
-    /* Glass morphism - light mode */
+    /* Glass morphism */
     --glass-bg: hsl(0 0% 100% / 0.85);
-    --glass-border: hsl(214 15% 80% / 0.5);
+    --glass-border: hsl(220 15% 88% / 0.6);
 
-    /* Premium shadows - subtle blue tint */
-    --shadow-sm: 0 1px 2px 0 hsl(217 20% 10% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(217 20% 10% / 0.08);
-    --shadow-lg: 0 10px 15px -3px hsl(217 20% 10% / 0.1);
-    --shadow-xl: 0 20px 25px -5px hsl(217 20% 10% / 0.12);
-    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.12);
-    --shadow-glow-strong: 0 0 60px hsl(217 91% 60% / 0.2);
+    /* Premium shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(220 25% 10% / 0.03), 0 1px 3px 0 hsl(220 25% 10% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(220 25% 10% / 0.05), 0 2px 4px -1px hsl(220 25% 10% / 0.03);
+    --shadow-lg: 0 10px 15px -3px hsl(220 25% 10% / 0.07), 0 4px 6px -2px hsl(220 25% 10% / 0.03);
+    --shadow-xl: 0 20px 25px -5px hsl(220 25% 10% / 0.08), 0 10px 10px -5px hsl(220 25% 10% / 0.02);
+    --shadow-glow: 0 0 40px hsl(220 70% 50% / 0.15);
 
-    --sidebar-background: 214 15% 96%;
-    --sidebar-foreground: 217 25% 10%;
-    --sidebar-primary: 217 91% 60%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 25% 10%;
+    --sidebar-primary: 220 70% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 214 15% 90%;
-    --sidebar-accent-foreground: 217 25% 10%;
-    --sidebar-border: 214 15% 85%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-accent: 220 15% 95%;
+    --sidebar-accent-foreground: 220 25% 10%;
+    --sidebar-border: 220 15% 90%;
+    --sidebar-ring: 220 70% 50%;
+  }
+
+  .dark {
+    --background: 220 25% 6%;
+    --foreground: 220 15% 95%;
+
+    --card: 220 25% 9%;
+    --card-foreground: 220 15% 95%;
+
+    --popover: 220 25% 10%;
+    --popover-foreground: 220 15% 95%;
+
+    --primary: 220 80% 60%;
+    --primary-foreground: 220 25% 6%;
+
+    --secondary: 220 20% 15%;
+    --secondary-foreground: 220 15% 90%;
+
+    --muted: 220 20% 14%;
+    --muted-foreground: 220 10% 55%;
+
+    --accent: 165 60% 45%;
+    --accent-foreground: 220 25% 6%;
+
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 220 15% 95%;
+
+    --border: 220 20% 18%;
+    --input: 220 20% 18%;
+    --ring: 220 80% 60%;
+
+    --success: 152 60% 45%;
+    --success-foreground: 220 15% 95%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 220 25% 6%;
+    --danger: 0 72% 55%;
+    --danger-foreground: 220 15% 95%;
+    --info: 210 100% 55%;
+    --info-foreground: 220 25% 6%;
+
+    --prob-confirmed: 152 60% 45%;
+    --prob-strengthening: 38 92% 50%;
+    --prob-balanced: 220 80% 60%;
+    --prob-weakening: 25 95% 53%;
+    --prob-invalidated: 0 72% 55%;
+
+    --glass-bg: hsl(220 25% 10% / 0.85);
+    --glass-border: hsl(220 20% 25% / 0.5);
+
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.2);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.3);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.35);
+    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.4);
+    --shadow-glow: 0 0 40px hsl(220 80% 60% / 0.2);
+
+    --sidebar-background: 220 25% 6%;
+    --sidebar-foreground: 220 15% 95%;
+    --sidebar-primary: 220 80% 60%;
+    --sidebar-primary-foreground: 220 25% 6%;
+    --sidebar-accent: 220 20% 14%;
+    --sidebar-accent-foreground: 220 15% 95%;
+    --sidebar-border: 220 20% 18%;
+    --sidebar-ring: 220 80% 60%;
   }
 }
 
@@ -107,23 +169,23 @@
     font-weight: 600;
   }
 
-  /* Premium scrollbar - light mode */
+  /* Premium scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    background: hsl(var(--muted));
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: hsl(var(--primary) / 0.4);
+    background: hsl(var(--muted-foreground) / 0.2);
     border-radius: 100px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--primary) / 0.6);
+    background: hsl(var(--muted-foreground) / 0.35);
   }
 }
 
@@ -159,10 +221,9 @@
   }
 
   .section-icon {
-    @apply flex h-10 w-10 items-center justify-center rounded-xl text-lg;
+    @apply flex h-10 w-10 items-center justify-center rounded-xl text-lg shadow-sm;
     background: var(--gradient-primary);
     color: hsl(var(--primary-foreground));
-    box-shadow: var(--shadow-glow);
   }
 
   .form-section {
@@ -178,61 +239,37 @@
   .card-hover:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
-    border-color: hsl(var(--primary) / 0.3);
-  }
-
-  /* Neon glow effects */
-  .neon-glow {
-    box-shadow: var(--shadow-glow);
-  }
-
-  .neon-glow-strong {
-    box-shadow: var(--shadow-glow-strong);
-  }
-
-  .neon-border {
-    border-color: hsl(var(--primary) / 0.5);
-  }
-
-  .neon-border-strong {
-    border-color: hsl(var(--primary));
-    box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
   }
 
   /* Status badges */
   .status-confirmed {
     @apply bg-[hsl(var(--prob-confirmed))] text-[hsl(var(--success-foreground))];
-    box-shadow: 0 0 15px hsl(var(--prob-confirmed) / 0.4);
   }
 
   .status-strengthening {
     @apply bg-[hsl(var(--prob-strengthening))] text-[hsl(var(--warning-foreground))];
-    box-shadow: 0 0 15px hsl(var(--prob-strengthening) / 0.4);
   }
 
   .status-balanced {
     @apply bg-[hsl(var(--prob-balanced))] text-[hsl(var(--primary-foreground))];
-    box-shadow: 0 0 15px hsl(var(--prob-balanced) / 0.4);
   }
 
   .status-weakening {
     @apply bg-[hsl(var(--prob-weakening))] text-[hsl(var(--warning-foreground))];
-    box-shadow: 0 0 15px hsl(var(--prob-weakening) / 0.4);
   }
 
   .status-invalidated {
     @apply bg-[hsl(var(--prob-invalidated))] text-[hsl(var(--danger-foreground))];
-    box-shadow: 0 0 15px hsl(var(--prob-invalidated) / 0.4);
   }
 
   /* Premium input styling */
   .premium-input {
-    @apply transition-all duration-200 bg-secondary border-border;
+    @apply transition-all duration-200;
+    box-shadow: var(--shadow-sm);
   }
 
   .premium-input:focus {
-    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.15), var(--shadow-glow);
-    border-color: hsl(var(--primary) / 0.5);
+    box-shadow: var(--shadow-md), 0 0 0 3px hsl(var(--primary) / 0.1);
   }
 
   /* Dividers */
@@ -248,19 +285,6 @@
   .mono {
     font-family: 'JetBrains Mono', monospace;
   }
-
-  /* Trading data grid */
-  .data-cell {
-    @apply py-2 px-3 text-sm font-mono;
-  }
-
-  .data-cell-positive {
-    @apply text-success;
-  }
-
-  .data-cell-negative {
-    @apply text-danger;
-  }
 }
 
 @layer utilities {
@@ -274,9 +298,5 @@
 
   .shadow-glow {
     box-shadow: var(--shadow-glow);
-  }
-
-  .shadow-glow-strong {
-    box-shadow: var(--shadow-glow-strong);
   }
 }
