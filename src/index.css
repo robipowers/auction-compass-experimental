@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,114 +6,142 @@
 
 @layer base {
   :root {
-    /* Bloomberg Terminal Dark Theme */
-    --background: 210 25% 5%;
-    --foreground: 220 15% 90%;
+    --background: 220 20% 97%;
+    --foreground: 220 25% 10%;
 
-    --card: 210 20% 8%;
-    --card-foreground: 220 15% 90%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 10%;
 
-    --popover: 210 20% 10%;
-    --popover-foreground: 220 15% 90%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 10%;
 
-    --primary: 165 80% 45%;
-    --primary-foreground: 210 25% 5%;
+    --primary: 220 70% 50%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 15% 12%;
-    --secondary-foreground: 220 15% 85%;
+    --secondary: 220 15% 92%;
+    --secondary-foreground: 220 25% 20%;
 
-    --muted: 210 15% 15%;
+    --muted: 220 15% 94%;
+    --muted-foreground: 220 10% 45%;
+
+    --accent: 165 60% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 220 70% 50%;
+
+    --radius: 0.625rem;
+
+    /* Trading-specific semantic tokens */
+    --success: 152 60% 40%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 220 25% 10%;
+    --danger: 0 72% 51%;
+    --danger-foreground: 0 0% 100%;
+    --info: 210 100% 50%;
+    --info-foreground: 0 0% 100%;
+
+    /* Probability states */
+    --prob-confirmed: 152 60% 40%;
+    --prob-strengthening: 38 92% 50%;
+    --prob-balanced: 220 70% 50%;
+    --prob-weakening: 25 95% 53%;
+    --prob-invalidated: 0 72% 51%;
+
+    /* Premium gradient tokens */
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(220 20% 98%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(220 70% 50%) 0%, hsl(210 100% 50%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(165 60% 40%) 0%, hsl(165 60% 50%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(220 20% 97%) 0%, hsl(220 15% 94%) 100%);
+    --gradient-premium: linear-gradient(135deg, hsl(220 70% 50%) 0%, hsl(280 60% 55%) 100%);
+
+    /* Glass morphism */
+    --glass-bg: hsl(0 0% 100% / 0.85);
+    --glass-border: hsl(220 15% 88% / 0.6);
+
+    /* Premium shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(220 25% 10% / 0.03), 0 1px 3px 0 hsl(220 25% 10% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(220 25% 10% / 0.05), 0 2px 4px -1px hsl(220 25% 10% / 0.03);
+    --shadow-lg: 0 10px 15px -3px hsl(220 25% 10% / 0.07), 0 4px 6px -2px hsl(220 25% 10% / 0.03);
+    --shadow-xl: 0 20px 25px -5px hsl(220 25% 10% / 0.08), 0 10px 10px -5px hsl(220 25% 10% / 0.02);
+    --shadow-glow: 0 0 40px hsl(220 70% 50% / 0.15);
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 25% 10%;
+    --sidebar-primary: 220 70% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 15% 95%;
+    --sidebar-accent-foreground: 220 25% 10%;
+    --sidebar-border: 220 15% 90%;
+    --sidebar-ring: 220 70% 50%;
+  }
+
+  .dark {
+    --background: 220 25% 6%;
+    --foreground: 220 15% 95%;
+
+    --card: 220 25% 9%;
+    --card-foreground: 220 15% 95%;
+
+    --popover: 220 25% 10%;
+    --popover-foreground: 220 15% 95%;
+
+    --primary: 220 80% 60%;
+    --primary-foreground: 220 25% 6%;
+
+    --secondary: 220 20% 15%;
+    --secondary-foreground: 220 15% 90%;
+
+    --muted: 220 20% 14%;
     --muted-foreground: 220 10% 55%;
 
-    --accent: 165 80% 45%;
-    --accent-foreground: 210 25% 5%;
+    --accent: 165 60% 45%;
+    --accent-foreground: 220 25% 6%;
 
     --destructive: 0 72% 55%;
     --destructive-foreground: 220 15% 95%;
 
-    --border: 210 15% 18%;
-    --input: 210 15% 15%;
-    --ring: 165 80% 45%;
+    --border: 220 20% 18%;
+    --input: 220 20% 18%;
+    --ring: 220 80% 60%;
 
-    --radius: 0.5rem;
-
-    /* Trading-specific semantic tokens */
-    --success: 152 70% 45%;
-    --success-foreground: 210 25% 5%;
+    --success: 152 60% 45%;
+    --success-foreground: 220 15% 95%;
     --warning: 38 92% 50%;
-    --warning-foreground: 210 25% 5%;
+    --warning-foreground: 220 25% 6%;
     --danger: 0 72% 55%;
     --danger-foreground: 220 15% 95%;
-    --info: 200 100% 55%;
-    --info-foreground: 210 25% 5%;
+    --info: 210 100% 55%;
+    --info-foreground: 220 25% 6%;
 
-    /* Teal accent variations */
-    --teal: 165 80% 45%;
-    --teal-foreground: 210 25% 5%;
-    --teal-muted: 165 50% 20%;
-
-    /* Scenario colors */
-    --bullish: 152 70% 45%;
-    --bearish: 0 72% 55%;
-    --rotational: 200 100% 55%;
-
-    /* Probability states */
-    --prob-confirmed: 152 70% 45%;
+    --prob-confirmed: 152 60% 45%;
     --prob-strengthening: 38 92% 50%;
-    --prob-balanced: 200 100% 55%;
+    --prob-balanced: 220 80% 60%;
     --prob-weakening: 25 95% 53%;
     --prob-invalidated: 0 72% 55%;
 
-    /* Premium gradient tokens */
-    --gradient-card: linear-gradient(180deg, hsl(210 20% 9%) 0%, hsl(210 20% 7%) 100%);
-    --gradient-primary: linear-gradient(135deg, hsl(165 80% 45%) 0%, hsl(165 80% 55%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(165 80% 45%) 0%, hsl(165 60% 50%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(210 25% 5%) 0%, hsl(210 20% 8%) 100%);
-    --gradient-premium: linear-gradient(135deg, hsl(165 80% 45%) 0%, hsl(200 100% 55%) 100%);
+    --glass-bg: hsl(220 25% 10% / 0.85);
+    --glass-border: hsl(220 20% 25% / 0.5);
 
-    /* Glass morphism */
-    --glass-bg: hsl(210 20% 10% / 0.85);
-    --glass-border: hsl(210 15% 25% / 0.5);
-
-    /* Premium shadows */
     --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.2);
     --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.3);
     --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.35);
     --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.4);
-    --shadow-glow: 0 0 40px hsl(165 80% 45% / 0.2);
-    --shadow-teal: 0 0 20px hsl(165 80% 45% / 0.3);
+    --shadow-glow: 0 0 40px hsl(220 80% 60% / 0.2);
 
-    --sidebar-background: 210 25% 5%;
-    --sidebar-foreground: 220 15% 90%;
-    --sidebar-primary: 165 80% 45%;
-    --sidebar-primary-foreground: 210 25% 5%;
-    --sidebar-accent: 210 15% 12%;
-    --sidebar-accent-foreground: 220 15% 90%;
-    --sidebar-border: 210 15% 18%;
-    --sidebar-ring: 165 80% 45%;
-  }
-
-  /* Keep dark class for compatibility but it's now the default */
-  .dark {
-    --background: 210 25% 5%;
-    --foreground: 220 15% 90%;
-    --card: 210 20% 8%;
-    --card-foreground: 220 15% 90%;
-    --popover: 210 20% 10%;
-    --popover-foreground: 220 15% 90%;
-    --primary: 165 80% 45%;
-    --primary-foreground: 210 25% 5%;
-    --secondary: 210 15% 12%;
-    --secondary-foreground: 220 15% 85%;
-    --muted: 210 15% 15%;
-    --muted-foreground: 220 10% 55%;
-    --accent: 165 80% 45%;
-    --accent-foreground: 210 25% 5%;
-    --destructive: 0 72% 55%;
-    --destructive-foreground: 220 15% 95%;
-    --border: 210 15% 18%;
-    --input: 210 15% 15%;
-    --ring: 165 80% 45%;
+    --sidebar-background: 220 25% 6%;
+    --sidebar-foreground: 220 15% 95%;
+    --sidebar-primary: 220 80% 60%;
+    --sidebar-primary-foreground: 220 25% 6%;
+    --sidebar-accent: 220 20% 14%;
+    --sidebar-accent-foreground: 220 15% 95%;
+    --sidebar-border: 220 20% 18%;
+    --sidebar-ring: 220 80% 60%;
   }
 }
 
@@ -132,7 +160,7 @@
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     letter-spacing: -0.011em;
-    line-height: 1.7;
+    line-height: 1.6;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -141,28 +169,27 @@
     font-weight: 600;
   }
 
-  /* Premium scrollbar - Bloomberg style */
+  /* Premium scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    background: hsl(210 20% 8%);
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: hsl(165 80% 45% / 0.3);
+    background: hsl(var(--muted-foreground) / 0.2);
     border-radius: 100px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(165 80% 45% / 0.5);
+    background: hsl(var(--muted-foreground) / 0.35);
   }
 }
 
 @layer components {
-  /* Terminal-style glass card */
   .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(20px);
@@ -170,7 +197,6 @@
     border: 1px solid var(--glass-border);
   }
 
-  /* Teal accent gradient text */
   .gradient-text {
     background: var(--gradient-primary);
     -webkit-background-clip: text;
@@ -185,19 +211,8 @@
     background-clip: text;
   }
 
-  /* Bloomberg-style section with teal left border */
-  .terminal-section {
-    @apply relative rounded-lg border border-border bg-card p-6;
-    border-left: 4px solid hsl(var(--primary));
-  }
-
-  .terminal-section-header {
-    @apply mb-4 text-sm font-semibold uppercase tracking-wider text-primary;
-  }
-
-  /* Probability bar */
   .probability-bar {
-    @apply relative h-2 w-full overflow-hidden rounded-full;
+    @apply relative h-2.5 w-full overflow-hidden rounded-full;
     background: hsl(var(--muted));
   }
 
@@ -205,18 +220,15 @@
     @apply absolute left-0 top-0 h-full rounded-full transition-all duration-700 ease-out;
   }
 
-  /* Section icon */
   .section-icon {
-    @apply flex h-10 w-10 items-center justify-center rounded-lg text-lg;
+    @apply flex h-10 w-10 items-center justify-center rounded-xl text-lg shadow-sm;
     background: var(--gradient-primary);
     color: hsl(var(--primary-foreground));
-    box-shadow: var(--shadow-teal);
   }
 
-  /* Form section */
   .form-section {
-    @apply rounded-lg border border-border bg-card p-6;
-    border-left: 4px solid hsl(var(--primary));
+    @apply rounded-xl border border-border bg-card p-6;
+    box-shadow: var(--shadow-sm);
   }
 
   /* Premium card hover effects */
@@ -226,52 +238,7 @@
 
   .card-hover:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-lg), var(--shadow-teal);
-  }
-
-  /* Scenario cards with color-coded borders */
-  .scenario-card {
-    @apply relative rounded-lg border border-border bg-card p-5 transition-all duration-300;
-  }
-
-  .scenario-card:hover {
-    @apply border-opacity-50;
-  }
-
-  .scenario-card-bullish {
-    border-left: 4px solid hsl(var(--bullish));
-  }
-
-  .scenario-card-bullish:hover {
-    box-shadow: 0 0 20px hsl(var(--bullish) / 0.2);
-  }
-
-  .scenario-card-bearish {
-    border-left: 4px solid hsl(var(--bearish));
-  }
-
-  .scenario-card-bearish:hover {
-    box-shadow: 0 0 20px hsl(var(--bearish) / 0.2);
-  }
-
-  .scenario-card-rotational {
-    border-left: 4px solid hsl(var(--rotational));
-  }
-
-  .scenario-card-rotational:hover {
-    box-shadow: 0 0 20px hsl(var(--rotational) / 0.2);
-  }
-
-  /* Price level styling - monospace with teal background */
-  .price-level {
-    @apply inline-block rounded px-2 py-0.5 font-mono text-sm font-medium;
-    background: hsl(var(--teal-muted));
-    color: hsl(var(--primary));
-  }
-
-  /* AMT term highlighting */
-  .amt-term {
-    @apply font-semibold text-primary;
+    box-shadow: var(--shadow-lg);
   }
 
   /* Status badges */
@@ -284,7 +251,7 @@
   }
 
   .status-balanced {
-    @apply bg-[hsl(var(--prob-balanced))] text-[hsl(var(--info-foreground))];
+    @apply bg-[hsl(var(--prob-balanced))] text-[hsl(var(--primary-foreground))];
   }
 
   .status-weakening {
@@ -298,15 +265,14 @@
   /* Premium input styling */
   .premium-input {
     @apply transition-all duration-200;
-    background: hsl(var(--input));
     box-shadow: var(--shadow-sm);
   }
 
   .premium-input:focus {
-    box-shadow: var(--shadow-md), 0 0 0 2px hsl(var(--primary) / 0.2);
+    box-shadow: var(--shadow-md), 0 0 0 3px hsl(var(--primary) / 0.1);
   }
 
-  /* Terminal-style dividers */
+  /* Dividers */
   .divider-subtle {
     @apply border-t border-border/60;
   }
@@ -318,19 +284,6 @@
 
   .mono {
     font-family: 'JetBrains Mono', monospace;
-  }
-
-  /* Chat bubbles - Bloomberg style */
-  .chat-bubble-user {
-    @apply rounded-2xl rounded-tr-md px-4 py-3;
-    background: hsl(var(--teal-muted));
-    border: 1px solid hsl(var(--primary) / 0.3);
-  }
-
-  .chat-bubble-ai {
-    @apply rounded-2xl rounded-tl-md px-4 py-3;
-    background: hsl(var(--secondary));
-    border: 1px solid hsl(var(--border));
   }
 }
 
@@ -345,14 +298,5 @@
 
   .shadow-glow {
     box-shadow: var(--shadow-glow);
-  }
-
-  .shadow-teal {
-    box-shadow: var(--shadow-teal);
-  }
-
-  /* Line height utilities for readability */
-  .leading-relaxed-plus {
-    line-height: 1.8;
   }
 }

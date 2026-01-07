@@ -12,15 +12,15 @@ export function Header() {
   const location = useLocation();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-3 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/70 shadow-teal group-hover:shadow-glow transition-shadow duration-300">
+        <Link to="/" className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-info">
             <BarChart3 className="h-5 w-5 text-primary-foreground" />
           </div>
           <div className="flex flex-col">
-            <span className="text-lg font-bold tracking-tight text-foreground">Auction Plan</span>
-            <span className="text-xs text-primary mono">AMT Trading Tool</span>
+            <span className="text-lg font-bold tracking-tight">Auction Plan</span>
+            <span className="text-xs text-muted-foreground">AMT Trading Tool</span>
           </div>
         </Link>
 
@@ -34,8 +34,8 @@ export function Header() {
                 className={cn(
                   "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200",
                   isActive
-                    ? "bg-primary/15 text-primary border border-primary/30"
-                    : "text-muted-foreground hover:bg-secondary hover:text-foreground border border-transparent"
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                 )}
               >
                 <item.icon className="h-4 w-4" />
