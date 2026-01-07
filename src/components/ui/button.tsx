@@ -9,17 +9,17 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow-[var(--shadow-md)] hover:bg-primary/90 hover:shadow-[var(--shadow-lg)] active:scale-[0.98]",
-        destructive: "bg-destructive text-destructive-foreground shadow-[var(--shadow-sm)] hover:bg-destructive/90",
-        outline: "border border-input bg-background shadow-[var(--shadow-sm)] hover:bg-secondary hover:text-secondary-foreground hover:border-primary/30",
-        secondary: "bg-secondary text-secondary-foreground shadow-[var(--shadow-sm)] hover:bg-secondary/80",
-        ghost: "hover:bg-secondary hover:text-secondary-foreground",
+        default: "bg-primary text-primary-foreground shadow-[0_0_20px_hsl(var(--primary)/0.3)] hover:shadow-[0_0_30px_hsl(var(--primary)/0.5)] hover:bg-primary/90 active:scale-[0.98]",
+        destructive: "bg-destructive text-destructive-foreground shadow-[0_0_15px_hsl(var(--destructive)/0.3)] hover:bg-destructive/90",
+        outline: "border border-border bg-transparent hover:bg-secondary hover:text-foreground hover:border-primary/50 hover:shadow-[0_0_15px_hsl(var(--primary)/0.15)]",
+        secondary: "bg-secondary text-secondary-foreground border border-border hover:bg-secondary/80 hover:border-primary/30",
+        ghost: "hover:bg-secondary hover:text-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        hero: "bg-gradient-to-r from-primary to-info text-primary-foreground shadow-[var(--shadow-lg)] hover:shadow-[var(--shadow-xl)] hover:scale-[1.02] active:scale-[0.98]",
-        success: "bg-success text-success-foreground shadow-[var(--shadow-md)] hover:bg-success/90",
-        warning: "bg-warning text-warning-foreground shadow-[var(--shadow-sm)] hover:bg-warning/90",
-        glass: "backdrop-blur-xl bg-secondary/40 border border-border hover:bg-secondary/60 text-foreground",
-        premium: "bg-gradient-to-r from-primary via-primary to-[hsl(280,60%,55%)] text-primary-foreground shadow-[var(--shadow-lg)] hover:shadow-[0_0_30px_hsl(var(--primary)/0.4)] hover:scale-[1.02] active:scale-[0.98]",
+        hero: "bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-[0_0_30px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_50px_hsl(var(--primary)/0.6)] hover:scale-[1.02] active:scale-[0.98]",
+        success: "bg-success text-success-foreground shadow-[0_0_20px_hsl(var(--success)/0.3)] hover:bg-success/90",
+        warning: "bg-warning text-warning-foreground shadow-[0_0_15px_hsl(var(--warning)/0.3)] hover:bg-warning/90",
+        glass: "backdrop-blur-xl bg-secondary/40 border border-border hover:bg-secondary/60 text-foreground hover:border-primary/30",
+        premium: "bg-gradient-to-r from-primary via-accent to-info text-primary-foreground shadow-[0_0_30px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_50px_hsl(var(--primary)/0.6)] hover:scale-[1.02] active:scale-[0.98]",
       },
       size: {
         default: "h-10 px-4 py-2",
