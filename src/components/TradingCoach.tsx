@@ -38,13 +38,13 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
   };
 
   return (
-    <Card variant="premium" className="flex h-[520px] flex-col animate-fade-in">
-      <CardHeader className="flex-shrink-0 border-b border-border pb-4">
+    <Card variant="premium" className="flex h-[520px] flex-col animate-fade-in overflow-hidden">
+      <CardHeader className="flex-shrink-0 border-b border-border/40 pb-4">
         <CardTitle className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent/70 shadow-lg shadow-accent/25">
+          <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-[hsl(168,60%,52%)] shadow-lg shadow-accent/20">
             <MessageSquare className="h-5 w-5 text-white" />
           </span>
-          <span className="text-xl">Trading Coach</span>
+          <span className="text-lg font-semibold">Trading Coach</span>
         </CardTitle>
       </CardHeader>
 
@@ -53,10 +53,10 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
         <div className="flex-1 overflow-y-auto p-5 space-y-4">
           {messages.length === 0 ? (
             <div className="flex h-full items-center justify-center">
-              <div className="text-center max-w-xs">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary">
-                  <Bot className="h-7 w-7 text-muted-foreground" />
-                </div>
+            <div className="text-center max-w-xs">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary/60">
+                <Bot className="h-7 w-7 text-muted-foreground" />
+              </div>
                 <p className="text-sm font-medium text-foreground">
                   Ask about current price action
                 </p>
@@ -132,7 +132,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
         {/* Input Area */}
         <form
           onSubmit={handleSubmit}
-          className="flex-shrink-0 border-t border-border p-4"
+          className="flex-shrink-0 border-t border-border/40 p-4"
         >
           <div className="flex gap-3">
             <Textarea

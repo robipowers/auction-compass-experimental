@@ -6,7 +6,7 @@ import { AICritique } from "@/components/AICritique";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, Download, Loader2 } from "lucide-react";
+import { Sparkles, Download, Loader2, TrendingUp } from "lucide-react";
 import {
   YesterdayContext,
   TodayContext,
@@ -310,27 +310,34 @@ export default function CreatePlan() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container max-w-7xl py-8 lg:py-12">
+    <div className="min-h-screen">
+      <div className="container max-w-7xl py-8 lg:py-10">
         {/* Page Header */}
-        <header className="mb-10">
-          <h1 className="text-3xl font-bold tracking-tight lg:text-4xl">
-            Create Auction Plan
-          </h1>
-          <p className="mt-2 text-muted-foreground text-base">
-            Build your pre-market analysis for EURUSD
-          </p>
+        <header className="mb-8">
+          <div className="flex items-center gap-4 mb-2">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary via-primary to-[hsl(260,70%,60%)] shadow-lg shadow-primary/20">
+              <TrendingUp className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight lg:text-3xl">
+                Create Auction Plan
+              </h1>
+              <p className="text-muted-foreground text-sm">
+                Build your pre-market analysis for EURUSD
+              </p>
+            </div>
+          </div>
         </header>
 
-        <div className="grid gap-10 xl:grid-cols-2">
+        <div className="grid gap-8 xl:grid-cols-2">
           {/* Left Column - Form and Analysis */}
-          <div className="space-y-8">
+          <div className="space-y-6">
             <AuctionPlanForm onSave={handleSavePlan} isLoading={isSaving} />
 
             {plan && !critique && (
               <div className="flex justify-center py-4">
                 <Button
-                  variant="hero"
+                  variant="premium"
                   size="xl"
                   onClick={handleAnalyzePlan}
                   disabled={isAnalyzing}
@@ -357,11 +364,11 @@ export default function CreatePlan() {
           </div>
 
           {/* Right Column - Probability Tracker and Coach */}
-          <div className="space-y-8">
+          <div className="space-y-6">
             {critique && (
               <>
                 <div className="flex justify-end">
-                  <Button variant="outline" size="default" onClick={handleExportReport}>
+                  <Button variant="outline" size="default" onClick={handleExportReport} className="rounded-xl">
                     <Download className="mr-2 h-4 w-4" />
                     Export Report
                   </Button>
