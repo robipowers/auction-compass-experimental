@@ -38,13 +38,13 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
   };
 
   return (
-    <Card variant="premium" className="flex h-[520px] flex-col animate-fade-in">
+    <Card className="flex h-[520px] flex-col animate-fade-in border-border bg-card">
       <CardHeader className="flex-shrink-0 border-b border-border pb-4">
         <CardTitle className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent/70 shadow-lg shadow-accent/25">
-            <MessageSquare className="h-5 w-5 text-white" />
+          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/70 shadow-teal">
+            <MessageSquare className="h-5 w-5 text-primary-foreground" />
           </span>
-          <span className="text-xl">Trading Coach</span>
+          <span className="text-xl font-semibold text-foreground">Trading Coach</span>
         </CardTitle>
       </CardHeader>
 
@@ -54,8 +54,8 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
           {messages.length === 0 ? (
             <div className="flex h-full items-center justify-center">
               <div className="text-center max-w-xs">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary">
-                  <Bot className="h-7 w-7 text-muted-foreground" />
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-secondary border border-border">
+                  <Bot className="h-7 w-7 text-primary" />
                 </div>
                 <p className="text-sm font-medium text-foreground">
                   Ask about current price action
@@ -63,7 +63,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
                 <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
                   I'll analyze the structure and update scenario probabilities
                 </p>
-                <p className="mt-3 text-xs text-muted-foreground/70 italic">
+                <p className="mt-3 text-xs text-muted-foreground/70 italic mono">
                   Example: "Price at VAL, seeing rejection"
                 </p>
               </div>
@@ -79,31 +79,31 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
               >
                 <div
                   className={cn(
-                    "flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl",
+                    "flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border",
                     message.role === "user"
-                      ? "bg-primary/15"
-                      : "bg-accent/15"
+                      ? "bg-primary/10 border-primary/30"
+                      : "bg-secondary border-border"
                   )}
                 >
                   {message.role === "user" ? (
                     <User className="h-4 w-4 text-primary" />
                   ) : (
-                    <Bot className="h-4 w-4 text-accent" />
+                    <Bot className="h-4 w-4 text-primary" />
                   )}
                 </div>
                 <div
                   className={cn(
-                    "max-w-[80%] rounded-2xl px-4 py-3 text-sm",
+                    "max-w-[80%] text-sm",
                     message.role === "user"
-                      ? "bg-primary text-primary-foreground rounded-tr-md"
-                      : "bg-secondary rounded-tl-md"
+                      ? "chat-bubble-user"
+                      : "chat-bubble-ai"
                   )}
                 >
-                  <div className="whitespace-pre-wrap leading-relaxed">{message.content}</div>
+                  <div className="whitespace-pre-wrap leading-relaxed-plus text-foreground/90">{message.content}</div>
                   {message.probabilities && (
-                    <div className="mt-3 flex gap-2 border-t border-foreground/10 pt-2.5 text-xs">
-                      <span className="text-current/70">Probabilities:</span>
-                      <span className="font-mono font-medium">
+                    <div className="mt-3 flex gap-2 border-t border-border/50 pt-2.5 text-xs">
+                      <span className="text-muted-foreground">Probabilities:</span>
+                      <span className="font-mono font-medium text-primary">
                         {message.probabilities.join("% / ")}%
                       </span>
                     </div>
@@ -114,14 +114,14 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
           )}
           {isLoading && (
             <div className="flex gap-3 animate-fade-in">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/15">
-                <Bot className="h-4 w-4 text-accent" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-secondary border border-border">
+                <Bot className="h-4 w-4 text-primary" />
               </div>
-              <div className="rounded-2xl rounded-tl-md bg-secondary px-4 py-3">
-                <div className="flex items-center gap-1">
-                  <span className="inline-block w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <span className="inline-block w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <span className="inline-block w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: '300ms' }} />
+              <div className="chat-bubble-ai">
+                <div className="flex items-center gap-1.5">
+                  <span className="inline-block w-2 h-2 rounded-full bg-primary/40 animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <span className="inline-block w-2 h-2 rounded-full bg-primary/40 animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <span className="inline-block w-2 h-2 rounded-full bg-primary/40 animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
               </div>
             </div>
@@ -132,7 +132,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
         {/* Input Area */}
         <form
           onSubmit={handleSubmit}
-          className="flex-shrink-0 border-t border-border p-4"
+          className="flex-shrink-0 border-t border-border p-4 bg-secondary/30"
         >
           <div className="flex gap-3">
             <Textarea
@@ -141,14 +141,14 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Describe the current price action..."
-              className="min-h-[48px] max-h-32 resize-none rounded-xl text-sm"
+              className="min-h-[48px] max-h-32 resize-none rounded-lg text-sm bg-input border-border focus:border-primary focus:ring-primary/20"
               disabled={isLoading}
             />
             <Button
               type="submit"
               size="icon"
               disabled={!input.trim() || isLoading}
-              className="flex-shrink-0 h-12 w-12 rounded-xl"
+              className="flex-shrink-0 h-12 w-12 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
