@@ -41,16 +41,16 @@ export function ProbabilityTracker({
   }, [probabilities]);
 
   return (
-    <Card variant="premium" className="animate-fade-in">
-      <CardHeader className="pb-6">
+    <Card variant="premium" className="animate-fade-in overflow-hidden">
+      <CardHeader className="pb-5">
         <CardTitle className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-warning to-orange-500 shadow-lg shadow-warning/25">
+          <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-warning to-orange-400 shadow-lg shadow-warning/20">
             <BarChart3 className="h-5 w-5 text-white" />
           </span>
-          <span className="text-xl">Probability Tracker</span>
+          <span className="text-lg font-semibold">Probability Tracker</span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-4">
         {scenarios.map((scenario, index) => {
           const probability = probabilities[index];
           const previousProb = previousProbabilities?.[index];
@@ -67,7 +67,7 @@ export function ProbabilityTracker({
               : "neutral";
 
           return (
-            <div key={index} className="space-y-3 rounded-xl border border-border bg-card p-4 shadow-[var(--shadow-sm)]">
+            <div key={index} className="space-y-3 rounded-2xl border border-border/40 bg-white/60 p-4">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2.5">
