@@ -31,23 +31,17 @@ VERIFICATION REQUIREMENT: Your response must demonstrate knowledge base consulta
 - Applying principles in the exact manner presented in the books`;
 
 // Helper function to search AMT knowledge base
-async function searchAMTKnowledge(query: string, supabaseUrl: string, supabaseKey: string): Promise<string> {
+async function searchAMTKnowledge(query: string, apiKey: string, supabaseUrl: string, supabaseKey: string): Promise<string> {
   try {
-    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
-    if (!OPENAI_API_KEY) {
-      console.warn('OPENAI_API_KEY not set, skipping knowledge search');
-      return '';
-    }
-
-    // Generate embedding for the query using OpenAI (same model used to create chunks)
-    const embeddingResponse = await fetch("https://api.openai.com/v1/embeddings", {
+    // Generate embedding for the query
+    const embeddingResponse = await fetch("https://ai.gateway.lovable.dev/v1/embeddings", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
+        Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "text-embedding-3-small",
+        model: "google/text-embedding-004",
         input: query,
       }),
     });
@@ -134,7 +128,7 @@ serve(async (req) => {
     
     // Execute all knowledge queries in parallel
     const knowledgeResults = await Promise.all(
-      knowledgeQueries.map(query => searchAMTKnowledge(query, supabaseUrl, supabaseServiceKey))
+      knowledgeQueries.map(query => searchAMTKnowledge(query, LOVABLE_API_KEY, supabaseUrl, supabaseServiceKey))
     );
     
     // Combine and deduplicate knowledge
@@ -375,7 +369,7 @@ END OF ANALYSIS REQUEST`;
       },
       body: JSON.stringify({
         model: "openai/gpt-5",
-        max_completion_tokens: 6000,
+        max_completion_tokens: 12000,
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: userPrompt }

@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { BarChart3, History, Home, TrendingUp, Settings } from "lucide-react";
+import { BarChart3, History, Home, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -12,10 +12,10 @@ export function Header() {
   const location = useLocation();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-white/70 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary via-primary to-[hsl(260,70%,60%)] shadow-lg shadow-primary/25">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-info">
             <BarChart3 className="h-5 w-5 text-primary-foreground" />
           </div>
           <div className="flex flex-col">
@@ -32,10 +32,10 @@ export function Header() {
                 key={item.path}
                 to={item.path}
                 className={cn(
-                  "flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-200",
+                  "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200",
                   isActive
-                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/25"
-                    : "text-muted-foreground hover:bg-white/80 hover:text-foreground hover:shadow-sm"
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                 )}
               >
                 <item.icon className="h-4 w-4" />

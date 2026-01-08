@@ -4,16 +4,16 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const cardVariants = cva(
-  "rounded-2xl border text-card-foreground transition-all duration-300",
+  "rounded-xl border text-card-foreground transition-all duration-300",
   {
     variants: {
       variant: {
-        default: "bg-card border-border/60 shadow-[var(--shadow-card)]",
-        glass: "backdrop-blur-xl bg-white/70 border-white/50 shadow-[var(--shadow-card)]",
-        elevated: "bg-card border-border/50 shadow-[var(--shadow-lg)]",
-        feature: "bg-white/80 backdrop-blur-sm border-border/40 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-lg)] hover:border-primary/20",
-        interactive: "bg-white/80 backdrop-blur-sm border-border/40 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-lg)] hover:border-primary/30 cursor-pointer",
-        premium: "bg-white/90 backdrop-blur-sm border-border/30 shadow-[var(--shadow-lg)]",
+        default: "bg-card border-border shadow-[var(--shadow-sm)]",
+        glass: "backdrop-blur-xl bg-secondary/20 border-border/50",
+        elevated: "bg-card border-border shadow-[var(--shadow-lg)]",
+        feature: "bg-card border-border shadow-[var(--shadow-md)] hover:shadow-[var(--shadow-lg)] hover:border-primary/30",
+        interactive: "bg-card border-border shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-lg)] hover:border-primary/40 cursor-pointer",
+        premium: "bg-gradient-to-br from-card via-card to-secondary/20 border-border/80 shadow-[var(--shadow-lg)]",
       },
     },
     defaultVariants: {
@@ -39,7 +39,7 @@ Card.displayName = "Card";
 
 const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex flex-col space-y-1.5 p-6 pb-5", className)} {...props} />
+    <div ref={ref} className={cn("flex flex-col space-y-1.5 p-6 pb-4", className)} {...props} />
   ),
 );
 CardHeader.displayName = "CardHeader";

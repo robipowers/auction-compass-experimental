@@ -61,17 +61,17 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {/* Yesterday's Context */}
-      <Card variant="feature" className="animate-fade-in overflow-hidden">
-        <CardHeader className="pb-5">
+      <Card variant="feature" className="animate-fade-in">
+        <CardHeader>
           <CardTitle className="flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-primary via-primary to-[hsl(260,70%,60%)] shadow-lg shadow-primary/20">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-info shadow-lg shadow-primary/20">
               <Calendar className="h-5 w-5 text-white" />
             </span>
             <div>
-              <div className="text-base font-semibold">Yesterday's Context</div>
-              <div className="text-xs font-normal text-muted-foreground">
+              <div className="text-lg font-semibold">Yesterday's Context</div>
+              <div className="text-sm font-normal text-muted-foreground">
                 Prior Session Structure
               </div>
             </div>
@@ -160,15 +160,15 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
       </Card>
 
       {/* Today's Context */}
-      <Card variant="feature" className="animate-fade-in overflow-hidden" style={{ animationDelay: "0.1s" }}>
-        <CardHeader className="pb-5">
+      <Card variant="feature" className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
+        <CardHeader>
           <CardTitle className="flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-[hsl(168,60%,52%)] shadow-lg shadow-accent/20">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent/70 shadow-lg shadow-accent/20">
               <TrendingUp className="h-5 w-5 text-white" />
             </span>
             <div>
-              <div className="text-base font-semibold">Today's Context</div>
-              <div className="text-xs font-normal text-muted-foreground">
+              <div className="text-lg font-semibold">Today's Context</div>
+              <div className="text-sm font-normal text-muted-foreground">
                 Current Market State
               </div>
             </div>
@@ -220,15 +220,15 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
       </Card>
 
       {/* Reference Levels */}
-      <Card variant="feature" className="animate-fade-in overflow-hidden" style={{ animationDelay: "0.2s" }}>
-        <CardHeader className="pb-5">
+      <Card variant="feature" className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
+        <CardHeader>
           <CardTitle className="flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-warning to-orange-400 shadow-lg shadow-warning/20">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-warning to-warning/70 shadow-lg shadow-warning/20">
               <Target className="h-5 w-5 text-white" />
             </span>
             <div>
-              <div className="text-base font-semibold">Reference Levels</div>
-              <div className="text-xs font-normal text-muted-foreground">
+              <div className="text-lg font-semibold">Reference Levels</div>
+              <div className="text-sm font-normal text-muted-foreground">
                 Key Structural Pivots
               </div>
             </div>
@@ -290,13 +290,13 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
       </Card>
 
       {/* Save Button */}
-      <div className="flex justify-end pt-3">
+      <div className="flex justify-end pt-2">
         <Button
-          variant="premium"
+          variant="hero"
           size="xl"
           onClick={handleSave}
           disabled={isLoading}
-          className="min-w-[220px] rounded-xl"
+          className="min-w-[220px]"
         >
           {isLoading ? (
             <>
