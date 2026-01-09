@@ -89,6 +89,7 @@ export default function CreatePlan() {
       const critiqueData: AICritiqueType = {
         id: Date.now().toString(),
         planId: plan.id,
+        currentAuctionState: data.currentAuctionState,
         coherence: data.coherence,
         coherenceExplanation: data.coherenceExplanation,
         structuralObservations: data.structuralObservations,

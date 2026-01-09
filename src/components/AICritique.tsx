@@ -65,6 +65,19 @@ export function AICritique({ critique }: AICritiqueProps) {
       "AI STRATEGIST ANALYSIS",
       "=".repeat(50),
       "",
+    ];
+
+    if (critique.currentAuctionState) {
+      lines.push(
+        "CURRENT AUCTION STATE",
+        "-".repeat(30),
+        `STATE: ${critique.currentAuctionState.state}`,
+        `EXPLANATION: ${critique.currentAuctionState.explanation}`,
+        ""
+      );
+    }
+
+    lines.push(
       `COHERENCE: ${coherence.label}`,
       critique.coherenceExplanation,
       "",
@@ -78,7 +91,7 @@ export function AICritique({ critique }: AICritiqueProps) {
         `${i + 1}. ${s.name}\n   Type: ${s.typeOfMove}\n   In Play: ${s.inPlay}\n   LIS: ${s.lis}${s.behavior ? `\n   Behavior: ${s.behavior}` : ""}`
       ),
       "",
-    ];
+    );
 
     if (critique.inventoryRiskAnalysis?.trim()) {
       lines.push("INVENTORY RISK ANALYSIS", "-".repeat(30), critique.inventoryRiskAnalysis, "");
@@ -134,6 +147,26 @@ export function AICritique({ critique }: AICritiqueProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-8">
+        {/* Current Auction State */}
+        {critique.currentAuctionState && (
+          <section className="rounded-xl border-2 border-primary/40 bg-primary/5 p-5">
+            <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-primary">
+              Current Auction State
+            </h4>
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">State:</span>
+                <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 font-semibold">
+                  {critique.currentAuctionState.state}
+                </Badge>
+              </div>
+              <p className="text-[15px] leading-[1.8] text-foreground/90">
+                {critique.currentAuctionState.explanation}
+              </p>
+            </div>
+          </section>
+        )}
+
         {/* Coherence Analysis */}
         <section className="rounded-xl border border-border bg-secondary/30 p-5">
           <div className="mb-4 flex items-center justify-between">

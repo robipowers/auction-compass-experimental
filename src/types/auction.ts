@@ -62,9 +62,15 @@ export interface ChecklistItem {
   answer: string;
 }
 
+export interface CurrentAuctionState {
+  state: string;
+  explanation: string;
+}
+
 export interface AICritique {
   id: string;
   planId: string;
+  currentAuctionState?: CurrentAuctionState;
   coherence: Coherence;
   coherenceExplanation: string;
   structuralObservations: string;

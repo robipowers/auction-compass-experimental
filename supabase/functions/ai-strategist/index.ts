@@ -218,6 +218,30 @@ You MUST structure your response EXACTLY as follows with complete paragraphs (no
 
 ---
 
+### CURRENT AUCTION STATE
+
+**STATE:** [Select exactly ONE state from the allowed list below]
+
+**EXPLANATION:** [1-2 sentences explaining WHY this state applies. Your explanation MUST reference: inventory position (net long, net short, balanced), profile structure (P-shape, b-shape, double distribution, etc.), open type (OIV, OOR, OOD, OTF), acceptance or rejection behavior, initiative vs responsive activity, and value relationship (overlapping-higher, overlapping-lower, higher, lower). Use specific price levels when relevant.]
+
+**Allowed States (select only ONE):**
+• Balanced Rotation
+• Balanced Rotation (Net Long Inventory)
+• Balanced Rotation (Net Short Inventory)
+• Early Discovery Attempt Above Value
+• Early Discovery Attempt Below Value
+• Failed Discovery / Rejection
+• Short-Covering Environment
+• Long Liquidation Environment
+• Late-Stage Balance Exhaustion
+• One-Timeframe Trending
+• Two-Timeframe Rotation
+• Value Migration in Progress
+• Acceptance Testing at Key Level
+• Open-Drive Trend Attempt
+
+---
+
 ### COHERENCE RATING: [ALIGNED | CONFLICTED | NEUTRAL]
 
 **[ALIGNED or CONFLICTED or NEUTRAL]**
@@ -428,6 +452,21 @@ function parseAICritique(content: string, plan: any) {
     return (lastSpace > 120 ? sliced.slice(0, lastSpace) : sliced).trimEnd() + "…";
   };
 
+  // Extract Current Auction State section
+  let currentAuctionState: { state: string; explanation: string } | undefined;
+  const auctionStateSection = content.match(/### CURRENT AUCTION STATE[\s\S]*?(?=### COHERENCE RATING|$)/i);
+  if (auctionStateSection) {
+    const stateMatch = auctionStateSection[0].match(/\*\*STATE:\*\*\s*([^\n]+)/i);
+    const explanationMatch = auctionStateSection[0].match(/\*\*EXPLANATION:\*\*\s*([^\n]+(?:\n(?!\*\*)[^\n#]*)*)/i);
+    
+    if (stateMatch) {
+      currentAuctionState = {
+        state: stateMatch[1].trim(),
+        explanation: explanationMatch ? explanationMatch[1].trim().replace(/\n/g, ' ') : ''
+      };
+    }
+  }
+
   // Extract coherence from COHERENCE RATING section (now at top)
   let coherence: "ALIGNED" | "CONFLICTED" | "NEUTRAL" = "NEUTRAL";
   const coherenceSection = content.match(/### COHERENCE RATING[\s\S]*?(?=### Market Context|$)/i);
@@ -615,6 +654,7 @@ function parseAICritique(content: string, plan: any) {
   }
 
   return {
+    currentAuctionState,
     coherence,
     coherenceExplanation,
     structuralObservations,
