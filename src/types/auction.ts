@@ -92,7 +92,8 @@ export interface CoachMessage {
 }
 
 export type ValidationStatus =
-  | "not_validated"
+  | "inactive"
+  | "in_play"
   | "partially_validated"
   | "validated"
   | "invalidated";
@@ -102,15 +103,33 @@ export interface ScenarioValidation {
   validatedConditions: string[];
   pendingConditions: string[];
   invalidationCondition: string;
+  triggerLevel?: string;
 }
+
+// Priority order for status (higher = more important)
+export const VALIDATION_STATUS_PRIORITY: Record<ValidationStatus, number> = {
+  inactive: 0,
+  in_play: 1,
+  partially_validated: 2,
+  validated: 3,
+  invalidated: -1, // Special case: invalidated should be dimmed
+};
 
 export function parseValidationStatus(statusStr: string): ValidationStatus {
   const normalized = statusStr.toLowerCase().replace(/[\s_-]+/g, '_');
-  if (normalized.includes('not_validated') || normalized === 'not validated') return "not_validated";
+  
+  // Check for new states first
+  if (normalized.includes('inactive') || normalized === 'inactive') return "inactive";
+  if (normalized.includes('in_play') || normalized === 'in play' || normalized === 'in_play') return "in_play";
+  
+  // Legacy "not_validated" maps to "in_play" by default (scenario is monitoring)
+  if (normalized.includes('not_validated') || normalized === 'not validated') return "in_play";
+  
   if (normalized.includes('partially')) return "partially_validated";
-  if (normalized.includes('validated') && !normalized.includes('not') && !normalized.includes('in')) return "validated";
+  if (normalized.includes('validated') && !normalized.includes('not') && !normalized.includes('in') && !normalized.includes('partially')) return "validated";
   if (normalized.includes('invalidated')) return "invalidated";
-  return "not_validated";
+  
+  return "in_play"; // Default to in_play instead of not_validated
 }
 
 export const DAY_TYPE_LABELS: Record<DayType, string> = {

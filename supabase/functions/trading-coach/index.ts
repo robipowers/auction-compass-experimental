@@ -261,13 +261,17 @@ VALIDATION OUTPUT FORMAT (MANDATORY):
 
 End EVERY response with:
 
-[VALIDATIONS: {"scenario1": {"status": "not_validated|partially_validated|validated|invalidated", "validatedConditions": ["condition 1", "condition 2"], "pendingConditions": ["pending 1"], "invalidationCondition": "LIS description"}, "scenario2": {...}, "scenario3": {...}}]
+[VALIDATIONS: {"scenario1": {"status": "inactive|in_play|partially_validated|validated|invalidated", "validatedConditions": ["condition 1", "condition 2"], "pendingConditions": ["pending 1"], "invalidationCondition": "LIS description"}, "scenario2": {...}, "scenario3": {...}}]
 
 RULES:
 - Only ONE scenario may be "validated" at any time
-- Multiple scenarios may be "not_validated" or "partially_validated"
-- Use specific level values in conditions when available
-- Status must be one of: not_validated, partially_validated, validated, invalidated`;
+- "inactive" = scenario not relevant (price far from trigger levels)
+- "in_play" = scenario is being monitored (price near trigger levels, awaiting trigger)
+- "partially_validated" = initial condition met but acceptance not proven
+- "validated" = acceptance confirmed (time + volume)
+- "invalidated" = LIS reclaimed or opposing acceptance occurred
+- Multiple scenarios may be "inactive", "in_play", or "partially_validated"
+- Use specific level values in conditions when available`;
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -308,9 +312,9 @@ SCENARIOS TO VALIDATE:
       contextPrompt += `
 
 CURRENT VALIDATION STATES:
-1. ${scenarios[0].name}: ${currentValidations[0]?.status || 'not_validated'}
-2. ${scenarios[1].name}: ${currentValidations[1]?.status || 'not_validated'}
-3. ${scenarios[2].name}: ${currentValidations[2]?.status || 'not_validated'}`;
+1. ${scenarios[0].name}: ${currentValidations[0]?.status || 'in_play'}
+2. ${scenarios[1].name}: ${currentValidations[1]?.status || 'in_play'}
+3. ${scenarios[2].name}: ${currentValidations[2]?.status || 'in_play'}`;
     }
 
     // Add knowledge context if available
@@ -395,7 +399,7 @@ Apply these authoritative insights when assessing acceptance, rejection, and val
 });
 
 interface ScenarioValidation {
-  status: "not_validated" | "partially_validated" | "validated" | "invalidated";
+  status: "inactive" | "in_play" | "partially_validated" | "validated" | "invalidated";
   validatedConditions: string[];
   pendingConditions: string[];
   invalidationCondition: string;
@@ -472,7 +476,7 @@ function extractValidations(content: string, scenarios: any[], currentValidation
               data = {};
             }
 
-            const status = parseValidationStatus(data.status || "not_validated");
+            const status = parseValidationStatus(data.status || "in_play");
             console.log(`Scenario ${index + 1} status: ${data.status} -> ${status}`);
 
             return {
@@ -485,8 +489,8 @@ function extractValidations(content: string, scenarios: any[], currentValidation
             };
           });
 
-          // Check if we actually got meaningful statuses
-          const hasNonDefault = parsed.some((v) => v.status !== "not_validated");
+          // Check if we actually got meaningful statuses (not just defaults)
+          const hasNonDefault = parsed.some((v) => v.status !== "in_play" && v.status !== "inactive");
           
           if (hasNonDefault) {
             console.log('✅ Validations extracted successfully:', parsed.map((v) => v.status));
@@ -500,7 +504,7 @@ function extractValidations(content: string, scenarios: any[], currentValidation
             }
           }
           
-          console.log('✅ Validations extracted (all not_validated):', parsed.map((v) => v.status));
+          console.log('✅ Validations extracted (default states):', parsed.map((v) => v.status));
           return parsed;
         } catch (e) {
           console.warn('Failed to parse validations JSON:', e);
@@ -514,12 +518,16 @@ function extractValidations(content: string, scenarios: any[], currentValidation
   return inferValidationsFromText(content, scenarios, currentValidations);
 }
 
-function parseValidationStatus(statusStr: string): "not_validated" | "partially_validated" | "validated" | "invalidated" {
+function parseValidationStatus(statusStr: string): "inactive" | "in_play" | "partially_validated" | "validated" | "invalidated" {
   const normalized = statusStr.toLowerCase().replace(/[\s_-]+/g, '_');
+  if (normalized.includes('inactive')) return "inactive";
+  if (normalized.includes('in_play') || normalized === 'in play') return "in_play";
   if (normalized.includes('invalidated')) return "invalidated";
   if (normalized === 'validated' || normalized === 'confirmed') return "validated";
   if (normalized.includes('partially') || normalized.includes('partial')) return "partially_validated";
-  return "not_validated";
+  // Legacy "not_validated" maps to "in_play"
+  if (normalized.includes('not_validated') || normalized === 'not validated') return "in_play";
+  return "in_play";
 }
 
 function inferValidationsFromText(text: string, scenarios: any[], currentValidations: ScenarioValidation[] | null): ScenarioValidation[] {
@@ -531,7 +539,7 @@ function inferValidationsFromText(text: string, scenarios: any[], currentValidat
   const result: ScenarioValidation[] = scenarios.map((scenario, index) => {
     const current = currentValidations?.[index];
     return {
-      status: current?.status || "not_validated",
+      status: current?.status || "in_play",
       validatedConditions: current?.validatedConditions || [],
       pendingConditions: current?.pendingConditions || ["Requires acceptance (time + volume)"],
       invalidationCondition: current?.invalidationCondition || scenario.lis,
@@ -560,14 +568,21 @@ function inferValidationsFromText(text: string, scenarios: any[], currentValidat
         console.log(`Scenario ${scenarioNum} matched:`, lastMatch);
         
         // Order matters: check more specific patterns first
-        if (lastMatch.includes('invalidated')) {
+        if (lastMatch.includes('inactive')) {
+          result[i].status = "inactive";
+          break;
+        } else if (lastMatch.includes('in_play') || lastMatch.includes('in play')) {
+          result[i].status = "in_play";
+          break;
+        } else if (lastMatch.includes('invalidated')) {
           result[i].status = "invalidated";
           break;
         } else if (lastMatch.includes('partially')) {
           result[i].status = "partially_validated";
           break;
         } else if (lastMatch.includes('not validated') || lastMatch.includes('not_validated')) {
-          result[i].status = "not_validated";
+          // Legacy: map to in_play
+          result[i].status = "in_play";
           break;
         } else if (lastMatch.includes('validated') && !lastMatch.includes('not')) {
           result[i].status = "validated";

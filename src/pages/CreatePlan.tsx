@@ -37,7 +37,7 @@ function CreatePlanContent() {
   // Create initial validations from scenarios
   const createInitialValidations = (scenarios: Scenario[]): ScenarioValidation[] => {
     return scenarios.map((scenario) => ({
-      status: "not_validated" as ValidationStatus,
+      status: "in_play" as ValidationStatus,
       validatedConditions: [],
       pendingConditions: ["Requires acceptance (time + volume)", `Watch for activity at ${scenario.inPlay}`],
       invalidationCondition: `Acceptance ${scenario.lis}`,
@@ -195,14 +195,18 @@ function CreatePlanContent() {
 
         const parseStatus = (s: string): ValidationStatus => {
           const normalized = s.toLowerCase().replace(/[\s_-]+/g, '_');
+          if (normalized.includes('inactive')) return "inactive";
+          if (normalized.includes('in_play') || normalized === 'in play') return "in_play";
           if (normalized.includes('invalidated')) return "invalidated";
           if (normalized === 'validated' || normalized === 'confirmed') return "validated";
           if (normalized.includes('partially') || normalized.includes('partial')) return "partially_validated";
-          return "not_validated";
+          // Legacy "not_validated" maps to "in_play"
+          if (normalized.includes('not_validated') || normalized === 'not validated') return "in_play";
+          return "in_play";
         };
         
         return {
-          status: parseStatus(data.status || "not_validated"),
+          status: parseStatus(data.status || "in_play"),
           validatedConditions: data.validatedConditions || [],
           pendingConditions: data.pendingConditions || ["Awaiting price action update"],
           invalidationCondition: data.invalidationCondition || scenario.lis,
