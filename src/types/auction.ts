@@ -87,23 +87,30 @@ export interface CoachMessage {
   planId: string;
   role: "user" | "assistant";
   content: string;
-  probabilities?: [number, number, number];
+  validationStates?: [ValidationStatus, ValidationStatus, ValidationStatus];
   createdAt: Date;
 }
 
-export type ProbabilityStatus =
-  | "confirmed"
-  | "strengthening"
-  | "balanced"
-  | "weakening"
+export type ValidationStatus =
+  | "not_validated"
+  | "partially_validated"
+  | "validated"
   | "invalidated";
 
-export function getProbabilityStatus(probability: number): ProbabilityStatus {
-  if (probability >= 85) return "confirmed";
-  if (probability >= 60) return "strengthening";
-  if (probability >= 40) return "balanced";
-  if (probability >= 15) return "weakening";
-  return "invalidated";
+export interface ScenarioValidation {
+  status: ValidationStatus;
+  validatedConditions: string[];
+  pendingConditions: string[];
+  invalidationCondition: string;
+}
+
+export function parseValidationStatus(statusStr: string): ValidationStatus {
+  const normalized = statusStr.toLowerCase().replace(/[\s_-]+/g, '_');
+  if (normalized.includes('not_validated') || normalized === 'not validated') return "not_validated";
+  if (normalized.includes('partially')) return "partially_validated";
+  if (normalized.includes('validated') && !normalized.includes('not') && !normalized.includes('in')) return "validated";
+  if (normalized.includes('invalidated')) return "invalidated";
+  return "not_validated";
 }
 
 export const DAY_TYPE_LABELS: Record<DayType, string> = {

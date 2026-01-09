@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AuctionPlanForm } from "@/components/AuctionPlanForm";
-import { ProbabilityTracker } from "@/components/ProbabilityTracker";
+import { ScenarioValidationTracker } from "@/components/ScenarioValidationTracker";
 import { TradingCoach } from "@/components/TradingCoach";
 import { AICritique } from "@/components/AICritique";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,8 @@ import {
   AICritique as AICritiqueType,
   CoachMessage,
   Scenario,
+  ScenarioValidation,
+  ValidationStatus,
 } from "@/types/auction";
 
 
@@ -25,13 +27,19 @@ export default function CreatePlan() {
   const [plan, setPlan] = useState<AuctionPlan | null>(null);
   const [critique, setCritique] = useState<AICritiqueType | null>(null);
   const [messages, setMessages] = useState<CoachMessage[]>([]);
-  const [probabilities, setProbabilities] = useState<[number, number, number]>([
-    33, 33, 34,
-  ]);
-  const [previousProbabilities, setPreviousProbabilities] = useState<
-    [number, number, number] | undefined
-  >();
+  const [validations, setValidations] = useState<ScenarioValidation[]>([]);
+  const [previousValidations, setPreviousValidations] = useState<ScenarioValidation[] | undefined>();
   const [isCoachLoading, setIsCoachLoading] = useState(false);
+
+  // Create initial validations from scenarios
+  const createInitialValidations = (scenarios: Scenario[]): ScenarioValidation[] => {
+    return scenarios.map((scenario) => ({
+      status: "not_validated" as ValidationStatus,
+      validatedConditions: [],
+      pendingConditions: ["Requires acceptance (time + volume)", `Watch for activity at ${scenario.inPlay}`],
+      invalidationCondition: `Acceptance ${scenario.lis}`,
+    }));
+  };
 
   const handleSavePlan = async (data: {
     yesterday: YesterdayContext;
@@ -102,7 +110,7 @@ export default function CreatePlan() {
       };
 
       setCritique(critiqueData);
-      setProbabilities([33, 33, 34]);
+      setValidations(createInitialValidations(data.scenarios));
       toast({
         title: "Analysis Complete",
         description: "AI Strategist has generated your structural critique.",
@@ -119,42 +127,35 @@ export default function CreatePlan() {
     }
   };
 
-  // Extract probabilities from AI response using [PROBABILITIES: X, Y, Z] format
-  const extractProbabilities = (content: string): [number, number, number] | null => {
-    const match = content.match(/\[PROBABILITIES:\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\]/i);
-    
-    if (!match) {
-      console.warn('No probabilities found in AI response');
+  // Parse validation data from AI response
+  const parseValidationsFromResponse = (content: string, scenarios: Scenario[]): ScenarioValidation[] | null => {
+    try {
+      // Look for [VALIDATIONS: {...}] pattern
+      const match = content.match(/\[VALIDATIONS:\s*(\{[\s\S]*?\})\s*\]/i);
+      if (!match) return null;
+
+      const validationData = JSON.parse(match[1]);
+      
+      return scenarios.map((scenario, index) => {
+        const key = `scenario${index + 1}`;
+        const data = validationData[key] || {};
+        
+        return {
+          status: (data.status || "not_validated") as ValidationStatus,
+          validatedConditions: data.validatedConditions || [],
+          pendingConditions: data.pendingConditions || ["Awaiting price action update"],
+          invalidationCondition: data.invalidationCondition || scenario.lis,
+        };
+      });
+    } catch (e) {
+      console.warn('Failed to parse validations from response:', e);
       return null;
     }
-    
-    const probs: [number, number, number] = [
-      parseInt(match[1], 10),
-      parseInt(match[2], 10),
-      parseInt(match[3], 10)
-    ];
-    
-    // Validate they sum to 100
-    const sum = probs.reduce((a, b) => a + b, 0);
-    if (sum !== 100) {
-      console.warn(`Probabilities sum to ${sum}, normalizing to 100`);
-      const normalized: [number, number, number] = [
-        Math.round((probs[0] / sum) * 100),
-        Math.round((probs[1] / sum) * 100),
-        Math.round((probs[2] / sum) * 100)
-      ];
-      // Fix rounding errors
-      const diff = 100 - normalized.reduce((a, b) => a + b, 0);
-      normalized[0] += diff;
-      return normalized;
-    }
-    
-    return probs;
   };
 
-  // Strip probability tag from displayed content
-  const stripProbabilityTag = (content: string): string => {
-    return content.replace(/\[PROBABILITIES:\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\]/gi, '').trim();
+  // Strip validation tag from displayed content
+  const stripValidationTag = (content: string): string => {
+    return content.replace(/\[VALIDATIONS:\s*\{[\s\S]*?\}\s*\]/gi, '').trim();
   };
 
   const handleSendMessage = async (content: string) => {
@@ -178,7 +179,7 @@ export default function CreatePlan() {
         content: m.content
       }));
 
-      // Call the real AI edge function with previous probabilities for fallback
+      // Call the real AI edge function with current validations for context
       const { data, error } = await supabase.functions.invoke('trading-coach', {
         body: {
           message: content,
@@ -189,7 +190,7 @@ export default function CreatePlan() {
           },
           scenarios: critique.scenarios,
           chatHistory,
-          previousProbabilities: probabilities
+          currentValidations: validations
         }
       });
 
@@ -203,20 +204,29 @@ export default function CreatePlan() {
       }
 
       const responseContent = data?.content || '';
-      const newProbabilities: [number, number, number] = data?.probabilities || [33, 33, 34];
       
-      // Strip probability tag from displayed content
-      const displayContent = stripProbabilityTag(responseContent);
-
-      setPreviousProbabilities([...probabilities]);
-      setProbabilities(newProbabilities);
+      // Parse new validations from response
+      const newValidations = parseValidationsFromResponse(responseContent, critique.scenarios);
+      if (newValidations) {
+        setPreviousValidations([...validations]);
+        setValidations(newValidations);
+      } else if (data?.validations) {
+        // Fallback to validations from response data
+        setPreviousValidations([...validations]);
+        setValidations(data.validations);
+      }
+      
+      // Strip validation tag from displayed content
+      const displayContent = stripValidationTag(responseContent);
 
       const assistantMessage: CoachMessage = {
         id: (Date.now() + 1).toString(),
         planId: plan.id,
         role: "assistant",
         content: displayContent,
-        probabilities: newProbabilities,
+        validationStates: newValidations ? 
+          [newValidations[0].status, newValidations[1].status, newValidations[2].status] :
+          undefined,
         createdAt: new Date(),
       };
 
@@ -286,10 +296,19 @@ export default function CreatePlan() {
 
       report += `### Scenarios\n\n`;
       critique.scenarios.forEach((s, i) => {
+        const validation = validations[i];
         report += `**${i + 1}. ${s.name}**\n`;
+        report += `- Status: ${validation?.status.toUpperCase().replace('_', ' ') || 'NOT VALIDATED'}\n`;
         report += `- Type: ${s.typeOfMove}\n`;
         report += `- In Play: ${s.inPlay}\n`;
-        report += `- LIS: ${s.lis}\n\n`;
+        report += `- LIS: ${s.lis}\n`;
+        if (validation?.validatedConditions.length) {
+          report += `- Validated: ${validation.validatedConditions.join(', ')}\n`;
+        }
+        if (validation?.pendingConditions.length) {
+          report += `- Pending: ${validation.pendingConditions.join(', ')}\n`;
+        }
+        report += `\n`;
       });
 
       report += `### Primary Risk\n\n${critique.primaryRisk}\n\n`;
@@ -357,7 +376,7 @@ export default function CreatePlan() {
             )}
           </div>
 
-          {/* Right Column - Probability Tracker and Coach */}
+          {/* Right Column - Validation Tracker and Coach */}
           <div className="space-y-8">
             {critique && (
               <>
@@ -368,10 +387,10 @@ export default function CreatePlan() {
                   </Button>
                 </div>
 
-                <ProbabilityTracker
+                <ScenarioValidationTracker
                   scenarios={critique.scenarios}
-                  probabilities={probabilities}
-                  previousProbabilities={previousProbabilities}
+                  validations={validations}
+                  previousValidations={previousValidations}
                 />
 
                 <TradingCoach

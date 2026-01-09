@@ -75,6 +75,50 @@ async function searchAMTKnowledge(query: string, apiKey: string, supabaseUrl: st
 const SYSTEM_PROMPT = `You are an institutional AMT (Auction Market Theory) trading coach providing real-time guidance during the trading session.
 
 ═══════════════════════════════════════════════════════════════
+CRITICAL: VALIDATION-BASED SYSTEM (NOT PROBABILITY/FORECASTING)
+═══════════════════════════════════════════════════════════════
+
+You operate a VALIDATION SYSTEM, not a prediction system.
+Your role is to observe what HAS OCCURRED and assess whether conditions for each scenario have been MET or REMAIN PENDING.
+
+FORBIDDEN LANGUAGE:
+- "probability", "likely", "odds", "chance", "forecast"
+- "accelerating", "fueling" (unless acceptance is proven)
+- Directional predictions or price targets
+- Urgency language or trade recommendations
+
+REQUIRED LANGUAGE:
+- "requires acceptance", "not yet proven", "remains conditional"
+- "validated", "partially validated", "not validated", "invalidated"
+- "acceptance observed" or "acceptance pending"
+- Reference time + volume when discussing validation
+
+═══════════════════════════════════════════════════════════════
+SCENARIO VALIDATION STATUSES (ONLY THESE 4 ARE ALLOWED):
+═══════════════════════════════════════════════════════════════
+
+1. NOT VALIDATED
+   - Required conditions have not occurred
+   - Scenario remains theoretical
+   - No acceptance observed at key levels
+
+2. PARTIALLY VALIDATED  
+   - Some required conditions have occurred
+   - Acceptance is NOT yet proven (insufficient time OR volume)
+   - Key conditions still pending
+
+3. VALIDATED
+   - Acceptance has occurred (TIME + VOLUME confirmed)
+   - Two-sided trade at new price level observed
+   - Multiple 30-min periods of sustained activity
+   - Only ONE scenario may reach VALIDATED at a time
+
+4. INVALIDATED
+   - Invalidation condition (LIS) has been breached with acceptance
+   - Scenario is no longer viable
+   - Clear structural shift in opposite direction
+
+═══════════════════════════════════════════════════════════════
 AMT CORE PRINCIPLES FOR REAL-TIME COACHING:
 ═══════════════════════════════════════════════════════════════
 
@@ -120,19 +164,19 @@ NET LONG INVENTORY:
 - Already positioned above settlement
 - **ASYMMETRIC RISK**: 
   * Upside = MUTED (already in, limited new buyers)
-  * Downside = VIOLENT (liquidation fuel)
+  * Downside = VIOLENT (liquidation fuel IF ACCEPTANCE OCCURS)
 - Bounce = positioned longs defending (not new conviction)
-- Break = liquidation cascade (fuel accelerates move)
+- Net Long does NOT fuel downside UNTIL acceptance below key level
 
 NET SHORT INVENTORY:
 - Already positioned below settlement
 - **ASYMMETRIC RISK**:
   * Downside = MUTED (already in, limited new sellers)
-  * Upside = VIOLENT (short squeeze fuel)
+  * Upside = VIOLENT (short squeeze fuel IF ACCEPTANCE OCCURS)
 - Rejection = positioned shorts defending (not new conviction)
-- Break = short covering cascade (fuel accelerates move)
+- Net Short does NOT fuel upside UNTIL acceptance above key level
 
-**COACHING TIP**: When inventory bounces off support/resistance, it's DEFENSIVE (responsive), not OFFENSIVE (initiative). True conviction requires NEW participants.
+**CRITICAL**: Inventory is POTENTIAL fuel, not ACTIVE fuel until acceptance proves it.
 
 4. P-SHAPE & b-SHAPE VULNERABILITIES:
 
@@ -148,24 +192,7 @@ b-SHAPE (Lower Distribution):
 - **VULNERABILITY**: Shorts become squeeze fuel if sellers don't continue
 - **TODAY'S TEST**: Will new initiative sellers step in?
 
-**COACHING TIP**: P-Shape + Net Long = double vulnerability. b-Shape + Net Short = double vulnerability.
-
-5. COILED SPRING EFFECT:
-
-SETUP:
-- Tight overnight range (< 40 pips for FX)
-- + Positioned inventory (Net Long or Net Short)
-- = EXPLOSIVE POTENTIAL
-
-**MECHANISM**:
-- Compressed range masks tension
-- Small catalyst triggers VIOLENT move
-- Inventory liquidation ACCELERATES
-- "Speed and violence" characterize breakout
-
-**COACHING TIP**: When range is tight + inventory positioned, warn about explosive potential. Traders often underestimate speed of liquidation.
-
-6. REFERENCE LEVELS & THEIR MEANING:
+5. REFERENCE LEVELS & THEIR MEANING:
 
 VAH (Value Area High):
 - If below: Resistance (yesterday's accepted high)
@@ -189,90 +216,58 @@ ONH/ONL (Overnight High/Low):
 
 **COACHING TIP**: Always distinguish between PROBE (initial test) and ACCEPTANCE (sustained trade).
 
-7. PROBABILITY ASSESSMENT FRAMEWORK:
-
-**STRENGTHENING** (move from 33% → 55-65%):
-- Level acceptance (time + volume)
-- Initiative activity confirming
-- Inventory resolving in scenario's direction
-- Structure aligning
-
-**CONFIRMED** (move to 85-90%):
-- Clear structural shift
-- LIS for opposing scenarios broken
-- Time + volume + acceptance all aligned
-- Inventory resolving violently
-
-**WEAKENING** (move from 33% → 15-25%):
-- Level rejection (tail forming)
-- Failed breakout/breakdown
-- Inventory conflict
-- Approaching LIS
-
-**INVALIDATED** (move to 5-10%):
-- LIS broken with acceptance
-- Structural shift confirmed opposite direction
-- Scenario no longer viable
-
 ═══════════════════════════════════════════════════════════════
-YOUR COACHING APPROACH:
+YOUR COACHING RESPONSE FORMAT:
 ═══════════════════════════════════════════════════════════════
 
-1. **Scenario Analysis** (2-3 sentences):
-   - Which scenario is strengthening/weakening/confirmed/invalidated?
-   - Reference scenario by name (e.g., "Scenario 2: Inventory Liquidation")
-   - Use AMT terminology (initiative, responsive, acceptance, rejection)
+1. **Scenario Validation Assessment** (2-3 sentences):
+   - Which scenario's conditions are being validated/partially validated/invalidated?
+   - Reference scenario by name
+   - State what has OCCURRED vs what REMAINS PENDING
+   - Use: "requires acceptance", "not yet proven", "remains conditional"
 
-2. **Structural Implications** (2-3 sentences):
+2. **Structural Observations** (2-3 sentences):
    - Is this initiative or responsive activity?
-   - How does inventory position affect interpretation?
-   - Connect to yesterday's structure (P-Shape/b-Shape vulnerability)
-   - Identify if this is acceptance or just a probe
-   - Mention coiled spring if tight range + positioned inventory
+   - Describe acceptance OR rejection behavior
+   - Note if acceptance is pending (e.g., "sustained trade below VAL for 30+ minutes required")
 
 3. **Watch Next** (2-3 specific points):
-   - Key levels to monitor with specific prices
-   - What acceptance/rejection would signal
-   - Warn about speed/violence if liquidation risk
+   - Key conditions that would validate or invalidate scenarios
+   - Specific levels and required behavior (time + volume)
    - Reference specific scenarios by name
 
-4. **Probabilities** (MANDATORY):
-   [PROBABILITIES: X, Y, Z]
-   Where X, Y, Z are integers 0-100 that sum to 100
+4. **Validation Status** (MANDATORY):
+   [VALIDATIONS: {"scenario1": {"status": "...", "validatedConditions": [...], "pendingConditions": [...], "invalidationCondition": "..."}, "scenario2": {...}, "scenario3": {...}}]
 
 ═══════════════════════════════════════════════════════════════
-TONE & STYLE:
-- Institutional, precise, direct (real-time coaching)
-- Use AMT terminology consistently
-- Distinguish initiative vs. responsive
-- Emphasize asymmetric risk when relevant
-- Warn about coiled spring / speed & violence
-- Reference scenarios by name
-- Be concise but thorough (this is live market hours)
-
-EXAMPLES OF GOOD COACHING:
-
-✅ "Scenario 1 (Bullish Continuation) is strengthening. The bounce off ONL 1.04261 shows **responsive buying** at the overnight low. However, given **Net Long inventory**, this is positioned longs defending their exposure, not new initiative buyers. For confirmation, watch for **acceptance above VAH 1.04428** with volume—that would signal new buyers entering. Current action is defensive (responsive), not offensive (initiative). The **tight 26-pip overnight range** combined with Net Long inventory creates **coiled spring** potential—if ONL breaks, liquidation will be **fast and violent**."
-
-✅ "Scenario 2 (Inventory Liquidation) is CONFIRMED. The break below ONL 1.04261 with volume triggered **liquidation of Net Long inventory**. This isn't just responsive selling—it's **initiative liquidation** accelerating the decline. The **P-Shape vulnerability** from yesterday is now playing out: yesterday's short covering (corrective move) lacked conviction, and today's failure to hold ONL confirms it. Watch for **speed and violence** as positioned longs exit. Next support is VAL 1.04153."
-
-✅ "Scenario 3 (Rotational Acceptance) is weakening. The rejection at VAH 1.04428 shows **responsive selling** (not initiative), but the **Net Long inventory** means this is a tenuous balance. The market is trying to find acceptance within yesterday's value, but the **P-Shape structure** suggests vulnerability. If VAH holds on multiple tests, rotation confirmed. If VAH breaks with **acceptance** (time + volume), Scenario 1 strengthens significantly."
-
-═══════════════════════════════════════════════════════════════
-CRITICAL REQUIREMENT:
+EXAMPLES OF CORRECT COACHING:
 ═══════════════════════════════════════════════════════════════
 
-You MUST end EVERY SINGLE RESPONSE with probabilities in this EXACT format:
+✅ CORRECT: "Scenario 1 (Bullish Continuation) remains NOT VALIDATED. The bounce off ONL 1.04261 shows **responsive buying** at the overnight low—positioned longs defending their exposure. This is not new initiative buying. For validation, **acceptance above VAH 1.04428 is required**: sustained trade (30+ minutes) with volume. Until this occurs, Scenario 1 is conditional."
 
-[PROBABILITIES: X, Y, Z]
+✅ CORRECT: "Scenario 2 (Inventory Liquidation) is now PARTIALLY VALIDATED. We have observed a break below ONL 1.04261 with volume—this is initiative selling. However, **acceptance below ONL is not yet proven**. For full validation, we need sustained trade below 1.04261 for 30+ minutes. Without this, the break could be a failed probe."
 
-Where:
-- X = Scenario 1 probability (integer 0-100)
-- Y = Scenario 2 probability (integer 0-100)  
-- Z = Scenario 3 probability (integer 0-100)
-- X + Y + Z MUST equal 100
+✅ CORRECT: "Scenario 3 (Rotational Acceptance) is VALIDATED. Price has built value within yesterday's range for 2+ hours with two-sided trade at VPOC. Both VAH and VAL held as boundaries. This confirms the market is accepting this value area."
 
-This line is MANDATORY. Do not forget it. Do not skip it. Do not modify the format.`;
+❌ INCORRECT: "This move is being fueled by net short inventory, accelerating upside." 
+→ WRONG: Inventory cannot "fuel" until acceptance is proven.
+
+❌ INCORRECT: "Scenario 2 probability increases to 65%."
+→ WRONG: Do not use probability language.
+
+═══════════════════════════════════════════════════════════════
+VALIDATION OUTPUT FORMAT (MANDATORY):
+═══════════════════════════════════════════════════════════════
+
+End EVERY response with:
+
+[VALIDATIONS: {"scenario1": {"status": "not_validated|partially_validated|validated|invalidated", "validatedConditions": ["condition 1", "condition 2"], "pendingConditions": ["pending 1"], "invalidationCondition": "LIS description"}, "scenario2": {...}, "scenario3": {...}}]
+
+RULES:
+- Only ONE scenario may be "validated" at any time
+- Multiple scenarios may be "not_validated" or "partially_validated"
+- Use specific level values in conditions when available
+- Status must be one of: not_validated, partially_validated, validated, invalidated`;
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -281,7 +276,7 @@ serve(async (req) => {
   }
 
   try {
-    const { message, planContext, scenarios, chatHistory, previousProbabilities } = await req.json();
+    const { message, planContext, scenarios, chatHistory, currentValidations } = await req.json();
     
     console.log("Trading Coach request received:", { message, planContext });
 
@@ -294,7 +289,7 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
     // Search knowledge base for relevant AMT concepts based on the user's message
-    const knowledgeQuery = `${message} ${planContext.yesterday.structure} ${planContext.today.inventory} auction market theory`;
+    const knowledgeQuery = `${message} ${planContext.yesterday.structure} ${planContext.today.inventory} auction market theory acceptance rejection`;
     const knowledgeContext = await searchAMTKnowledge(knowledgeQuery, LOVABLE_API_KEY, supabaseUrl, supabaseServiceKey);
 
     // Build context from plan data
@@ -303,10 +298,20 @@ serve(async (req) => {
 - Today: ${planContext.today.inventory}, ${planContext.today.openRelation}
 - Levels: VAH ${planContext.levels.yesterdayVah}, VAL ${planContext.levels.yesterdayVal}, ONH ${planContext.levels.overnightHigh}, ONL ${planContext.levels.overnightLow}
 
-SCENARIOS:
-1. ${scenarios[0].name}: ${scenarios[0].inPlay} → LIS ${scenarios[0].lis}
-2. ${scenarios[1].name}: ${scenarios[1].inPlay} → LIS ${scenarios[1].lis}
-3. ${scenarios[2].name}: ${scenarios[2].inPlay} → LIS ${scenarios[2].lis}`;
+SCENARIOS TO VALIDATE:
+1. ${scenarios[0].name}: In Play at ${scenarios[0].inPlay} → Invalidates at ${scenarios[0].lis}
+2. ${scenarios[1].name}: In Play at ${scenarios[1].inPlay} → Invalidates at ${scenarios[1].lis}
+3. ${scenarios[2].name}: In Play at ${scenarios[2].inPlay} → Invalidates at ${scenarios[2].lis}`;
+
+    // Add current validation states if available
+    if (currentValidations && currentValidations.length > 0) {
+      contextPrompt += `
+
+CURRENT VALIDATION STATES:
+1. ${scenarios[0].name}: ${currentValidations[0]?.status || 'not_validated'}
+2. ${scenarios[1].name}: ${currentValidations[1]?.status || 'not_validated'}
+3. ${scenarios[2].name}: ${currentValidations[2]?.status || 'not_validated'}`;
+    }
 
     // Add knowledge context if available
     if (knowledgeContext) {
@@ -315,7 +320,7 @@ SCENARIOS:
 RELEVANT AMT BOOK REFERENCES:
 ${knowledgeContext}
 
-Use these authoritative insights when applicable to your coaching response.`;
+Apply these authoritative insights when assessing acceptance, rejection, and validation conditions.`;
     }
 
     // Build messages array with chat history
@@ -368,13 +373,12 @@ Use these authoritative insights when applicable to your coaching response.`;
     
     console.log("AI response received:", aiContent.substring(0, 200));
 
-    // Extract probabilities from AI response with fallback to previous
-    const prevProbs = previousProbabilities || [33, 33, 34];
-    const probabilities = extractProbabilities(aiContent, prevProbs);
+    // Extract validations from AI response
+    const validations = extractValidations(aiContent, scenarios, currentValidations);
     
     return new Response(JSON.stringify({ 
       content: aiContent,
-      probabilities 
+      validations 
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
@@ -390,88 +394,103 @@ Use these authoritative insights when applicable to your coaching response.`;
   }
 });
 
-function extractProbabilities(content: string, previousProbs: number[] = [33, 33, 34]): [number, number, number] {
-  const match = content.match(/\[PROBABILITIES:\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\]/i);
-  
-  if (!match) {
-    console.error('❌ AI did not return probabilities in required format!');
-    console.error('Response end:', content.substring(content.length - 200));
-    
-    // Try to infer from text as fallback
-    const inferredProbs = inferProbabilitiesFromText(content, previousProbs);
-    if (inferredProbs) {
-      console.warn('⚠️ Using inferred probabilities:', inferredProbs);
-      return inferredProbs;
-    }
-    
-    // Last resort: use previous probabilities
-    console.warn('⚠️ Using previous probabilities as fallback:', previousProbs);
-    return [previousProbs[0], previousProbs[1], previousProbs[2]];
-  }
-  
-  let probs: [number, number, number] = [
-    parseInt(match[1], 10),
-    parseInt(match[2], 10),
-    parseInt(match[3], 10)
-  ];
-  
-  // Validate they sum to 100
-  const sum = probs.reduce((a, b) => a + b, 0);
-  if (sum !== 100) {
-    console.warn(`⚠️ Probabilities sum to ${sum}, normalizing to 100`);
-    const normalized: [number, number, number] = [
-      Math.round((probs[0] / sum) * 100),
-      Math.round((probs[1] / sum) * 100),
-      Math.round((probs[2] / sum) * 100)
-    ];
-    // Fix rounding errors
-    const diff = 100 - normalized.reduce((a, b) => a + b, 0);
-    normalized[0] += diff;
-    return normalized;
-  }
-  
-  console.log('✅ Probabilities extracted successfully:', probs);
-  return probs;
+interface ScenarioValidation {
+  status: "not_validated" | "partially_validated" | "validated" | "invalidated";
+  validatedConditions: string[];
+  pendingConditions: string[];
+  invalidationCondition: string;
 }
 
-// Helper function to infer probabilities from text when format is missing
-function inferProbabilitiesFromText(text: string, previousProbs: number[]): [number, number, number] | null {
+function extractValidations(content: string, scenarios: any[], currentValidations: ScenarioValidation[] | null): ScenarioValidation[] {
+  // Try to parse JSON from [VALIDATIONS: {...}] format
+  const match = content.match(/\[VALIDATIONS:\s*(\{[\s\S]*?\})\s*\]/i);
+  
+  if (match) {
+    try {
+      const validationData = JSON.parse(match[1]);
+      
+      const result: ScenarioValidation[] = scenarios.map((scenario, index) => {
+        const key = `scenario${index + 1}`;
+        const data = validationData[key] || {};
+        
+        return {
+          status: parseValidationStatus(data.status || "not_validated"),
+          validatedConditions: Array.isArray(data.validatedConditions) ? data.validatedConditions : [],
+          pendingConditions: Array.isArray(data.pendingConditions) ? data.pendingConditions : ["Awaiting price action update"],
+          invalidationCondition: data.invalidationCondition || scenario.lis || "N/A",
+        };
+      });
+      
+      console.log('✅ Validations extracted successfully:', result.map(v => v.status));
+      return result;
+    } catch (e) {
+      console.warn('Failed to parse validations JSON:', e);
+    }
+  }
+  
+  // Fallback: infer from text
+  console.warn('⚠️ No validation JSON found, inferring from text');
+  return inferValidationsFromText(content, scenarios, currentValidations);
+}
+
+function parseValidationStatus(statusStr: string): "not_validated" | "partially_validated" | "validated" | "invalidated" {
+  const normalized = statusStr.toLowerCase().replace(/[\s_-]+/g, '_');
+  if (normalized.includes('invalidated')) return "invalidated";
+  if (normalized === 'validated' || normalized === 'confirmed') return "validated";
+  if (normalized.includes('partially') || normalized.includes('partial')) return "partially_validated";
+  return "not_validated";
+}
+
+function inferValidationsFromText(text: string, scenarios: any[], currentValidations: ScenarioValidation[] | null): ScenarioValidation[] {
   const lowerText = text.toLowerCase();
   
-  // Scenario 1 confirmed
-  if (lowerText.includes('scenario 1') && (lowerText.includes('confirmed') || lowerText.includes('is confirmed'))) {
-    return [90, 5, 5];
+  // Start with current validations or defaults
+  const result: ScenarioValidation[] = scenarios.map((scenario, index) => {
+    const current = currentValidations?.[index];
+    return {
+      status: current?.status || "not_validated",
+      validatedConditions: current?.validatedConditions || [],
+      pendingConditions: current?.pendingConditions || ["Requires acceptance (time + volume)"],
+      invalidationCondition: current?.invalidationCondition || scenario.lis,
+    };
+  });
+  
+  // Check for validation language in text for each scenario
+  for (let i = 0; i < 3; i++) {
+    const scenarioNum = i + 1;
+    const scenarioPattern = new RegExp(`scenario\\s*${scenarioNum}[^.]*?(validated|invalidated|partially|not validated)`, 'gi');
+    const matches = lowerText.match(scenarioPattern);
+    
+    if (matches) {
+      const lastMatch = matches[matches.length - 1].toLowerCase();
+      if (lastMatch.includes('invalidated')) {
+        result[i].status = "invalidated";
+      } else if (lastMatch.includes('partially')) {
+        result[i].status = "partially_validated";
+      } else if (lastMatch.includes('not validated')) {
+        result[i].status = "not_validated";
+      } else if (lastMatch.includes('validated')) {
+        result[i].status = "validated";
+      }
+    }
   }
   
-  // Scenario 2 confirmed
-  if (lowerText.includes('scenario 2') && (lowerText.includes('confirmed') || lowerText.includes('is confirmed'))) {
-    return [5, 90, 5];
+  // Ensure only one scenario is validated
+  const validatedCount = result.filter(v => v.status === "validated").length;
+  if (validatedCount > 1) {
+    // Keep only the first validated one
+    let foundFirst = false;
+    for (let i = 0; i < result.length; i++) {
+      if (result[i].status === "validated") {
+        if (foundFirst) {
+          result[i].status = "partially_validated";
+        } else {
+          foundFirst = true;
+        }
+      }
+    }
   }
   
-  // Scenario 3 confirmed
-  if (lowerText.includes('scenario 3') && (lowerText.includes('confirmed') || lowerText.includes('is confirmed'))) {
-    return [5, 5, 90];
-  }
-  
-  // Scenario 1 strengthening
-  if (lowerText.includes('scenario 1') && lowerText.includes('strengthening')) {
-    return [65, 25, 10];
-  }
-  
-  // Scenario 2 strengthening
-  if (lowerText.includes('scenario 2') && lowerText.includes('strengthening')) {
-    return [25, 60, 15];
-  }
-  
-  // Scenario 1 weakening
-  if (lowerText.includes('scenario 1') && lowerText.includes('weakening')) {
-    return [35, 40, 25];
-  }
-  
-  // Scenario 2 weakening
-  if (lowerText.includes('scenario 2') && lowerText.includes('weakening')) {
-    return [40, 35, 25];
-  }
-  
-  return null;
+  console.log('⚠️ Inferred validations:', result.map(v => v.status));
+  return result;
 }

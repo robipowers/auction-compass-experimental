@@ -58,13 +58,13 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
                   <Bot className="h-7 w-7 text-muted-foreground" />
                 </div>
                 <p className="text-sm font-medium text-foreground">
-                  Ask about current price action
+                  Describe current price action
                 </p>
                 <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
-                  I'll analyze the structure and update scenario probabilities
+                  I'll analyze acceptance, rejection, and validate scenarios
                 </p>
                 <p className="mt-3 text-xs text-muted-foreground/70 italic">
-                  Example: "Price at VAL, seeing rejection"
+                  Example: "30 mins below VAL, volume building"
                 </p>
               </div>
             </div>
@@ -100,14 +100,6 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
                   )}
                 >
                   <div className="whitespace-pre-wrap leading-relaxed">{message.content}</div>
-                  {message.probabilities && (
-                    <div className="mt-3 flex gap-2 border-t border-foreground/10 pt-2.5 text-xs">
-                      <span className="text-current/70">Probabilities:</span>
-                      <span className="font-mono font-medium">
-                        {message.probabilities.join("% / ")}%
-                      </span>
-                    </div>
-                  )}
                 </div>
               </div>
             ))
