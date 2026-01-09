@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Sparkles, Download, Loader2 } from "lucide-react";
+import { ExecutionModeProvider, useExecutionMode } from "@/contexts/ExecutionModeContext";
+import { ExecutionModeToggle } from "@/components/ExecutionModeToggle";
 import {
   YesterdayContext,
   TodayContext,
@@ -19,9 +21,9 @@ import {
   ValidationStatus,
 } from "@/types/auction";
 
-
-export default function CreatePlan() {
+function CreatePlanContent() {
   const { toast } = useToast();
+  const { isPremarket, isLive } = useExecutionMode();
   const [isSaving, setIsSaving] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [plan, setPlan] = useState<AuctionPlan | null>(null);
@@ -30,6 +32,7 @@ export default function CreatePlan() {
   const [validations, setValidations] = useState<ScenarioValidation[]>([]);
   const [previousValidations, setPreviousValidations] = useState<ScenarioValidation[] | undefined>();
   const [isCoachLoading, setIsCoachLoading] = useState(false);
+  const [showContextInLive, setShowContextInLive] = useState(false);
 
   // Create initial validations from scenarios
   const createInitialValidations = (scenarios: Scenario[]): ScenarioValidation[] => {
@@ -390,19 +393,52 @@ export default function CreatePlan() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container max-w-7xl py-8 lg:py-12">
-        {/* Page Header */}
+        {/* Page Header with Mode Toggle */}
         <header className="mb-10">
-          <h1 className="text-3xl font-bold tracking-tight lg:text-4xl">
-            Create Auction Plan
-          </h1>
-          <p className="mt-2 text-muted-foreground text-base">
-            Build your pre-market analysis for EURUSD
-          </p>
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight lg:text-4xl">
+                Create Auction Plan
+              </h1>
+              <p className="mt-2 text-muted-foreground text-base">
+                Build your pre-market analysis for EURUSD
+              </p>
+            </div>
+            {critique && <ExecutionModeToggle />}
+          </div>
         </header>
+
+        {/* Mode Labels */}
+        {critique && (
+          <div className="mb-8 rounded-xl border border-border bg-secondary/30 p-4">
+            {isPremarket ? (
+              <div className="flex items-center gap-3">
+                <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                <span className="text-sm font-medium text-foreground">
+                  Premarket Preparation – Context & Structure
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  Full analysis for building conviction before the session
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                <div className="h-2 w-2 rounded-full bg-accent animate-pulse" />
+                <span className="text-sm font-medium text-foreground">
+                  Live Execution – Conditions & Validation
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  Execution-critical elements only • Discipline & patience
+                </span>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="grid gap-10 xl:grid-cols-2">
           {/* Left Column - Form and Analysis */}
           <div className="space-y-8">
+            {/* Always show form */}
             <AuctionPlanForm onSave={handleSavePlan} isLoading={isSaving} />
 
             {plan && !critique && (
@@ -429,8 +465,34 @@ export default function CreatePlan() {
               </div>
             )}
 
+            {/* AI Critique - Full in Premarket, Collapsible in Live */}
             {critique && (
-              <AICritique critique={critique} />
+              <>
+                {isPremarket ? (
+                  <AICritique critique={critique} />
+                ) : (
+                  <div className="space-y-4">
+                    {/* Primary Risk - Always visible in Live mode */}
+                    <AICritique critique={critique} mode="live" />
+                    
+                    {/* View Context Toggle */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowContextInLive(!showContextInLive)}
+                      className="w-full"
+                    >
+                      {showContextInLive ? "Hide Context" : "View Full Context"}
+                    </Button>
+                    
+                    {showContextInLive && (
+                      <div className="animate-fade-in">
+                        <AICritique critique={critique} mode="premarket" />
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
             )}
           </div>
 
@@ -445,16 +507,19 @@ export default function CreatePlan() {
                   </Button>
                 </div>
 
+                {/* Scenario Validation Tracker - Always visible */}
                 <ScenarioValidationTracker
                   scenarios={critique.scenarios}
                   validations={validations}
                   previousValidations={previousValidations}
                 />
 
+                {/* Trading Coach - Only active in Live mode, disabled in Premarket */}
                 <TradingCoach
                   messages={messages}
                   onSendMessage={handleSendMessage}
                   isLoading={isCoachLoading}
+                  disabled={isPremarket}
                 />
               </>
             )}
@@ -462,5 +527,13 @@ export default function CreatePlan() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CreatePlan() {
+  return (
+    <ExecutionModeProvider>
+      <CreatePlanContent />
+    </ExecutionModeProvider>
   );
 }

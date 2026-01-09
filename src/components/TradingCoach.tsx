@@ -10,9 +10,10 @@ interface TradingCoachProps {
   messages: CoachMessage[];
   onSendMessage: (content: string) => Promise<void>;
   isLoading: boolean;
+  disabled?: boolean;
 }
 
-export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoachProps) {
+export function TradingCoach({ messages, onSendMessage, isLoading, disabled = false }: TradingCoachProps) {
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -23,7 +24,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || disabled) return;
 
     const message = input.trim();
     setInput("");
@@ -38,20 +39,56 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
   };
 
   return (
-    <Card variant="premium" className="flex h-[520px] flex-col animate-fade-in">
+    <Card variant="premium" className={cn("flex h-[520px] flex-col animate-fade-in", disabled && "opacity-60")}>
       <CardHeader className="flex-shrink-0 border-b border-border pb-4">
-        <CardTitle className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent/70 shadow-lg shadow-accent/25">
-            <MessageSquare className="h-5 w-5 text-white" />
-          </span>
-          <span className="text-xl">Trading Coach</span>
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className={cn(
+              "flex h-10 w-10 items-center justify-center rounded-xl shadow-lg",
+              disabled 
+                ? "bg-muted shadow-none" 
+                : "bg-gradient-to-br from-accent to-accent/70 shadow-accent/25"
+            )}>
+              <MessageSquare className={cn("h-5 w-5", disabled ? "text-muted-foreground" : "text-white")} />
+            </span>
+            <div className="flex flex-col">
+              <span className="text-xl">Trading Coach</span>
+              {disabled && (
+                <span className="text-xs text-muted-foreground">
+                  Switch to Live Execution mode to enable
+                </span>
+              )}
+            </div>
+          </div>
+          {disabled && (
+            <span className="rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
+              PREMARKET
+            </span>
+          )}
         </CardTitle>
       </CardHeader>
 
       <CardContent className="flex flex-1 flex-col overflow-hidden p-0">
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto p-5 space-y-4">
-          {messages.length === 0 ? (
+          {disabled ? (
+            <div className="flex h-full items-center justify-center">
+              <div className="text-center max-w-xs">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary">
+                  <Bot className="h-7 w-7 text-muted-foreground" />
+                </div>
+                <p className="text-sm font-medium text-foreground">
+                  Premarket Mode Active
+                </p>
+                <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
+                  The Trading Coach is available during Live Execution mode only.
+                </p>
+                <p className="mt-3 text-xs text-muted-foreground/70">
+                  Review your full analysis above, then switch to Live mode when the session begins.
+                </p>
+              </div>
+            </div>
+          ) : messages.length === 0 ? (
             <div className="flex h-full items-center justify-center">
               <div className="text-center max-w-xs">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary">
@@ -132,14 +169,14 @@ export function TradingCoach({ messages, onSendMessage, isLoading }: TradingCoac
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Describe the current price action..."
+              placeholder={disabled ? "Switch to Live Execution mode..." : "Describe the current price action..."}
               className="min-h-[48px] max-h-32 resize-none rounded-xl text-sm"
-              disabled={isLoading}
+              disabled={isLoading || disabled}
             />
             <Button
               type="submit"
               size="icon"
-              disabled={!input.trim() || isLoading}
+              disabled={!input.trim() || isLoading || disabled}
               className="flex-shrink-0 h-12 w-12 rounded-xl"
             >
               {isLoading ? (
