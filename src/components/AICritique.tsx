@@ -9,6 +9,7 @@ import { toast } from "sonner";
 
 interface AICritiqueProps {
   critique: AICritiqueType;
+  mode?: "premarket" | "live";
 }
 
 const coherenceConfig: Record<
@@ -55,10 +56,11 @@ function FormattedText({ text, className }: { text: string; className?: string }
   );
 }
 
-export function AICritique({ critique }: AICritiqueProps) {
+export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
   const [copied, setCopied] = useState(false);
   const coherence = coherenceConfig[critique.coherence];
   const CoherenceIcon = coherence.icon;
+  const isLiveMode = mode === "live";
 
   const formatCritiqueForCopy = () => {
     const lines = [
@@ -125,6 +127,73 @@ export function AICritique({ critique }: AICritiqueProps) {
     }
   };
 
+  // In Live mode, show only execution-critical sections
+  if (isLiveMode) {
+    return (
+      <Card variant="premium" className="animate-fade-in">
+        <CardHeader className="pb-6">
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent/70 shadow-lg shadow-accent/25">
+                <Sparkles className="h-5 w-5 text-white" />
+              </span>
+              <div className="flex flex-col">
+                <span className="text-xl">Execution Summary</span>
+                <span className="text-xs text-muted-foreground">What matters now</span>
+              </div>
+            </div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Primary Risk - Always visible */}
+          <section className="rounded-xl border border-danger/30 bg-danger/5 p-5">
+            <h4 className="mb-4 flex items-center gap-2 text-sm font-semibold text-danger">
+              <AlertTriangle className="h-4 w-4" />
+              Primary Risk
+            </h4>
+            <FormattedText text={critique.primaryRisk} />
+          </section>
+
+          {/* What Must Happen Next - Extracted from scenarios */}
+          <section className="rounded-xl border border-primary/30 bg-primary/5 p-5">
+            <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-primary">
+              What Must Happen Next
+            </h4>
+            <ul className="space-y-3">
+              {critique.scenarios.map((scenario, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary">
+                    {index + 1}
+                  </span>
+                  <div className="flex-1">
+                    <p className="font-medium text-foreground text-sm">{scenario.name}</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      <span className="font-medium text-info">In Play:</span> {scenario.inPlay} • 
+                      <span className="font-medium text-danger ml-2">LIS:</span> {scenario.lis}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {/* Current Auction State - Compact */}
+          {critique.currentAuctionState && (
+            <section className="rounded-xl border border-border bg-secondary/30 p-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Current State:</span>
+                <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 font-semibold">
+                  {critique.currentAuctionState.state}
+                </Badge>
+              </div>
+            </section>
+          )}
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Full Premarket mode - show everything
   return (
     <Card variant="premium" className="animate-fade-in">
       <CardHeader className="pb-6">
@@ -133,7 +202,10 @@ export function AICritique({ critique }: AICritiqueProps) {
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg shadow-purple-500/25">
               <Sparkles className="h-5 w-5 text-white" />
             </span>
-            <span className="text-xl">AI Strategist Analysis</span>
+            <div className="flex flex-col">
+              <span className="text-xl">AI Strategist Analysis</span>
+              <span className="text-xs text-muted-foreground">Full structural context</span>
+            </div>
           </div>
           <Button
             variant="outline"
@@ -168,6 +240,21 @@ export function AICritique({ critique }: AICritiqueProps) {
         )}
 
         {/* Coherence Analysis */}
+        <section className="rounded-xl border border-border bg-secondary/30 p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <h4 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Coherence Analysis
+            </h4>
+            <Badge
+              variant="outline"
+              className={cn("gap-1.5 px-3 py-1 font-medium", coherence.className)}
+            >
+              <CoherenceIcon className="h-3.5 w-3.5" />
+              {coherence.label}
+            </Badge>
+          </div>
+          <FormattedText text={critique.coherenceExplanation} />
+        </section>
         <section className="rounded-xl border border-border bg-secondary/30 p-5">
           <div className="mb-4 flex items-center justify-between">
             <h4 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
