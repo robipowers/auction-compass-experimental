@@ -403,15 +403,37 @@ interface ScenarioValidation {
 
 function extractValidations(content: string, scenarios: any[], currentValidations: ScenarioValidation[] | null): ScenarioValidation[] {
   // Try to parse JSON from [VALIDATIONS: {...}] format
-  const match = content.match(/\[VALIDATIONS:\s*(\{[\s\S]*?\})\s*\]/i);
+  // Use a more robust regex that handles nested objects
+  const match = content.match(/\[VALIDATIONS:\s*(\{[\s\S]*\})\s*\]/i);
   
   if (match) {
     try {
-      const validationData = JSON.parse(match[1]);
+      // Find the balanced JSON by counting braces
+      let jsonStr = match[1];
+      let braceCount = 0;
+      let endIndex = 0;
+      
+      for (let i = 0; i < jsonStr.length; i++) {
+        if (jsonStr[i] === '{') braceCount++;
+        if (jsonStr[i] === '}') braceCount--;
+        if (braceCount === 0) {
+          endIndex = i + 1;
+          break;
+        }
+      }
+      
+      if (endIndex > 0) {
+        jsonStr = jsonStr.substring(0, endIndex);
+      }
+      
+      console.log('Parsing validation JSON:', jsonStr.substring(0, 200));
+      const validationData = JSON.parse(jsonStr);
       
       const result: ScenarioValidation[] = scenarios.map((scenario, index) => {
         const key = `scenario${index + 1}`;
         const data = validationData[key] || {};
+        
+        console.log(`Scenario ${index + 1} raw status:`, data.status);
         
         return {
           status: parseValidationStatus(data.status || "not_validated"),
@@ -444,6 +466,8 @@ function parseValidationStatus(statusStr: string): "not_validated" | "partially_
 function inferValidationsFromText(text: string, scenarios: any[], currentValidations: ScenarioValidation[] | null): ScenarioValidation[] {
   const lowerText = text.toLowerCase();
   
+  console.log('Inferring validations from text. Searching for patterns...');
+  
   // Start with current validations or defaults
   const result: ScenarioValidation[] = scenarios.map((scenario, index) => {
     const current = currentValidations?.[index];
@@ -456,21 +480,40 @@ function inferValidationsFromText(text: string, scenarios: any[], currentValidat
   });
   
   // Check for validation language in text for each scenario
+  // More robust patterns to catch "is now VALIDATED", "is VALIDATED", "now VALIDATED"
   for (let i = 0; i < 3; i++) {
     const scenarioNum = i + 1;
-    const scenarioPattern = new RegExp(`scenario\\s*${scenarioNum}[^.]*?(validated|invalidated|partially|not validated)`, 'gi');
-    const matches = lowerText.match(scenarioPattern);
+    const scenarioName = scenarios[i]?.name?.toLowerCase() || '';
     
-    if (matches) {
-      const lastMatch = matches[matches.length - 1].toLowerCase();
-      if (lastMatch.includes('invalidated')) {
-        result[i].status = "invalidated";
-      } else if (lastMatch.includes('partially')) {
-        result[i].status = "partially_validated";
-      } else if (lastMatch.includes('not validated')) {
-        result[i].status = "not_validated";
-      } else if (lastMatch.includes('validated')) {
-        result[i].status = "validated";
+    // Multiple patterns to match validation statements
+    const patterns = [
+      new RegExp(`scenario\\s*${scenarioNum}[^.]*?(?:is\\s+now\\s+|is\\s+|now\\s+)?(invalidated|validated|partially\\s*validated|not\\s*validated)`, 'gi'),
+      new RegExp(`scenario\\s*${scenarioNum}[^.]*?(validated|invalidated|partially|not validated)`, 'gi'),
+      // Also try matching by scenario name if available
+      ...(scenarioName ? [new RegExp(`${scenarioName.replace(/[()]/g, '\\$&')}[^.]*?(?:is\\s+now\\s+|is\\s+|now\\s+)?(invalidated|validated|partially\\s*validated|not\\s*validated)`, 'gi')] : [])
+    ];
+    
+    for (const pattern of patterns) {
+      const matches = lowerText.match(pattern);
+      
+      if (matches) {
+        const lastMatch = matches[matches.length - 1].toLowerCase();
+        console.log(`Scenario ${scenarioNum} matched:`, lastMatch);
+        
+        // Order matters: check more specific patterns first
+        if (lastMatch.includes('invalidated')) {
+          result[i].status = "invalidated";
+          break;
+        } else if (lastMatch.includes('partially')) {
+          result[i].status = "partially_validated";
+          break;
+        } else if (lastMatch.includes('not validated') || lastMatch.includes('not_validated')) {
+          result[i].status = "not_validated";
+          break;
+        } else if (lastMatch.includes('validated') && !lastMatch.includes('not')) {
+          result[i].status = "validated";
+          break;
+        }
       }
     }
   }
