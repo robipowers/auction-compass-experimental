@@ -403,53 +403,50 @@ interface ScenarioValidation {
 
 function extractValidations(content: string, scenarios: any[], currentValidations: ScenarioValidation[] | null): ScenarioValidation[] {
   // Try to parse JSON from [VALIDATIONS: {...}] format
-  // Use a more robust regex that handles nested objects
-  const match = content.match(/\[VALIDATIONS:\s*(\{[\s\S]*\})\s*\]/i);
-  
+  // IMPORTANT: Only treat it as valid if it actually contains scenario keys.
+  const match = content.match(/\[VALIDATIONS:\s*(\{[\s\S]*?\})\s*\]/i);
+
   if (match) {
-    try {
-      // Find the balanced JSON by counting braces
-      let jsonStr = match[1];
-      let braceCount = 0;
-      let endIndex = 0;
-      
-      for (let i = 0; i < jsonStr.length; i++) {
-        if (jsonStr[i] === '{') braceCount++;
-        if (jsonStr[i] === '}') braceCount--;
-        if (braceCount === 0) {
-          endIndex = i + 1;
-          break;
+    const rawJson = match[1];
+
+    // Guard: avoid accidentally matching unrelated braces.
+    const looksLikeValidationPayload = /scenario\s*1|"scenario1"/i.test(rawJson);
+
+    if (looksLikeValidationPayload) {
+      try {
+        const validationData = JSON.parse(rawJson);
+
+        const parsed: ScenarioValidation[] = scenarios.map((scenario, index) => {
+          const key = `scenario${index + 1}`;
+          const data = validationData[key] || {};
+
+          return {
+            status: parseValidationStatus(data.status || "not_validated"),
+            validatedConditions: Array.isArray(data.validatedConditions) ? data.validatedConditions : [],
+            pendingConditions: Array.isArray(data.pendingConditions)
+              ? data.pendingConditions
+              : ["Awaiting price action update"],
+            invalidationCondition: data.invalidationCondition || scenario.lis || "N/A",
+          };
+        });
+
+        // Heuristic: if JSON exists but yields no meaningful status changes, fall back to text inference.
+        const allNotValidated = parsed.every((v) => v.status === "not_validated");
+        const textSuggestsValidation = /scenario\s*3[\s\S]{0,120}(?:is\s+now\s+)?validated/i.test(content);
+
+        if (allNotValidated && textSuggestsValidation) {
+          console.warn('⚠️ Validation JSON present but not usable; falling back to text inference');
+          return inferValidationsFromText(content, scenarios, currentValidations);
         }
+
+        console.log('✅ Validations extracted successfully:', parsed.map((v) => v.status));
+        return parsed;
+      } catch (e) {
+        console.warn('Failed to parse validations JSON:', e);
       }
-      
-      if (endIndex > 0) {
-        jsonStr = jsonStr.substring(0, endIndex);
-      }
-      
-      console.log('Parsing validation JSON:', jsonStr.substring(0, 200));
-      const validationData = JSON.parse(jsonStr);
-      
-      const result: ScenarioValidation[] = scenarios.map((scenario, index) => {
-        const key = `scenario${index + 1}`;
-        const data = validationData[key] || {};
-        
-        console.log(`Scenario ${index + 1} raw status:`, data.status);
-        
-        return {
-          status: parseValidationStatus(data.status || "not_validated"),
-          validatedConditions: Array.isArray(data.validatedConditions) ? data.validatedConditions : [],
-          pendingConditions: Array.isArray(data.pendingConditions) ? data.pendingConditions : ["Awaiting price action update"],
-          invalidationCondition: data.invalidationCondition || scenario.lis || "N/A",
-        };
-      });
-      
-      console.log('✅ Validations extracted successfully:', result.map(v => v.status));
-      return result;
-    } catch (e) {
-      console.warn('Failed to parse validations JSON:', e);
     }
   }
-  
+
   // Fallback: infer from text
   console.warn('⚠️ No validation JSON found, inferring from text');
   return inferValidationsFromText(content, scenarios, currentValidations);
