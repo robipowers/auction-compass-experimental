@@ -127,21 +127,79 @@ export default function CreatePlan() {
     }
   };
 
-  // Parse validation data from AI response
+  // Parse validation data from AI response - handles both scenario1/2/3 keys and scenario name keys
   const parseValidationsFromResponse = (content: string, scenarios: Scenario[]): ScenarioValidation[] | null => {
     try {
-      // Look for [VALIDATIONS: {...}] pattern
-      const match = content.match(/\[VALIDATIONS:\s*(\{[\s\S]*?\})\s*\]/i);
-      if (!match) return null;
+      // Extract JSON using brace-counting to handle nested objects
+      const tagStart = content.search(/\[VALIDATIONS:\s*\{/i);
+      if (tagStart === -1) return null;
 
-      const validationData = JSON.parse(match[1]);
+      const jsonStart = content.indexOf('{', tagStart);
+      if (jsonStart === -1) return null;
+
+      // Count braces to find matching close
+      let braceCount = 0;
+      let jsonEnd = -1;
+      for (let i = jsonStart; i < content.length; i++) {
+        if (content[i] === '{') braceCount++;
+        if (content[i] === '}') braceCount--;
+        if (braceCount === 0) {
+          jsonEnd = i + 1;
+          break;
+        }
+      }
+
+      if (jsonEnd <= jsonStart) return null;
+
+      const rawJson = content.substring(jsonStart, jsonEnd);
+      console.log('Client parsing validation JSON:', rawJson.substring(0, 200));
+      
+      const validationData = JSON.parse(rawJson);
+      const keys = Object.keys(validationData);
+      console.log('Validation keys:', keys);
       
       return scenarios.map((scenario, index) => {
-        const key = `scenario${index + 1}`;
-        const data = validationData[key] || {};
+        // Try multiple key formats
+        const numericKey = `scenario${index + 1}`;
+        const scenarioName = scenario.name || '';
+        
+        let data = validationData[numericKey];
+        
+        // Try exact name match
+        if (!data && scenarioName) {
+          data = validationData[scenarioName];
+        }
+        
+        // Try partial name match
+        if (!data && scenarioName) {
+          const scenarioWords = scenarioName.toLowerCase().split(/\s+/).filter(w => w.length > 4);
+          for (const key of keys) {
+            const keyLower = key.toLowerCase();
+            const matchCount = scenarioWords.filter(word => keyLower.includes(word)).length;
+            if (matchCount >= 2 || keyLower.includes(scenarioName.toLowerCase().substring(0, 20))) {
+              data = validationData[key];
+              break;
+            }
+          }
+        }
+        
+        // Positional match fallback
+        if (!data && keys.length === scenarios.length) {
+          data = validationData[keys[index]];
+        }
+        
+        if (!data) data = {};
+
+        const parseStatus = (s: string): ValidationStatus => {
+          const normalized = s.toLowerCase().replace(/[\s_-]+/g, '_');
+          if (normalized.includes('invalidated')) return "invalidated";
+          if (normalized === 'validated' || normalized === 'confirmed') return "validated";
+          if (normalized.includes('partially') || normalized.includes('partial')) return "partially_validated";
+          return "not_validated";
+        };
         
         return {
-          status: (data.status || "not_validated") as ValidationStatus,
+          status: parseStatus(data.status || "not_validated"),
           validatedConditions: data.validatedConditions || [],
           pendingConditions: data.pendingConditions || ["Awaiting price action update"],
           invalidationCondition: data.invalidationCondition || scenario.lis,

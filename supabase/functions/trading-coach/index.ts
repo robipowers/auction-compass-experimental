@@ -402,47 +402,109 @@ interface ScenarioValidation {
 }
 
 function extractValidations(content: string, scenarios: any[], currentValidations: ScenarioValidation[] | null): ScenarioValidation[] {
-  // Try to parse JSON from [VALIDATIONS: {...}] format
-  // IMPORTANT: Only treat it as valid if it actually contains scenario keys.
-  const match = content.match(/\[VALIDATIONS:\s*(\{[\s\S]*?\})\s*\]/i);
-
-  if (match) {
-    const rawJson = match[1];
-
-    // Guard: avoid accidentally matching unrelated braces.
-    const looksLikeValidationPayload = /scenario\s*1|"scenario1"/i.test(rawJson);
-
-    if (looksLikeValidationPayload) {
-      try {
-        const validationData = JSON.parse(rawJson);
-
-        const parsed: ScenarioValidation[] = scenarios.map((scenario, index) => {
-          const key = `scenario${index + 1}`;
-          const data = validationData[key] || {};
-
-          return {
-            status: parseValidationStatus(data.status || "not_validated"),
-            validatedConditions: Array.isArray(data.validatedConditions) ? data.validatedConditions : [],
-            pendingConditions: Array.isArray(data.pendingConditions)
-              ? data.pendingConditions
-              : ["Awaiting price action update"],
-            invalidationCondition: data.invalidationCondition || scenario.lis || "N/A",
-          };
-        });
-
-        // Heuristic: if JSON exists but yields no meaningful status changes, fall back to text inference.
-        const allNotValidated = parsed.every((v) => v.status === "not_validated");
-        const textSuggestsValidation = /scenario\s*3[\s\S]{0,120}(?:is\s+now\s+)?validated/i.test(content);
-
-        if (allNotValidated && textSuggestsValidation) {
-          console.warn('⚠️ Validation JSON present but not usable; falling back to text inference');
-          return inferValidationsFromText(content, scenarios, currentValidations);
+  // Extract JSON using brace-counting to handle nested objects properly
+  const tagStart = content.search(/\[VALIDATIONS:\s*\{/i);
+  
+  if (tagStart !== -1) {
+    // Find the opening brace
+    const jsonStart = content.indexOf('{', tagStart);
+    if (jsonStart !== -1) {
+      // Count braces to find the matching closing brace
+      let braceCount = 0;
+      let jsonEnd = -1;
+      
+      for (let i = jsonStart; i < content.length; i++) {
+        if (content[i] === '{') braceCount++;
+        if (content[i] === '}') braceCount--;
+        if (braceCount === 0) {
+          jsonEnd = i + 1;
+          break;
         }
+      }
+      
+      if (jsonEnd > jsonStart) {
+        const rawJson = content.substring(jsonStart, jsonEnd);
+        console.log('Extracted validation JSON:', rawJson.substring(0, 300));
+        
+        try {
+          const validationData = JSON.parse(rawJson);
+          const keys = Object.keys(validationData);
+          console.log('Validation keys found:', keys);
+          
+          const parsed: ScenarioValidation[] = scenarios.map((scenario, index) => {
+            // Try multiple key formats:
+            // 1. scenario1, scenario2, scenario3
+            // 2. Exact scenario name
+            // 3. Partial name match
+            const numericKey = `scenario${index + 1}`;
+            const scenarioName = scenario.name || '';
+            
+            let data = validationData[numericKey];
+            
+            // Try exact name match
+            if (!data && scenarioName) {
+              data = validationData[scenarioName];
+            }
+            
+            // Try partial/fuzzy name match - look for keys that contain part of the scenario name
+            if (!data && scenarioName) {
+              const scenarioWords = scenarioName.toLowerCase().split(/\s+/).filter((w: string) => w.length > 4);
+              for (const key of keys) {
+                const keyLower = key.toLowerCase();
+                // Check if the key contains significant words from scenario name
+                const matchCount = scenarioWords.filter((word: string) => keyLower.includes(word)).length;
+                if (matchCount >= 2 || keyLower.includes(scenarioName.toLowerCase().substring(0, 20))) {
+                  data = validationData[key];
+                  console.log(`Matched scenario ${index + 1} "${scenarioName}" to key "${key}"`);
+                  break;
+                }
+              }
+            }
+            
+            // Try matching by position if we have the right number of keys
+            if (!data && keys.length === scenarios.length) {
+              data = validationData[keys[index]];
+              console.log(`Using positional match for scenario ${index + 1}: key "${keys[index]}"`);
+            }
+            
+            if (!data) {
+              console.warn(`No data found for scenario ${index + 1}: "${scenarioName}"`);
+              data = {};
+            }
 
-        console.log('✅ Validations extracted successfully:', parsed.map((v) => v.status));
-        return parsed;
-      } catch (e) {
-        console.warn('Failed to parse validations JSON:', e);
+            const status = parseValidationStatus(data.status || "not_validated");
+            console.log(`Scenario ${index + 1} status: ${data.status} -> ${status}`);
+
+            return {
+              status,
+              validatedConditions: Array.isArray(data.validatedConditions) ? data.validatedConditions : [],
+              pendingConditions: Array.isArray(data.pendingConditions)
+                ? data.pendingConditions
+                : ["Awaiting price action update"],
+              invalidationCondition: data.invalidationCondition || scenario.lis || "N/A",
+            };
+          });
+
+          // Check if we actually got meaningful statuses
+          const hasNonDefault = parsed.some((v) => v.status !== "not_validated");
+          
+          if (hasNonDefault) {
+            console.log('✅ Validations extracted successfully:', parsed.map((v) => v.status));
+            return parsed;
+          } else {
+            // Check if text mentions validation but JSON didn't capture it
+            const textMentionsValidation = /(?:is\s+now\s+|is\s+)(partially\s*validated|validated|invalidated)/i.test(content);
+            if (textMentionsValidation) {
+              console.warn('⚠️ JSON parsed but statuses are all default, text suggests otherwise. Falling back to inference.');
+              return inferValidationsFromText(content, scenarios, currentValidations);
+            }
+          }
+          
+          console.log('✅ Validations extracted (all not_validated):', parsed.map((v) => v.status));
+          return parsed;
+        } catch (e) {
+          console.warn('Failed to parse validations JSON:', e);
+        }
       }
     }
   }
