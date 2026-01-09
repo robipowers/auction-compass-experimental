@@ -39,7 +39,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
   };
 
   return (
-    <Card variant="premium" className={cn("flex h-[520px] flex-col animate-fade-in", disabled && "opacity-60")}>
+    <Card variant="premium" className={cn("flex min-h-[600px] h-[70vh] max-h-[800px] flex-col animate-fade-in", disabled && "opacity-60")}>
       <CardHeader className="flex-shrink-0 border-b border-border pb-4">
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-3">
