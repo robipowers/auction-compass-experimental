@@ -292,6 +292,7 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
       {/* Save Button */}
       <div className="flex justify-end pt-2">
         <Button
+          type="button"
           variant="hero"
           size="xl"
           onClick={handleSave}
