@@ -80,10 +80,10 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
                 <p className="text-sm font-medium text-foreground">
                   Premarket Mode Active
                 </p>
-                <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
+                <p className="mt-1.5 text-sm text-secondary-foreground leading-relaxed">
                   The Trading Coach is available during Live Execution mode only.
                 </p>
-                <p className="mt-3 text-xs text-muted-foreground/70">
+                <p className="mt-3 text-xs text-muted-foreground">
                   Review your full analysis above, then switch to Live mode when the session begins.
                 </p>
               </div>
@@ -97,10 +97,10 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
                 <p className="text-sm font-medium text-foreground">
                   Describe current price action
                 </p>
-                <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
+                <p className="mt-1.5 text-sm text-secondary-foreground leading-relaxed">
                   I'll analyze acceptance, rejection, and validate scenarios
                 </p>
-                <p className="mt-3 text-xs text-muted-foreground/70 italic">
+                <p className="mt-3 text-sm text-muted-foreground italic">
                   Example: "30 mins below VAL, volume building"
                 </p>
               </div>
@@ -133,7 +133,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
                     "max-w-[80%] rounded-lg px-4 py-3 text-sm",
                     message.role === "user"
                       ? "bg-primary text-primary-foreground"
-                      : "bg-secondary border border-border"
+                      : "bg-secondary border border-border text-foreground"
                   )}
                 >
                   <div className="whitespace-pre-wrap leading-relaxed">{message.content}</div>

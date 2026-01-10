@@ -64,28 +64,28 @@ const statusConfig: Record<ValidationStatus, {
 
 function ValidationLegend() {
   return (
-    <div className="mb-4 p-3 rounded-lg bg-secondary/50 border border-border">
-      <p className="text-xs font-medium text-muted-foreground mb-2.5">How to use this:</p>
+    <div className="mb-4 p-3 rounded-lg bg-secondary border border-border">
+      <p className="text-xs font-semibold text-foreground mb-2.5">How to use this:</p>
       <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs">
         <span className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-muted-foreground/40"></span>
-          <span className="text-muted-foreground">Grey = Ignore</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-muted-foreground/50"></span>
+          <span className="text-secondary-foreground">Grey = Ignore</span>
         </span>
         <span className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-info"></span>
-          <span className="text-muted-foreground">Blue = Monitor</span>
+          <span className="text-secondary-foreground">Blue = Monitor</span>
         </span>
         <span className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-warning"></span>
-          <span className="text-muted-foreground">Orange = Developing</span>
+          <span className="text-secondary-foreground">Orange = Developing</span>
         </span>
         <span className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-success"></span>
-          <span className="text-muted-foreground">Green = Accepted</span>
+          <span className="text-secondary-foreground">Green = Accepted</span>
         </span>
         <span className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-danger"></span>
-          <span className="text-muted-foreground">Red = Invalidated</span>
+          <span className="text-secondary-foreground">Red = Invalidated</span>
         </span>
       </div>
     </div>
@@ -258,7 +258,7 @@ export function ScenarioValidationTracker({
                 <CollapsibleContent>
                   <div className="px-4 pb-4">
                     {/* Type of Move */}
-                    <p className="text-xs text-muted-foreground mb-3 ml-7">
+                    <p className="text-sm text-secondary-foreground mb-3 ml-7">
                       {scenario.typeOfMove}
                     </p>
 
@@ -284,7 +284,7 @@ export function ScenarioValidationTracker({
                       {/* Validated Conditions */}
                       {validation.validatedConditions.length > 0 && (
                         <div className="space-y-1.5 pt-2">
-                          <span className="text-xs font-semibold text-success uppercase tracking-wide">
+                          <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'hsl(160 84% 50%)' }}>
                             Validated Conditions
                           </span>
                           <ul className="space-y-1">
@@ -301,12 +301,12 @@ export function ScenarioValidationTracker({
                       {/* Pending Conditions */}
                       {validation.pendingConditions.length > 0 && validation.status !== "inactive" && (
                         <div className="space-y-1.5 pt-2">
-                          <span className="text-xs font-semibold text-warning uppercase tracking-wide">
+                          <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'hsl(32 95% 65%)' }}>
                             Pending Conditions
                           </span>
                           <ul className="space-y-1">
                             {validation.pendingConditions.map((condition, i) => (
-                              <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                              <li key={i} className="flex items-start gap-2 text-sm text-secondary-foreground">
                                 <Clock className="h-4 w-4 text-warning flex-shrink-0 mt-0.5" />
                                 <span>{condition}</span>
                               </li>
@@ -317,10 +317,10 @@ export function ScenarioValidationTracker({
 
                       {/* Invalidation Condition */}
                       <div className="space-y-1.5 pt-2">
-                        <span className="text-xs font-semibold text-danger uppercase tracking-wide">
+                        <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'hsl(0 84% 70%)' }}>
                           Invalidation
                         </span>
-                        <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                        <div className="flex items-start gap-2 text-sm text-secondary-foreground">
                           <XCircle className="h-4 w-4 text-danger flex-shrink-0 mt-0.5" />
                           <span>{validation.invalidationCondition}</span>
                         </div>
@@ -330,11 +330,11 @@ export function ScenarioValidationTracker({
                     {/* Reference Levels */}
                     <div className="flex gap-6 text-xs pt-3 mt-3 ml-7 border-t border-border/40">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-muted-foreground">In Play:</span>
+                        <span className="text-secondary-foreground">In Play:</span>
                         <span className="font-semibold text-info">{scenario.inPlay}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-muted-foreground">LIS:</span>
+                        <span className="text-secondary-foreground">LIS:</span>
                         <span className="font-semibold text-danger">{scenario.lis}</span>
                       </div>
                     </div>
