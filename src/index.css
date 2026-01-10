@@ -5,100 +5,94 @@
 @tailwind utilities;
 
 @layer base {
+  /* Light Theme - Professional Trading */
   :root {
-    /* Professional Dark Theme - Institutional Trading */
-    /* Improved contrast for WCAG AA compliance */
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
 
-    /* Card backgrounds - lightened for better contrast */
-    --card: 222 47% 14%;
-    --card-foreground: 0 0% 100%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
 
-    --popover: 222 47% 14%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
 
-    /* Primary - brighter blue for links/actions */
-    --primary: 217 92% 70%;
+    --primary: 217 91% 50%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary text and backgrounds */
-    --secondary: 222 47% 11%;
-    --secondary-foreground: 220 14% 96%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 20%;
 
-    /* Muted - improved contrast */
-    --muted: 222 47% 11%;
-    --muted-foreground: 220 13% 69%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 187 96% 50%;
+    --accent: 187 85% 43%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 84% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Borders - more visible */
-    --border: 222 47% 25%;
-    --input-background: 222 47% 11%;
-    --input: 215 25% 35%;
-    --ring: 217 91% 60%;
+    --border: 214 32% 91%;
+    --input-background: 210 40% 98%;
+    --input: 214 32% 75%;
+    --ring: 217 91% 50%;
 
     --radius: 0.5rem;
 
-    /* Trading-specific semantic tokens - brighter for readability */
-    --success: 160 84% 45%;
+    /* Trading-specific semantic tokens - light theme */
+    --success: 160 84% 35%;
     --success-foreground: 0 0% 100%;
-    --warning: 32 95% 60%;
-    --warning-foreground: 0 0% 0%;
-    --danger: 0 84% 65%;
+    --warning: 32 95% 44%;
+    --warning-foreground: 0 0% 100%;
+    --danger: 0 84% 50%;
     --danger-foreground: 0 0% 100%;
-    --info: 217 92% 70%;
+    --info: 217 91% 50%;
     --info-foreground: 0 0% 100%;
     
-    /* Text hierarchy tokens */
-    --text-primary: 0 0% 100%;
-    --text-secondary: 220 14% 85%;
-    --text-muted: 220 13% 69%;
-    --text-placeholder: 220 9% 46%;
+    /* Text hierarchy tokens - light theme */
+    --text-primary: 222 47% 11%;
+    --text-secondary: 215 25% 35%;
+    --text-muted: 215 16% 47%;
+    --text-placeholder: 215 16% 57%;
 
     /* Status states for scenario tracking */
-    --prob-confirmed: 160 84% 39%;
-    --prob-strengthening: 38 92% 50%;
-    --prob-balanced: 217 91% 60%;
-    --prob-weakening: 25 95% 53%;
-    --prob-invalidated: 0 84% 60%;
+    --prob-confirmed: 160 84% 35%;
+    --prob-strengthening: 38 92% 44%;
+    --prob-balanced: 217 91% 50%;
+    --prob-weakening: 25 95% 48%;
+    --prob-invalidated: 0 84% 50%;
 
-    /* Premium gradient tokens */
-    --gradient-card: linear-gradient(180deg, hsl(222 47% 11%) 0%, hsl(222 47% 9%) 100%);
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(187 96% 42%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(187 96% 42%) 0%, hsl(160 84% 39%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(0 0% 0%) 0%, hsl(222 47% 6%) 100%);
-    --gradient-premium: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(280 60% 55%) 100%);
+    /* Premium gradient tokens - light theme */
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(210 40% 98%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 50%) 0%, hsl(187 85% 43%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(187 85% 43%) 0%, hsl(160 84% 35%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(210 40% 98%) 0%, hsl(210 40% 96%) 100%);
+    --gradient-premium: linear-gradient(135deg, hsl(217 91% 50%) 0%, hsl(280 60% 50%) 100%);
 
-    /* Glass morphism - dark variant */
-    --glass-bg: hsl(222 47% 11% / 0.8);
-    --glass-border: hsl(222 47% 25% / 0.5);
+    /* Glass morphism - light variant */
+    --glass-bg: hsl(0 0% 100% / 0.8);
+    --glass-border: hsl(214 32% 91% / 0.5);
 
-    /* Premium shadows - darker for dark theme */
-    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
-    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.4), 0 2px 4px -1px hsl(0 0% 0% / 0.3);
-    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.5), 0 4px 6px -2px hsl(0 0% 0% / 0.3);
-    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.6), 0 10px 10px -5px hsl(0 0% 0% / 0.3);
-    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.25);
-    --shadow-success-glow: 0 0 30px hsl(160 84% 39% / 0.3);
-    --shadow-warning-glow: 0 0 30px hsl(38 92% 50% / 0.3);
-    --shadow-danger-glow: 0 0 30px hsl(0 84% 60% / 0.3);
+    /* Premium shadows - light theme */
+    --shadow-sm: 0 1px 2px 0 hsl(222 47% 11% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(222 47% 11% / 0.1), 0 2px 4px -1px hsl(222 47% 11% / 0.06);
+    --shadow-lg: 0 10px 15px -3px hsl(222 47% 11% / 0.1), 0 4px 6px -2px hsl(222 47% 11% / 0.05);
+    --shadow-xl: 0 20px 25px -5px hsl(222 47% 11% / 0.1), 0 10px 10px -5px hsl(222 47% 11% / 0.04);
+    --shadow-glow: 0 0 40px hsl(217 91% 50% / 0.15);
+    --shadow-success-glow: 0 0 30px hsl(160 84% 35% / 0.2);
+    --shadow-warning-glow: 0 0 30px hsl(38 92% 44% / 0.2);
+    --shadow-danger-glow: 0 0 30px hsl(0 84% 50% / 0.2);
 
-    --sidebar-background: 222 47% 8%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 217 91% 60%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 217 91% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 47% 14%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 222 47% 18%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 217 91% 50%;
   }
 
-  /* Keep dark class for compatibility - same values */
+  /* Dark Theme - Professional Institutional Trading */
   .dark {
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
@@ -149,6 +143,12 @@
     --prob-weakening: 25 95% 53%;
     --prob-invalidated: 0 84% 60%;
 
+    --gradient-card: linear-gradient(180deg, hsl(222 47% 11%) 0%, hsl(222 47% 9%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(187 96% 42%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(187 96% 42%) 0%, hsl(160 84% 39%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(0 0% 0%) 0%, hsl(222 47% 6%) 100%);
+    --gradient-premium: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(280 60% 55%) 100%);
+
     --glass-bg: hsl(222 47% 11% / 0.8);
     --glass-border: hsl(222 47% 25% / 0.5);
 
@@ -157,6 +157,9 @@
     --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.5), 0 4px 6px -2px hsl(0 0% 0% / 0.3);
     --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.6), 0 10px 10px -5px hsl(0 0% 0% / 0.3);
     --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.25);
+    --shadow-success-glow: 0 0 30px hsl(160 84% 39% / 0.3);
+    --shadow-warning-glow: 0 0 30px hsl(38 92% 50% / 0.3);
+    --shadow-danger-glow: 0 0 30px hsl(0 84% 60% / 0.3);
 
     --sidebar-background: 222 47% 8%;
     --sidebar-foreground: 0 0% 100%;
@@ -211,25 +214,38 @@
     font-weight: 600;
   }
 
-  /* Premium scrollbar - dark theme */
+  /* Premium scrollbar - adapts to theme */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    background: hsl(222 47% 8%);
+    background: hsl(var(--muted));
     border-radius: 100px;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: hsl(222 47% 25%);
+    background: hsl(var(--border));
     border-radius: 100px;
-    border: 2px solid hsl(222 47% 8%);
+    border: 2px solid hsl(var(--muted));
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(222 47% 35%);
+    background: hsl(var(--input));
+  }
+
+  /* Smooth theme transitions */
+  * {
+    transition-property: background-color, border-color, color;
+    transition-duration: 0.15s;
+    transition-timing-function: ease-out;
+  }
+
+  /* Exclude animations from transition */
+  *[class*="animate-"],
+  *[class*="transition-"] {
+    transition-property: all;
   }
 }
 
