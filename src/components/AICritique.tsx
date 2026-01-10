@@ -42,13 +42,13 @@ function FormattedText({ text, className }: { text: string; className?: string }
     .filter(p => p.length > 0);
 
   if (paragraphs.length <= 1) {
-    return <p className={cn("text-[15px] leading-[1.8] text-foreground/90", className)}>{text}</p>;
+    return <p className={cn("text-[15px] leading-[1.8] text-secondary-foreground", className)}>{text}</p>;
   }
 
   return (
     <div className={cn("space-y-4", className)}>
       {paragraphs.map((paragraph, index) => (
-        <p key={index} className="text-[15px] leading-[1.8] text-foreground/90">
+        <p key={index} className="text-[15px] leading-[1.8] text-secondary-foreground">
           {paragraph}
         </p>
       ))}
@@ -138,8 +138,8 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
                 <Sparkles className="h-5 w-5 text-white" />
               </span>
               <div className="flex flex-col">
-                <span className="text-xl">Execution Summary</span>
-                <span className="text-xs text-muted-foreground">What matters now</span>
+                <span className="text-xl text-foreground">Execution Summary</span>
+                <span className="text-sm text-secondary-foreground">What matters now</span>
               </div>
             </div>
           </CardTitle>
@@ -167,7 +167,7 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
                   </span>
                   <div className="flex-1">
                     <p className="font-medium text-foreground text-sm">{scenario.name}</p>
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="text-sm text-secondary-foreground mt-1">
                       <span className="font-medium text-info">In Play:</span> {scenario.inPlay} • 
                       <span className="font-medium text-danger ml-2">LIS:</span> {scenario.lis}
                     </p>
@@ -181,7 +181,7 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
           {critique.currentAuctionState && (
             <section className="rounded-xl border border-border bg-secondary/30 p-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Current State:</span>
+                <span className="text-sm font-medium text-secondary-foreground uppercase tracking-wide">Current State:</span>
                 <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 font-semibold">
                   {critique.currentAuctionState.state}
                 </Badge>
@@ -202,10 +202,10 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg shadow-purple-500/25">
               <Sparkles className="h-5 w-5 text-white" />
             </span>
-            <div className="flex flex-col">
-              <span className="text-xl">AI Strategist Analysis</span>
-              <span className="text-xs text-muted-foreground">Full structural context</span>
-            </div>
+              <div className="flex flex-col">
+                <span className="text-xl text-foreground">AI Strategist Analysis</span>
+                <span className="text-sm text-secondary-foreground">Full structural context</span>
+              </div>
           </div>
           <Button
             variant="outline"
@@ -227,12 +227,12 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
             </h4>
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">State:</span>
+                <span className="text-sm font-semibold uppercase tracking-wide text-secondary-foreground">State:</span>
                 <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 font-semibold">
                   {critique.currentAuctionState.state}
                 </Badge>
               </div>
-              <p className="text-[15px] leading-[1.8] text-foreground/90">
+              <p className="text-[15px] leading-[1.8] text-secondary-foreground">
                 {critique.currentAuctionState.explanation}
               </p>
             </div>
@@ -240,9 +240,9 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
         )}
 
         {/* Coherence Analysis */}
-        <section className="rounded-xl border border-border bg-secondary/30 p-5">
-          <div className="mb-4 flex items-center justify-between">
-            <h4 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          <section className="rounded-xl border border-border bg-secondary/30 p-5">
+            <div className="mb-4 flex items-center justify-between">
+              <h4 className="text-sm font-semibold uppercase tracking-wide text-secondary-foreground">
               Coherence Analysis
             </h4>
             <Badge
@@ -255,9 +255,9 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
           </div>
           <FormattedText text={critique.coherenceExplanation} />
         </section>
-        <section className="rounded-xl border border-border bg-secondary/30 p-5">
-          <div className="mb-4 flex items-center justify-between">
-            <h4 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          <section className="rounded-xl border border-border bg-secondary/30 p-5">
+            <div className="mb-4 flex items-center justify-between">
+              <h4 className="text-sm font-semibold uppercase tracking-wide text-secondary-foreground">
               Coherence Analysis
             </h4>
             <Badge
@@ -271,34 +271,34 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
           <FormattedText text={critique.coherenceExplanation} />
         </section>
 
-        {/* Structural Observations */}
-        <section className="rounded-xl border border-border bg-card p-5 shadow-[var(--shadow-sm)]">
-          <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          {/* Structural Observations */}
+          <section className="rounded-xl border border-border bg-card p-5 shadow-[var(--shadow-sm)]">
+            <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-secondary-foreground">
             Structural Observations
           </h4>
           <FormattedText text={critique.structuralObservations} />
         </section>
 
-        {/* Scenarios Table */}
-        <section>
-          <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          {/* Scenarios Table */}
+          <section>
+            <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-secondary-foreground">
             Key Structural Scenarios
           </h4>
           <div className="overflow-hidden rounded-xl border border-border">
             <table className="w-full text-sm">
               <thead className="bg-secondary/60">
                 <tr>
-                  <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">Scenario</th>
-                  <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">Type of Move</th>
-                  <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">In Play</th>
-                  <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">LIS</th>
+                  <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-foreground">Scenario</th>
+                  <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-foreground">Type of Move</th>
+                  <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-foreground">In Play</th>
+                  <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-foreground">LIS</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {critique.scenarios.map((scenario, index) => (
                   <tr key={index} className="transition-colors hover:bg-secondary/30">
                     <td className="px-5 py-4 font-medium text-foreground">{scenario.name}</td>
-                    <td className="px-5 py-4 text-muted-foreground">
+                    <td className="px-5 py-4 text-secondary-foreground">
                       {scenario.typeOfMove}
                     </td>
                     <td className="px-5 py-4">
@@ -314,9 +314,9 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
           </div>
         </section>
 
-        {/* Suggested Strategy */}
-        <section>
-          <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          {/* Suggested Strategy */}
+          <section>
+            <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-secondary-foreground">
             Suggested Strategy
           </h4>
           <div className="space-y-4">
@@ -333,21 +333,21 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
                 </div>
                 <div className="mb-4 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
                   <div className="flex gap-2">
-                    <span className="text-muted-foreground">Type:</span>
+                    <span className="text-secondary-foreground">Type:</span>
                     <span className="text-foreground">{scenario.typeOfMove}</span>
                   </div>
                   <div className="flex gap-2">
-                    <span className="text-muted-foreground">In Play:</span>
+                    <span className="text-secondary-foreground">In Play:</span>
                     <span className="font-medium text-info">{scenario.inPlay}</span>
                   </div>
                   <div className="flex gap-2 sm:col-span-2">
-                    <span className="text-muted-foreground">LIS:</span>
+                    <span className="text-secondary-foreground">LIS:</span>
                     <span className="font-medium text-danger">{scenario.lis}</span>
                   </div>
                 </div>
                 {scenario.behavior && (
                   <div className="rounded-lg bg-secondary/40 p-4">
-                    <p className="text-sm leading-relaxed text-foreground/90">
+                    <p className="text-sm leading-relaxed text-secondary-foreground">
                       <span className="font-semibold text-foreground">Behavior: </span>
                       {scenario.behavior}
                     </p>
@@ -377,17 +377,17 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
           <FormattedText text={critique.primaryRisk} />
         </section>
 
-        {/* Market Context */}
-        <section className="rounded-xl border border-border bg-card p-5 shadow-[var(--shadow-sm)]">
-          <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          {/* Market Context */}
+          <section className="rounded-xl border border-border bg-card p-5 shadow-[var(--shadow-sm)]">
+            <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-secondary-foreground">
             Market Context
           </h4>
           <FormattedText text={critique.marketContext} />
         </section>
 
-        {/* Structural Checklist Q&A */}
-        <section>
-          <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          {/* Structural Checklist Q&A */}
+          <section>
+            <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-secondary-foreground">
             Structural Checklist
           </h4>
           <div className="space-y-4">
@@ -405,7 +405,7 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
                   </p>
                 </div>
                 <div className="ml-9 rounded-lg bg-secondary/40 p-4">
-                  <p className="text-sm leading-relaxed text-foreground/90">
+                  <p className="text-sm leading-relaxed text-secondary-foreground">
                     {item.answer}
                   </p>
                 </div>

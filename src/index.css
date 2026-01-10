@@ -7,45 +7,58 @@
 @layer base {
   :root {
     /* Professional Dark Theme - Institutional Trading */
+    /* Improved contrast for WCAG AA compliance */
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
 
-    --card: 222 47% 11%;
+    /* Card backgrounds - lightened for better contrast */
+    --card: 222 47% 14%;
     --card-foreground: 0 0% 100%;
 
-    --popover: 222 47% 11%;
+    --popover: 222 47% 14%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 217 91% 60%;
+    /* Primary - brighter blue for links/actions */
+    --primary: 217 92% 70%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 222 47% 14%;
+    /* Secondary text and backgrounds */
+    --secondary: 222 47% 11%;
     --secondary-foreground: 220 14% 96%;
 
-    --muted: 222 47% 14%;
-    --muted-foreground: 220 9% 46%;
+    /* Muted - improved contrast */
+    --muted: 222 47% 11%;
+    --muted-foreground: 220 13% 69%;
 
-    --accent: 187 96% 42%;
+    --accent: 187 96% 50%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 222 47% 18%;
-    --input: 222 47% 18%;
+    /* Borders - more visible */
+    --border: 222 47% 25%;
+    --input-background: 222 47% 11%;
+    --input: 215 25% 35%;
     --ring: 217 91% 60%;
 
     --radius: 0.5rem;
 
-    /* Trading-specific semantic tokens */
-    --success: 160 84% 39%;
+    /* Trading-specific semantic tokens - brighter for readability */
+    --success: 160 84% 45%;
     --success-foreground: 0 0% 100%;
-    --warning: 38 92% 50%;
+    --warning: 32 95% 60%;
     --warning-foreground: 0 0% 0%;
-    --danger: 0 84% 60%;
+    --danger: 0 84% 65%;
     --danger-foreground: 0 0% 100%;
-    --info: 217 91% 60%;
+    --info: 217 92% 70%;
     --info-foreground: 0 0% 100%;
+    
+    /* Text hierarchy tokens */
+    --text-primary: 0 0% 100%;
+    --text-secondary: 220 14% 85%;
+    --text-muted: 220 13% 69%;
+    --text-placeholder: 220 9% 46%;
 
     /* Status states for scenario tracking */
     --prob-confirmed: 160 84% 39%;
@@ -90,39 +103,45 @@
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
 
-    --card: 222 47% 11%;
+    --card: 222 47% 14%;
     --card-foreground: 0 0% 100%;
 
-    --popover: 222 47% 11%;
+    --popover: 222 47% 14%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 217 91% 60%;
+    --primary: 217 92% 70%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 222 47% 14%;
+    --secondary: 222 47% 11%;
     --secondary-foreground: 220 14% 96%;
 
-    --muted: 222 47% 14%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 222 47% 11%;
+    --muted-foreground: 220 13% 69%;
 
-    --accent: 187 96% 42%;
+    --accent: 187 96% 50%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 222 47% 18%;
-    --input: 222 47% 18%;
+    --border: 222 47% 25%;
+    --input-background: 222 47% 11%;
+    --input: 215 25% 35%;
     --ring: 217 91% 60%;
 
-    --success: 160 84% 39%;
+    --success: 160 84% 45%;
     --success-foreground: 0 0% 100%;
-    --warning: 38 92% 50%;
+    --warning: 32 95% 60%;
     --warning-foreground: 0 0% 0%;
-    --danger: 0 84% 60%;
+    --danger: 0 84% 65%;
     --danger-foreground: 0 0% 100%;
-    --info: 217 91% 60%;
+    --info: 217 92% 70%;
     --info-foreground: 0 0% 100%;
+    
+    --text-primary: 0 0% 100%;
+    --text-secondary: 220 14% 85%;
+    --text-muted: 220 13% 69%;
+    --text-placeholder: 220 9% 46%;
 
     --prob-confirmed: 160 84% 39%;
     --prob-strengthening: 38 92% 50%;
