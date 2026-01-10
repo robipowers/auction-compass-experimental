@@ -6,142 +6,147 @@
 
 @layer base {
   :root {
-    --background: 220 20% 97%;
-    --foreground: 220 25% 10%;
+    /* Professional Dark Theme - Institutional Trading */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 25% 10%;
+    --card: 222 47% 11%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 10%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 220 70% 50%;
+    --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 15% 92%;
-    --secondary-foreground: 220 25% 20%;
+    --secondary: 222 47% 14%;
+    --secondary-foreground: 220 14% 96%;
 
-    --muted: 220 15% 94%;
-    --muted-foreground: 220 10% 45%;
+    --muted: 222 47% 14%;
+    --muted-foreground: 220 9% 46%;
 
-    --accent: 165 60% 40%;
+    --accent: 187 96% 42%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 15% 88%;
-    --input: 220 15% 88%;
-    --ring: 220 70% 50%;
+    --border: 222 47% 18%;
+    --input: 222 47% 18%;
+    --ring: 217 91% 60%;
 
-    --radius: 0.625rem;
+    --radius: 0.5rem;
 
     /* Trading-specific semantic tokens */
-    --success: 152 60% 40%;
+    --success: 160 84% 39%;
     --success-foreground: 0 0% 100%;
     --warning: 38 92% 50%;
-    --warning-foreground: 220 25% 10%;
-    --danger: 0 72% 51%;
+    --warning-foreground: 0 0% 0%;
+    --danger: 0 84% 60%;
     --danger-foreground: 0 0% 100%;
-    --info: 210 100% 50%;
+    --info: 217 91% 60%;
     --info-foreground: 0 0% 100%;
 
-    /* Probability states */
-    --prob-confirmed: 152 60% 40%;
+    /* Status states for scenario tracking */
+    --prob-confirmed: 160 84% 39%;
     --prob-strengthening: 38 92% 50%;
-    --prob-balanced: 220 70% 50%;
+    --prob-balanced: 217 91% 60%;
     --prob-weakening: 25 95% 53%;
-    --prob-invalidated: 0 72% 51%;
+    --prob-invalidated: 0 84% 60%;
 
     /* Premium gradient tokens */
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(220 20% 98%) 100%);
-    --gradient-primary: linear-gradient(135deg, hsl(220 70% 50%) 0%, hsl(210 100% 50%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(165 60% 40%) 0%, hsl(165 60% 50%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(220 20% 97%) 0%, hsl(220 15% 94%) 100%);
-    --gradient-premium: linear-gradient(135deg, hsl(220 70% 50%) 0%, hsl(280 60% 55%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(222 47% 11%) 0%, hsl(222 47% 9%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(187 96% 42%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(187 96% 42%) 0%, hsl(160 84% 39%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(0 0% 0%) 0%, hsl(222 47% 6%) 100%);
+    --gradient-premium: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(280 60% 55%) 100%);
 
-    /* Glass morphism */
-    --glass-bg: hsl(0 0% 100% / 0.85);
-    --glass-border: hsl(220 15% 88% / 0.6);
+    /* Glass morphism - dark variant */
+    --glass-bg: hsl(222 47% 11% / 0.8);
+    --glass-border: hsl(222 47% 25% / 0.5);
 
-    /* Premium shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(220 25% 10% / 0.03), 0 1px 3px 0 hsl(220 25% 10% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(220 25% 10% / 0.05), 0 2px 4px -1px hsl(220 25% 10% / 0.03);
-    --shadow-lg: 0 10px 15px -3px hsl(220 25% 10% / 0.07), 0 4px 6px -2px hsl(220 25% 10% / 0.03);
-    --shadow-xl: 0 20px 25px -5px hsl(220 25% 10% / 0.08), 0 10px 10px -5px hsl(220 25% 10% / 0.02);
-    --shadow-glow: 0 0 40px hsl(220 70% 50% / 0.15);
+    /* Premium shadows - darker for dark theme */
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.4), 0 2px 4px -1px hsl(0 0% 0% / 0.3);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.5), 0 4px 6px -2px hsl(0 0% 0% / 0.3);
+    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.6), 0 10px 10px -5px hsl(0 0% 0% / 0.3);
+    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.25);
+    --shadow-success-glow: 0 0 30px hsl(160 84% 39% / 0.3);
+    --shadow-warning-glow: 0 0 30px hsl(38 92% 50% / 0.3);
+    --shadow-danger-glow: 0 0 30px hsl(0 84% 60% / 0.3);
 
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 220 25% 10%;
-    --sidebar-primary: 220 70% 50%;
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 217 91% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 15% 95%;
-    --sidebar-accent-foreground: 220 25% 10%;
-    --sidebar-border: 220 15% 90%;
-    --sidebar-ring: 220 70% 50%;
+    --sidebar-accent: 222 47% 14%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 222 47% 18%;
+    --sidebar-ring: 217 91% 60%;
   }
 
+  /* Keep dark class for compatibility - same values */
   .dark {
-    --background: 220 25% 6%;
-    --foreground: 220 15% 95%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
 
-    --card: 220 25% 9%;
-    --card-foreground: 220 15% 95%;
+    --card: 222 47% 11%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 220 25% 10%;
-    --popover-foreground: 220 15% 95%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 220 80% 60%;
-    --primary-foreground: 220 25% 6%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 20% 15%;
-    --secondary-foreground: 220 15% 90%;
+    --secondary: 222 47% 14%;
+    --secondary-foreground: 220 14% 96%;
 
-    --muted: 220 20% 14%;
-    --muted-foreground: 220 10% 55%;
+    --muted: 222 47% 14%;
+    --muted-foreground: 220 9% 46%;
 
-    --accent: 165 60% 45%;
-    --accent-foreground: 220 25% 6%;
+    --accent: 187 96% 42%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 72% 55%;
-    --destructive-foreground: 220 15% 95%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 220 20% 18%;
-    --input: 220 20% 18%;
-    --ring: 220 80% 60%;
+    --border: 222 47% 18%;
+    --input: 222 47% 18%;
+    --ring: 217 91% 60%;
 
-    --success: 152 60% 45%;
-    --success-foreground: 220 15% 95%;
+    --success: 160 84% 39%;
+    --success-foreground: 0 0% 100%;
     --warning: 38 92% 50%;
-    --warning-foreground: 220 25% 6%;
-    --danger: 0 72% 55%;
-    --danger-foreground: 220 15% 95%;
-    --info: 210 100% 55%;
-    --info-foreground: 220 25% 6%;
+    --warning-foreground: 0 0% 0%;
+    --danger: 0 84% 60%;
+    --danger-foreground: 0 0% 100%;
+    --info: 217 91% 60%;
+    --info-foreground: 0 0% 100%;
 
-    --prob-confirmed: 152 60% 45%;
+    --prob-confirmed: 160 84% 39%;
     --prob-strengthening: 38 92% 50%;
-    --prob-balanced: 220 80% 60%;
+    --prob-balanced: 217 91% 60%;
     --prob-weakening: 25 95% 53%;
-    --prob-invalidated: 0 72% 55%;
+    --prob-invalidated: 0 84% 60%;
 
-    --glass-bg: hsl(220 25% 10% / 0.85);
-    --glass-border: hsl(220 20% 25% / 0.5);
+    --glass-bg: hsl(222 47% 11% / 0.8);
+    --glass-border: hsl(222 47% 25% / 0.5);
 
-    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.2);
-    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.3);
-    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.35);
-    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.4);
-    --shadow-glow: 0 0 40px hsl(220 80% 60% / 0.2);
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.4), 0 2px 4px -1px hsl(0 0% 0% / 0.3);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.5), 0 4px 6px -2px hsl(0 0% 0% / 0.3);
+    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.6), 0 10px 10px -5px hsl(0 0% 0% / 0.3);
+    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.25);
 
-    --sidebar-background: 220 25% 6%;
-    --sidebar-foreground: 220 15% 95%;
-    --sidebar-primary: 220 80% 60%;
-    --sidebar-primary-foreground: 220 25% 6%;
-    --sidebar-accent: 220 20% 14%;
-    --sidebar-accent-foreground: 220 15% 95%;
-    --sidebar-border: 220 20% 18%;
-    --sidebar-ring: 220 80% 60%;
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 47% 14%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 222 47% 18%;
+    --sidebar-ring: 217 91% 60%;
   }
 }
 
@@ -163,33 +168,54 @@
     line-height: 1.6;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1 {
+    @apply text-3xl font-bold tracking-tight lg:text-4xl;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  h2 {
+    @apply text-2xl font-semibold tracking-tight;
     letter-spacing: -0.02em;
+    line-height: 1.25;
+  }
+
+  h3 {
+    @apply text-xl font-semibold;
+    letter-spacing: -0.015em;
     line-height: 1.3;
+  }
+
+  h4, h5, h6 {
+    letter-spacing: -0.01em;
+    line-height: 1.4;
     font-weight: 600;
   }
 
-  /* Premium scrollbar */
+  /* Premium scrollbar - dark theme */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted-foreground) / 0.2);
+    background: hsl(222 47% 8%);
     border-radius: 100px;
   }
 
+  ::-webkit-scrollbar-thumb {
+    background: hsl(222 47% 25%);
+    border-radius: 100px;
+    border: 2px solid hsl(222 47% 8%);
+  }
+
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--muted-foreground) / 0.35);
+    background: hsl(222 47% 35%);
   }
 }
 
 @layer components {
+  /* Glass card - dark variant */
   .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(20px);
@@ -197,6 +223,7 @@
     border: 1px solid var(--glass-border);
   }
 
+  /* Gradient text */
   .gradient-text {
     background: var(--gradient-primary);
     -webkit-background-clip: text;
@@ -211,6 +238,7 @@
     background-clip: text;
   }
 
+  /* Probability bar */
   .probability-bar {
     @apply relative h-2.5 w-full overflow-hidden rounded-full;
     background: hsl(var(--muted));
@@ -220,12 +248,15 @@
     @apply absolute left-0 top-0 h-full rounded-full transition-all duration-700 ease-out;
   }
 
+  /* Section icon */
   .section-icon {
-    @apply flex h-10 w-10 items-center justify-center rounded-xl text-lg shadow-sm;
+    @apply flex h-10 w-10 items-center justify-center rounded-xl text-lg;
     background: var(--gradient-primary);
     color: hsl(var(--primary-foreground));
+    box-shadow: var(--shadow-md);
   }
 
+  /* Form section */
   .form-section {
     @apply rounded-xl border border-border bg-card p-6;
     box-shadow: var(--shadow-sm);
@@ -233,48 +264,75 @@
 
   /* Premium card hover effects */
   .card-hover {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
   }
 
   .card-hover:hover {
-    transform: translateY(-2px);
+    transform: scale(1.01) translateY(-2px);
     box-shadow: var(--shadow-lg);
+    border-color: hsl(var(--primary) / 0.3);
   }
 
-  /* Status badges */
+  /* Status badges - institutional styling */
   .status-confirmed {
-    @apply bg-[hsl(var(--prob-confirmed))] text-[hsl(var(--success-foreground))];
+    @apply bg-success/20 text-success border border-success/30;
   }
 
   .status-strengthening {
-    @apply bg-[hsl(var(--prob-strengthening))] text-[hsl(var(--warning-foreground))];
+    @apply bg-warning/20 text-warning border border-warning/30;
   }
 
   .status-balanced {
-    @apply bg-[hsl(var(--prob-balanced))] text-[hsl(var(--primary-foreground))];
+    @apply bg-info/20 text-info border border-info/30;
   }
 
   .status-weakening {
-    @apply bg-[hsl(var(--prob-weakening))] text-[hsl(var(--warning-foreground))];
+    @apply bg-warning/20 text-warning border border-warning/30;
   }
 
   .status-invalidated {
-    @apply bg-[hsl(var(--prob-invalidated))] text-[hsl(var(--danger-foreground))];
+    @apply bg-danger/20 text-danger border border-danger/30;
+  }
+
+  /* Status badge pill styling */
+  .status-badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium uppercase tracking-wide;
+  }
+
+  .status-badge-inactive {
+    @apply status-badge bg-muted/60 text-muted-foreground border border-border;
+  }
+
+  .status-badge-in-play {
+    @apply status-badge bg-info/15 text-info border border-info/30;
+  }
+
+  .status-badge-partial {
+    @apply status-badge bg-warning/15 text-warning border border-warning/30;
+  }
+
+  .status-badge-validated {
+    @apply status-badge bg-success/15 text-success border border-success/30;
+  }
+
+  .status-badge-invalidated {
+    @apply status-badge bg-danger/15 text-danger border border-danger/30;
   }
 
   /* Premium input styling */
   .premium-input {
-    @apply transition-all duration-200;
+    @apply transition-all duration-200 bg-secondary border-border;
     box-shadow: var(--shadow-sm);
   }
 
   .premium-input:focus {
-    box-shadow: var(--shadow-md), 0 0 0 3px hsl(var(--primary) / 0.1);
+    box-shadow: var(--shadow-md), 0 0 0 3px hsl(var(--primary) / 0.15);
+    border-color: hsl(var(--primary) / 0.5);
   }
 
   /* Dividers */
   .divider-subtle {
-    @apply border-t border-border/60;
+    @apply border-t border-border/40;
   }
 
   /* Text utilities */
@@ -284,6 +342,40 @@
 
   .mono {
     font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Institutional table styling */
+  .institutional-table {
+    @apply w-full;
+  }
+
+  .institutional-table th {
+    @apply bg-card px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b border-border;
+  }
+
+  .institutional-table td {
+    @apply px-4 py-3 text-sm border-b border-border/50;
+  }
+
+  .institutional-table tr:hover td {
+    @apply bg-secondary/50;
+  }
+
+  /* Glow effects for important states */
+  .glow-success {
+    box-shadow: var(--shadow-success-glow);
+  }
+
+  .glow-warning {
+    box-shadow: var(--shadow-warning-glow);
+  }
+
+  .glow-danger {
+    box-shadow: var(--shadow-danger-glow);
+  }
+
+  .glow-primary {
+    box-shadow: var(--shadow-glow);
   }
 }
 
@@ -298,5 +390,10 @@
 
   .shadow-glow {
     box-shadow: var(--shadow-glow);
+  }
+
+  /* Brightness filter for hover states */
+  .hover-brightness:hover {
+    filter: brightness(1.1);
   }
 }
