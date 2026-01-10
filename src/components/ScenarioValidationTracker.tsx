@@ -23,68 +23,68 @@ const statusConfig: Record<ValidationStatus, {
   inactive: { 
     label: "INACTIVE", 
     shortLabel: "Ignore",
-    className: "bg-muted/50 text-muted-foreground/60 border border-border/50",
+    className: "bg-muted/40 text-muted-foreground border border-border",
     icon: EyeOff,
-    legendColor: "bg-muted text-muted-foreground",
+    legendColor: "bg-muted-foreground/30",
     legendLabel: "Grey = Ignore (inactive)"
   },
   in_play: { 
     label: "IN PLAY", 
     shortLabel: "Monitor",
-    className: "bg-info/10 text-info border border-info/30",
+    className: "bg-info/15 text-info border border-info/40",
     icon: Eye,
-    legendColor: "bg-info/20 text-info",
+    legendColor: "bg-info",
     legendLabel: "Blue = Monitor (in play)"
   },
   partially_validated: { 
-    label: "PARTIALLY VALIDATED", 
+    label: "DEVELOPING", 
     shortLabel: "Developing",
-    className: "bg-warning/15 text-warning border border-warning/30",
+    className: "bg-warning/15 text-warning border border-warning/40",
     icon: Clock,
-    legendColor: "bg-warning/20 text-warning",
+    legendColor: "bg-warning",
     legendLabel: "Orange = Developing (partial)"
   },
   validated: { 
     label: "VALIDATED", 
     shortLabel: "Accepted",
-    className: "bg-success/15 text-success border border-success/30",
+    className: "bg-success/15 text-success border border-success/40",
     icon: CheckCircle2,
-    legendColor: "bg-success/20 text-success",
+    legendColor: "bg-success",
     legendLabel: "Green = Accepted (validated)"
   },
   invalidated: { 
     label: "INVALIDATED", 
     shortLabel: "Invalidated",
-    className: "bg-danger/15 text-danger border border-danger/30",
+    className: "bg-danger/15 text-danger border border-danger/40",
     icon: XCircle,
-    legendColor: "bg-danger/20 text-danger",
+    legendColor: "bg-danger",
     legendLabel: "Red = Invalidated"
   },
 };
 
 function ValidationLegend() {
   return (
-    <div className="mb-4 p-3 rounded-lg bg-muted/30 border border-border/50">
-      <p className="text-xs font-medium text-muted-foreground mb-2">How to use this:</p>
-      <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs">
-        <span className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-muted-foreground/40"></span>
+    <div className="mb-4 p-3 rounded-lg bg-secondary/50 border border-border">
+      <p className="text-xs font-medium text-muted-foreground mb-2.5">How to use this:</p>
+      <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs">
+        <span className="flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-muted-foreground/40"></span>
           <span className="text-muted-foreground">Grey = Ignore</span>
         </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-info"></span>
+        <span className="flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-info"></span>
           <span className="text-muted-foreground">Blue = Monitor</span>
         </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-warning"></span>
+        <span className="flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-warning"></span>
           <span className="text-muted-foreground">Orange = Developing</span>
         </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-success"></span>
+        <span className="flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-success"></span>
           <span className="text-muted-foreground">Green = Accepted</span>
         </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-danger"></span>
+        <span className="flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-danger"></span>
           <span className="text-muted-foreground">Red = Invalidated</span>
         </span>
       </div>
@@ -150,10 +150,10 @@ export function ScenarioValidationTracker({
     <Card variant="premium" className="animate-fade-in">
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/70 shadow-lg shadow-primary/25">
-            <ClipboardCheck className="h-5 w-5 text-white" />
+          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-[var(--shadow-lg)]">
+            <ClipboardCheck className="h-5 w-5 text-primary-foreground" />
           </span>
-          <span className="text-xl">Scenario Validation Tracker</span>
+          <span className="text-xl font-semibold">Scenario Validation Tracker</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -181,22 +181,22 @@ export function ScenarioValidationTracker({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
               className={cn(
-                "rounded-xl border transition-all duration-300",
+                "rounded-lg border transition-all duration-200",
                 // Status-specific styling
-                validation.status === "inactive" && "bg-muted/20 border-border/40 opacity-60",
+                validation.status === "inactive" && "bg-secondary/30 border-border opacity-50",
                 validation.status === "in_play" && "bg-card border-info/30",
-                validation.status === "partially_validated" && "bg-warning/5 border-warning/40 shadow-[0_0_15px_-5px] shadow-warning/20",
-                validation.status === "validated" && "bg-success/5 border-success/40 shadow-[0_0_20px_-5px] shadow-success/30 ring-1 ring-success/20",
-                validation.status === "invalidated" && "bg-muted/10 border-border/30 opacity-50",
+                validation.status === "partially_validated" && "bg-warning/5 border-warning/40 shadow-[0_0_20px_-8px] shadow-warning/30",
+                validation.status === "validated" && "bg-success/5 border-success/40 shadow-[0_0_25px_-8px] shadow-success/40 ring-1 ring-success/20",
+                validation.status === "invalidated" && "bg-secondary/20 border-border/50 opacity-40",
                 // Dim when other scenarios are active
-                shouldDim && "opacity-40",
+                shouldDim && "opacity-30",
                 // Primary focus enhancement
-                isPrimaryFocus && "ring-2 ring-primary/30"
+                isPrimaryFocus && "ring-2 ring-primary/40"
               )}
             >
               <Collapsible open={!collapsed} onOpenChange={() => toggleCollapse(index)}>
                 <CollapsibleTrigger className="w-full">
-                  <div className="flex items-start justify-between gap-4 p-5">
+                  <div className="flex items-start justify-between gap-4 p-4">
                     <div className="flex-1 min-w-0 text-left">
                       <div className="flex items-center gap-2.5">
                         {collapsed ? (
@@ -205,24 +205,24 @@ export function ScenarioValidationTracker({
                           <ChevronDown className="h-4 w-4 text-muted-foreground" />
                         )}
                         <span className={cn(
-                          "flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold",
+                          "flex h-6 w-6 items-center justify-center rounded-md text-xs font-bold",
                           validation.status === "validated" && "bg-success/20 text-success",
                           validation.status === "partially_validated" && "bg-warning/20 text-warning",
                           validation.status === "in_play" && "bg-info/20 text-info",
                           validation.status === "inactive" && "bg-muted text-muted-foreground",
-                          validation.status === "invalidated" && "bg-danger/20 text-danger line-through"
+                          validation.status === "invalidated" && "bg-danger/20 text-danger"
                         )}>
                           {index + 1}
                         </span>
                         <h4 className={cn(
-                          "font-semibold",
+                          "font-semibold text-foreground",
                           validation.status === "invalidated" && "line-through text-muted-foreground",
                           validation.status === "inactive" && "text-muted-foreground"
                         )}>
                           {scenario.name}
                         </h4>
                         {isPrimaryFocus && (
-                          <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-semibold uppercase tracking-wide">
+                          <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/15 text-primary text-[10px] font-semibold uppercase tracking-wide border border-primary/30">
                             <Target className="h-3 w-3" />
                             Primary Focus
                           </span>
@@ -241,11 +241,11 @@ export function ScenarioValidationTracker({
                         validation.status === "partially_validated" && "text-warning",
                         validation.status === "in_play" && "text-info",
                         validation.status === "invalidated" && "text-danger",
-                        validation.status === "inactive" && "text-muted-foreground/60"
+                        validation.status === "inactive" && "text-muted-foreground/50"
                       )} />
                       <span
                         className={cn(
-                          "rounded-md px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap",
+                          "rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide whitespace-nowrap",
                           config.className
                         )}
                       >
@@ -256,7 +256,7 @@ export function ScenarioValidationTracker({
                 </CollapsibleTrigger>
 
                 <CollapsibleContent>
-                  <div className="px-5 pb-5">
+                  <div className="px-4 pb-4">
                     {/* Type of Move */}
                     <p className="text-xs text-muted-foreground mb-3 ml-7">
                       {scenario.typeOfMove}
@@ -264,14 +264,14 @@ export function ScenarioValidationTracker({
 
                     {/* Status-specific messaging */}
                     {validation.status === "in_play" && (
-                      <div className="mb-3 ml-7 flex items-center gap-2 px-3 py-2 rounded-lg bg-info/10 border border-info/20">
+                      <div className="mb-3 ml-7 flex items-center gap-2 px-3 py-2 rounded-md bg-info/10 border border-info/30">
                         <AlertCircle className="h-4 w-4 text-info" />
                         <span className="text-xs text-info font-medium">Monitoring: awaiting trigger</span>
                       </div>
                     )}
 
                     {validation.status === "validated" && (
-                      <div className="mb-3 ml-7 flex items-center gap-2 px-3 py-2 rounded-lg bg-success/10 border border-success/20">
+                      <div className="mb-3 ml-7 flex items-center gap-2 px-3 py-2 rounded-md bg-success/10 border border-success/30">
                         <CheckCircle2 className="h-4 w-4 text-success" />
                         <span className="text-xs text-success font-medium">
                           Action permitted only if your execution rules align
@@ -280,11 +280,11 @@ export function ScenarioValidationTracker({
                     )}
 
                     {/* Conditions Sections */}
-                    <div className="space-y-3 pt-2 ml-7 border-t border-border/50">
+                    <div className="space-y-3 pt-2 ml-7 border-t border-border/40">
                       {/* Validated Conditions */}
                       {validation.validatedConditions.length > 0 && (
-                        <div className="space-y-1.5">
-                          <span className="text-xs font-medium text-success uppercase tracking-wide">
+                        <div className="space-y-1.5 pt-2">
+                          <span className="text-xs font-semibold text-success uppercase tracking-wide">
                             Validated Conditions
                           </span>
                           <ul className="space-y-1">
@@ -300,8 +300,8 @@ export function ScenarioValidationTracker({
 
                       {/* Pending Conditions */}
                       {validation.pendingConditions.length > 0 && validation.status !== "inactive" && (
-                        <div className="space-y-1.5">
-                          <span className="text-xs font-medium text-warning uppercase tracking-wide">
+                        <div className="space-y-1.5 pt-2">
+                          <span className="text-xs font-semibold text-warning uppercase tracking-wide">
                             Pending Conditions
                           </span>
                           <ul className="space-y-1">
@@ -316,8 +316,8 @@ export function ScenarioValidationTracker({
                       )}
 
                       {/* Invalidation Condition */}
-                      <div className="space-y-1.5">
-                        <span className="text-xs font-medium text-danger uppercase tracking-wide">
+                      <div className="space-y-1.5 pt-2">
+                        <span className="text-xs font-semibold text-danger uppercase tracking-wide">
                           Invalidation
                         </span>
                         <div className="flex items-start gap-2 text-sm text-muted-foreground">
@@ -328,14 +328,14 @@ export function ScenarioValidationTracker({
                     </div>
 
                     {/* Reference Levels */}
-                    <div className="flex gap-6 text-xs pt-3 mt-3 ml-7 border-t border-border/50">
+                    <div className="flex gap-6 text-xs pt-3 mt-3 ml-7 border-t border-border/40">
                       <div className="flex items-center gap-1.5">
                         <span className="text-muted-foreground">In Play:</span>
-                        <span className="font-medium text-info">{scenario.inPlay}</span>
+                        <span className="font-semibold text-info">{scenario.inPlay}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <span className="text-muted-foreground">LIS:</span>
-                        <span className="font-medium text-danger">{scenario.lis}</span>
+                        <span className="font-semibold text-danger">{scenario.lis}</span>
                       </div>
                     </div>
                   </div>

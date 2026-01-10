@@ -39,20 +39,20 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
   };
 
   return (
-    <Card variant="premium" className={cn("flex min-h-[600px] h-[70vh] max-h-[800px] flex-col animate-fade-in", disabled && "opacity-60")}>
+    <Card variant="premium" className={cn("flex min-h-[600px] h-[70vh] max-h-[800px] flex-col animate-fade-in", disabled && "opacity-50")}>
       <CardHeader className="flex-shrink-0 border-b border-border pb-4">
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className={cn(
-              "flex h-10 w-10 items-center justify-center rounded-xl shadow-lg",
+              "flex h-10 w-10 items-center justify-center rounded-lg shadow-[var(--shadow-lg)]",
               disabled 
-                ? "bg-muted shadow-none" 
-                : "bg-gradient-to-br from-accent to-accent/70 shadow-accent/25"
+                ? "bg-secondary shadow-none" 
+                : "bg-gradient-to-br from-accent to-success"
             )}>
-              <MessageSquare className={cn("h-5 w-5", disabled ? "text-muted-foreground" : "text-white")} />
+              <MessageSquare className={cn("h-5 w-5", disabled ? "text-muted-foreground" : "text-accent-foreground")} />
             </span>
             <div className="flex flex-col">
-              <span className="text-xl">Trading Coach</span>
+              <span className="text-xl font-semibold text-foreground">Trading Coach</span>
               {disabled && (
                 <span className="text-xs text-muted-foreground">
                   Switch to Live Execution mode to enable
@@ -61,7 +61,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
             </div>
           </div>
           {disabled && (
-            <span className="rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
+            <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-muted-foreground uppercase tracking-wide border border-border">
               PREMARKET
             </span>
           )}
@@ -74,7 +74,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
           {disabled ? (
             <div className="flex h-full items-center justify-center">
               <div className="text-center max-w-xs">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-secondary border border-border">
                   <Bot className="h-7 w-7 text-muted-foreground" />
                 </div>
                 <p className="text-sm font-medium text-foreground">
@@ -91,7 +91,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
           ) : messages.length === 0 ? (
             <div className="flex h-full items-center justify-center">
               <div className="text-center max-w-xs">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-secondary border border-border">
                   <Bot className="h-7 w-7 text-muted-foreground" />
                 </div>
                 <p className="text-sm font-medium text-foreground">
@@ -116,10 +116,10 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
               >
                 <div
                   className={cn(
-                    "flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl",
+                    "flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg",
                     message.role === "user"
-                      ? "bg-primary/15"
-                      : "bg-accent/15"
+                      ? "bg-primary/15 border border-primary/30"
+                      : "bg-accent/15 border border-accent/30"
                   )}
                 >
                   {message.role === "user" ? (
@@ -130,10 +130,10 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
                 </div>
                 <div
                   className={cn(
-                    "max-w-[80%] rounded-2xl px-4 py-3 text-sm",
+                    "max-w-[80%] rounded-lg px-4 py-3 text-sm",
                     message.role === "user"
-                      ? "bg-primary text-primary-foreground rounded-tr-md"
-                      : "bg-secondary rounded-tl-md"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-secondary border border-border"
                   )}
                 >
                   <div className="whitespace-pre-wrap leading-relaxed">{message.content}</div>
@@ -143,14 +143,14 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
           )}
           {isLoading && (
             <div className="flex gap-3 animate-fade-in">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/15">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/15 border border-accent/30">
                 <Bot className="h-4 w-4 text-accent" />
               </div>
-              <div className="rounded-2xl rounded-tl-md bg-secondary px-4 py-3">
-                <div className="flex items-center gap-1">
-                  <span className="inline-block w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <span className="inline-block w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <span className="inline-block w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: '300ms' }} />
+              <div className="rounded-lg bg-secondary border border-border px-4 py-3">
+                <div className="flex items-center gap-1.5">
+                  <span className="inline-block w-2 h-2 rounded-full bg-muted-foreground/50 animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <span className="inline-block w-2 h-2 rounded-full bg-muted-foreground/50 animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <span className="inline-block w-2 h-2 rounded-full bg-muted-foreground/50 animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
               </div>
             </div>
@@ -161,7 +161,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
         {/* Input Area */}
         <form
           onSubmit={handleSubmit}
-          className="flex-shrink-0 border-t border-border p-4"
+          className="flex-shrink-0 border-t border-border p-4 bg-card"
         >
           <div className="flex gap-3">
             <Textarea
@@ -170,14 +170,14 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={disabled ? "Switch to Live Execution mode..." : "Describe the current price action..."}
-              className="min-h-[48px] max-h-32 resize-none rounded-xl text-sm"
+              className="min-h-[48px] max-h-32 resize-none rounded-lg text-sm bg-secondary border-border"
               disabled={isLoading || disabled}
             />
             <Button
               type="submit"
               size="icon"
               disabled={!input.trim() || isLoading || disabled}
-              className="flex-shrink-0 h-12 w-12 rounded-xl"
+              className="flex-shrink-0 h-12 w-12 rounded-lg"
             >
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
