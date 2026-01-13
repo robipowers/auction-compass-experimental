@@ -355,25 +355,28 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-    // Search knowledge base for relevant AMT concepts - multiple specific queries
+    // Search knowledge base for relevant AMT concepts - simplified to 2 focused queries
     const knowledgeQueries = [
-      `${plan.yesterday.dayType} day type market profile classification`,
-      `${plan.yesterday.structure} shape profile structure implications`,
-      `${plan.today.inventory} inventory positioning asymmetric risk`,
-      `${plan.today.openRelation} open type opening relationship value area`,
-      `${plan.yesterday.valueRelationship} value relationship acceptance rejection`,
-      `initiative responsive activity other timeframe participant`,
-      `coiled spring effect inventory liquidation`
+      `${plan.yesterday.dayType} ${plan.yesterday.structure} market profile structure inventory`,
+      `${plan.today.openRelation} ${plan.today.inventory} value area acceptance initiative responsive`
     ];
     
-    // Execute all knowledge queries in parallel
-    const knowledgeResults = await Promise.all(
-      knowledgeQueries.map(query => searchAMTKnowledge(query, LOVABLE_API_KEY, supabaseUrl, supabaseServiceKey))
-    );
-    
-    // Combine and deduplicate knowledge
-    const allKnowledge = knowledgeResults.filter(k => k.length > 0).join('\n\n---\n\n');
-    const knowledgeContext = allKnowledge || '';
+    // Execute knowledge queries with timeout protection
+    let knowledgeContext = '';
+    try {
+      const knowledgePromise = Promise.all(
+        knowledgeQueries.map(query => searchAMTKnowledge(query, LOVABLE_API_KEY, supabaseUrl, supabaseServiceKey))
+      );
+      const timeoutPromise = new Promise<string[]>((_, reject) => 
+        setTimeout(() => reject(new Error('Knowledge search timeout')), 5000)
+      );
+      
+      const knowledgeResults = await Promise.race([knowledgePromise, timeoutPromise]) as string[];
+      knowledgeContext = knowledgeResults.filter(k => k.length > 0).join('\n\n---\n\n');
+    } catch (e) {
+      console.log('Knowledge search skipped (timeout or error):', e);
+      // Continue without knowledge context
+    }
 
     const tradingDate = new Date().toISOString().split('T')[0];
     
@@ -625,21 +628,29 @@ Explain WHEN the inventory becomes critical. Discuss the proximity of key struct
 
 END OF ANALYSIS REQUEST`;
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "openai/gpt-5",
-        max_completion_tokens: 12000,
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: userPrompt }
-        ],
-      }),
-    });
+    // Create abort controller with 55 second timeout (edge functions have 60s limit)
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 55000);
+
+    try {
+      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-4o",
+          max_completion_tokens: 8000,
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: userPrompt }
+          ],
+        }),
+        signal: controller.signal,
+      });
+      
+      clearTimeout(timeout);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -672,6 +683,20 @@ END OF ANALYSIS REQUEST`;
     return new Response(JSON.stringify(critique), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
+    
+    } catch (fetchError) {
+      clearTimeout(timeout);
+      if (fetchError instanceof Error && fetchError.name === 'AbortError') {
+        console.error("AI request timed out");
+        return new Response(JSON.stringify({ 
+          error: "Analysis timed out. Please try again." 
+        }), {
+          status: 504,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      throw fetchError;
+    }
 
   } catch (error) {
     console.error("AI Strategist error:", error);
