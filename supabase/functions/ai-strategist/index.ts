@@ -640,8 +640,8 @@ END OF ANALYSIS REQUEST`;
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "openai/gpt-5",
-          max_completion_tokens: 10000,
+          model: "google/gemini-2.5-pro",
+          max_tokens: 10000,
           messages: [
             { role: "system", content: SYSTEM_PROMPT },
             { role: "user", content: userPrompt }
