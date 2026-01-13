@@ -626,6 +626,19 @@ Explain WHEN the inventory becomes critical. Discuss the proximity of key struct
 
 ---
 
+## CRITICAL PRICE LEVEL REQUIREMENT
+
+**CRITICAL: Use ONLY the exact price levels provided in the INPUT DATA. Do not invent, hallucinate, or modify any prices.**
+- ONH: ${plan.levels.overnightHigh}
+- ONL: ${plan.levels.overnightLow}
+- VAH: ${plan.levels.yesterdayVah}
+- VAL: ${plan.levels.yesterdayVal}
+- VPOC: ${plan.yesterday.prominentVpoc}
+
+**Any price level in your analysis MUST match one of these exact values. Do not generate fictional prices.**
+
+---
+
 ## CRITICAL COMPLETION REQUIREMENT
 
 **CRITICAL: You MUST complete ALL sections fully. Do not leave any section incomplete or with placeholder text like "analysis pending."**
@@ -648,8 +661,8 @@ END OF ANALYSIS REQUEST`;
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "google/gemini-2.5-pro",
-          max_tokens: 10000,
+          model: "openai/gpt-5-mini",
+          max_completion_tokens: 10000,
           messages: [
             { role: "system", content: SYSTEM_PROMPT },
             { role: "user", content: userPrompt }
