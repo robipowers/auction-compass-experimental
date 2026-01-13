@@ -6,29 +6,143 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const SYSTEM_PROMPT = `CRITICAL INSTRUCTION: You have access to three authoritative Auction Market Theory reference books in your knowledge base:
+const SYSTEM_PROMPT = `You are the AMT STRATEGIST ENGINE - an institutional-grade pre-session analysis system for auction market structure.
 
-1. Mind Over Markets by James Dalton
-2. Steidlmayer on Markets by J. Peter Steidlmayer
-3. CBOT Market Profile by Chicago Board of Trade
+## CORE OPERATING RULES (Non-Negotiable)
 
-YOU MUST reference and pull concepts directly from these uploaded PDFs in EVERY response. Do not rely solely on your training data.
+1. You generate STRUCTURAL ANALYSIS, not trade recommendations.
 
-Before generating any analysis:
-1. Query the knowledge base for relevant AMT concepts
-2. Extract specific terminology, principles, and frameworks from the PDFs
-3. Apply those exact concepts to the current market structure
-4. Use the precise language and terminology from the source material
+2. You use EXACT AMT terminology. No retail language.
 
-Your responses should reflect the depth and precision of the source material, not generic trading advice.
+3. Every scenario must include validation criteria that can be tracked in real-time.
 
-You are an expert institutional trader and Market Profile analyst with deep knowledge of Auction Market Theory (AMT). You analyze market structure with the precision of a hedge fund strategist.
+4. State regime (Balance/Imbalance) before any other analysis.
 
-VERIFICATION REQUIREMENT: Your response must demonstrate knowledge base consultation by:
-- Using specific terminology found in the PDFs (not generic trading terms)
-- Referencing frameworks explicitly described in the source material
-- Citing books by name (e.g., "According to Mind Over Markets...")
-- Applying principles in the exact manner presented in the books`;
+5. Identify conflicts explicitly. Do not paper over misalignment.
+
+## FORBIDDEN LANGUAGE
+
+Never use:
+
+- "big players", "smart money", "institutions" → Use "other-timeframe participants"
+
+- "aggressive", "defensive" → Use "initiative activity", "responsive activity"
+
+- "holding a level" → Use "acceptance" (requires time + volume)
+
+- "stop loss cascade" → Use "liquidation break"
+
+- "bullish", "bearish" as standalone assessments → Use structural descriptions
+
+- "likely", "probably", "should" → Use "requires", "conditional on", "validated if"
+
+## REQUIRED LANGUAGE
+
+Always use:
+
+- "Other-timeframe participants" for directional conviction players
+
+- "Initiative activity" (conviction, directional) vs "Responsive activity" (defensive, counter-trend)
+
+- "Acceptance" = time + volume at a level (minimum 2 TPO prints or 2+ rotation periods)
+
+- "Rejection" = wicks, quick reversals, failed probes
+
+- "Asymmetric risk profile" with "muted" and "violent" directions
+
+- "Liquidation break" for forced selling cascades
+
+- "Coiled spring" for tight range + positioned inventory
+
+## AMT FRAMEWORK REFERENCE
+
+### Profile Shapes (from CBOT Market Profile)
+
+- P-Shape = SHORT COVERING. Responsive activity. Corrective move. NOT bullish strength.
+
+- b-Shape = LONG LIQUIDATION. Initiative selling. Bearish conviction.
+
+- D-Shape = Normal distribution. Two-sided trade. Balance.
+
+- Double Distribution = Two value areas. Trend day or major inventory shift.
+
+### Inventory Risk (from Mind Over Markets)
+
+- Net Long Inventory = Muted upside (already positioned) / Violent downside (liquidation fuel)
+
+- Net Short Inventory = Muted downside (already positioned) / Violent upside (squeeze fuel)
+
+- Neutral Inventory = No asymmetry. Direction depends on initiative activity.
+
+### Open Types (from Steidlmayer)
+
+- OIV (Open Inside Value) = Neutral. Testing ground. Two-sided until proven otherwise.
+
+- OAV (Open Above Value) = Bullish bias. Requires acceptance above VAH to confirm.
+
+- OBV (Open Below Value) = Bearish bias. Requires acceptance below VAL to confirm.
+
+- OOR (Open Outside Range) = Gap. Strong conviction. Watch for acceptance or rejection.
+
+- OTF (One-Timeframe) = Trending. Do not fade.
+
+### Day Types (from Dalton)
+
+- Normal Day = Balance. Responsive strategies dominate. Value contains price.
+
+- Normal Variation = Slight directional bias within balance.
+
+- Trend Day = One-timeframe. Initiative dominates. Do not fade.
+
+- Double Distribution Trend = Two value areas. Major inventory shift occurred.
+
+- Neutral Day = Tight range. Coiled spring potential. Breakout imminent.
+
+### Value Relationships
+
+- Higher Value = Bullish migration. Buyers in control.
+
+- Lower Value = Bearish migration. Sellers in control.
+
+- Overlapping Value = Balance continuation. Reject trend strategies.
+
+- Inside Previous = Consolidation. Decision point pending.
+
+### Key Principles
+
+- "Speed and violence" = Liquidation-driven moves. Fast, unidirectional, painful for wrong-side positions.
+
+- "Coiled spring" = Tight range + positioned inventory = explosive potential when range breaks.
+
+- "Prominent VPOC" = Magnetic level. Price tends to return to test it.
+
+- "Poor High/Low" = Lack of excess. Structural magnet. Likely to be revisited.
+
+## CONFLICT RECOGNITION (Critical)
+
+These combinations are CONFLICTS, not alignments:
+
+- Net Long + OBV = CONFLICT (positioned long but opening weak)
+
+- Net Short + OAV = CONFLICT (positioned short but opening strong)
+
+- P-Shape + "bullish strength" = WRONG (P-shape is short covering, not initiative buying)
+
+- Overlapping Value + Trend expectation = CONFLICT (no trend without value migration)
+
+## OUTPUT QUALITY RULES
+
+- No placeholder text. No "analysis pending." Complete every section fully.
+
+- Every paragraph must have 2-3 sentences minimum.
+
+- Be specific with price levels and pip measurements.
+
+- Use ONLY the exact price levels provided in the input. Do not invent or modify any prices.
+
+- Every scenario needs: Trigger, Acceptance Requirement, Invalidation Level, Disconfirming Signal.
+
+- Scenarios must have unique IDs (S1, S2, S3) for tracking continuity.`;
 
 // Helper function to search AMT knowledge base
 async function searchAMTKnowledge(query: string, apiKey: string, supabaseUrl: string, supabaseKey: string): Promise<string> {
@@ -77,7 +191,7 @@ async function searchAMTKnowledge(query: string, apiKey: string, supabaseUrl: st
       .from('amt_documents')
       .select('id, title')
       .in('id', documentIds);
-    
+
     const docTitles: Record<string, string> = (docs || []).reduce((acc: Record<string, string>, doc: any) => {
       acc[doc.id] = doc.title;
       return acc;
@@ -104,7 +218,7 @@ serve(async (req) => {
 
   try {
     const { plan } = await req.json();
-    
+
     console.log("AI Strategist request received:", plan);
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
@@ -125,18 +239,18 @@ serve(async (req) => {
       `initiative responsive activity other timeframe participant`,
       `coiled spring effect inventory liquidation`
     ];
-    
+
     // Execute all knowledge queries in parallel
     const knowledgeResults = await Promise.all(
       knowledgeQueries.map(query => searchAMTKnowledge(query, LOVABLE_API_KEY, supabaseUrl, supabaseServiceKey))
     );
-    
+
     // Combine and deduplicate knowledge
     const allKnowledge = knowledgeResults.filter(k => k.length > 0).join('\n\n---\n\n');
     const knowledgeContext = allKnowledge || '';
 
     const tradingDate = new Date().toISOString().split('T')[0];
-    
+
     // Build the knowledge base section if we have relevant content
     const knowledgeSection = knowledgeContext ? `
 ═══════════════════════════════════════════════════════════════
@@ -155,8 +269,8 @@ VERIFICATION REQUIREMENT: Your response must demonstrate that you consulted this
 - Citing source material where applicable (e.g., "According to Mind Over Markets...")
 
 ` : ``;
-    
-const userPrompt = `You are the **AMT CRITIQUE ENGINE** - an institutional-grade analysis system for auction market structure.
+
+    const userPrompt = `You are the **AMT CRITIQUE ENGINE** - an institutional-grade analysis system for auction market structure.
 
 Your task is to analyze the following trading plan and provide a comprehensive structural critique using concepts from the uploaded PDF knowledge base.
 
@@ -383,6 +497,30 @@ Explain WHEN the inventory becomes critical. Discuss the proximity of key struct
 
 ---
 
+MANDATORY FINAL SECTION - Do not skip this:
+
+### SCENARIO TRACKING BLOCK
+
+Output this exact JSON structure with values filled in from your analysis:
+
+[SCENARIOS: {
+  "regime": "BALANCE",
+  "coherence": "ALIGNED",
+  "S1": {
+    "name": "scenario name from above",
+    "type": "move type",
+    "trigger": "price level",
+    "invalidation": "LIS price level",
+    "status": "inactive"
+  },
+  "S2": { ...same fields... },
+  "S3": { ...same fields... }
+}]
+
+This JSON block is required for system integration. Do not omit it.
+
+---
+
 END OF ANALYSIS REQUEST`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -393,7 +531,7 @@ END OF ANALYSIS REQUEST`;
       },
       body: JSON.stringify({
         model: "openai/gpt-5",
-        max_completion_tokens: 12000,
+        max_completion_tokens: 8000,
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: userPrompt }
@@ -404,7 +542,7 @@ END OF ANALYSIS REQUEST`;
     if (!response.ok) {
       const errorText = await response.text();
       console.error("AI gateway error:", response.status, errorText);
-      
+
       if (response.status === 429) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
           status: 429,
@@ -417,26 +555,26 @@ END OF ANALYSIS REQUEST`;
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      
+
       throw new Error(`AI gateway error: ${response.status}`);
     }
 
     const data = await response.json();
     const aiContent = data.choices?.[0]?.message?.content || "";
-    
+
     console.log("AI Strategist response:", aiContent.substring(0, 500));
 
     // Parse the AI response into structured critique
     const critique = parseAICritique(aiContent, plan);
-    
+
     return new Response(JSON.stringify(critique), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
 
   } catch (error) {
     console.error("AI Strategist error:", error);
-    return new Response(JSON.stringify({ 
-      error: error instanceof Error ? error.message : "Unknown error" 
+    return new Response(JSON.stringify({
+      error: error instanceof Error ? error.message : "Unknown error"
     }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -458,7 +596,7 @@ function parseAICritique(content: string, plan: any) {
   if (auctionStateSection) {
     const stateMatch = auctionStateSection[0].match(/\*\*STATE:\*\*\s*([^\n]+)/i);
     const explanationMatch = auctionStateSection[0].match(/\*\*EXPLANATION:\*\*\s*([^\n]+(?:\n(?!\*\*)[^\n#]*)*)/i);
-    
+
     if (stateMatch) {
       currentAuctionState = {
         state: stateMatch[1].trim(),
@@ -478,14 +616,14 @@ function parseAICritique(content: string, plan: any) {
   // Extract coherence explanation
   const coherenceExplanation = coherenceSection
     ? truncateOnWord(
-        coherenceSection[0]
-          .replace(/### COHERENCE RATING[^\n]*/i, "")
-          .replace(/\*\*Explanation:\*\*/gi, "")
-          .replace(/\*\*.*?\*\*/g, "")
-          .replace(/ALIGNED|CONFLICTED|NEUTRAL/gi, "")
-          .trim(),
-        1200,
-      )
+      coherenceSection[0]
+        .replace(/### COHERENCE RATING[^\n]*/i, "")
+        .replace(/\*\*Explanation:\*\*/gi, "")
+        .replace(/\*\*.*?\*\*/g, "")
+        .replace(/ALIGNED|CONFLICTED|NEUTRAL/gi, "")
+        .trim(),
+      1200,
+    )
     : "Analysis of structural coherence between inventory and market context.";
 
   // Extract market context
@@ -504,7 +642,7 @@ function parseAICritique(content: string, plan: any) {
   const scenarios = [];
   const scenarioRegex = /\*\*Scenario \d+:\s*([^*]+)\*\*[\s\S]*?Type of Move:\s*([^\n]+)[\s\S]*?In Play:\s*([^\n]+)[\s\S]*?LIS:\s*([^\n]+)[\s\S]*?Behavior:\s*([^\n]+(?:\n(?!\*\*Scenario)[^\n#]*)*)/gi;
   let scenarioMatch;
-  
+
   while ((scenarioMatch = scenarioRegex.exec(content)) !== null) {
     scenarios.push({
       name: scenarioMatch[1].trim(),
@@ -573,7 +711,7 @@ function parseAICritique(content: string, plan: any) {
         behavior: "Market builds value, awaits catalyst. Trade edges of developing range."
       }
     ];
-    
+
     while (scenarios.length < 3) {
       scenarios.push(defaultScenarios[scenarios.length]);
     }
@@ -594,11 +732,11 @@ function parseAICritique(content: string, plan: any) {
   // Extract structural checklist Q&A
   const checklistItems = [];
   const checklistSection = content.match(/### Structural Checklist[\s\S]*$/i);
-  
+
   if (checklistSection) {
     const qaRegex = /\*\*Q(\d):\s*([^*]+)\*\*\s*\n\*\*A:\*\*\s*([^\n]+(?:\n(?!\*\*Q\d:)[^\n#]*)*)/gi;
     let qaMatch;
-    
+
     while ((qaMatch = qaRegex.exec(checklistSection[0])) !== null) {
       checklistItems.push({
         question: qaMatch[2].trim(),
@@ -609,18 +747,18 @@ function parseAICritique(content: string, plan: any) {
 
   // If no Q&A found, create context-aware defaults
   if (checklistItems.length < 5) {
-    const inventory = plan.today.inventory === 'net_short' ? 'Net Short' : 
-                      plan.today.inventory === 'net_long' ? 'Net Long' : 'Neutral';
+    const inventory = plan.today.inventory === 'net_short' ? 'Net Short' :
+      plan.today.inventory === 'net_long' ? 'Net Long' : 'Neutral';
     const dayType = plan.yesterday.dayType;
-    const structure = plan.yesterday.structure === 'p_shape' ? 'P-Shape' : 
-                      plan.yesterday.structure === 'b_shape' ? 'b-Shape' : 'Balanced';
+    const structure = plan.yesterday.structure === 'p_shape' ? 'P-Shape' :
+      plan.yesterday.structure === 'b_shape' ? 'b-Shape' : 'Balanced';
     const valueRel = plan.yesterday.valueRelationship;
     const openRel = plan.today.openRelation.toUpperCase();
     const vah = plan.levels.yesterdayVah;
     const val = plan.levels.yesterdayVal;
     const onh = plan.levels.overnightHigh;
     const onl = plan.levels.overnightLow;
-    
+
     const isBullish = valueRel.includes('higher');
     const isBearish = valueRel.includes('lower');
     const direction = isBullish ? 'bullish' : isBearish ? 'bearish' : 'neutral';
@@ -647,7 +785,7 @@ function parseAICritique(content: string, plan: any) {
         answer: `Overnight range (${onh} to ${onl}) ${inventory !== 'Neutral' ? `+ ${inventory} inventory = coiled spring potential. Easy to miss speed and violence of ${inventory === 'Net Long' ? 'liquidation if ONH fails' : 'squeeze if ONL fails'}. Explosive move likely once direction confirmed.` : '+ Neutral inventory means watching for which side shows initiative first. Easy to miss early signs of directional commitment.'}`
       }
     ];
-    
+
     while (checklistItems.length < 5) {
       checklistItems.push(defaultChecklist[checklistItems.length]);
     }
