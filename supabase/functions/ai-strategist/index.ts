@@ -626,6 +626,14 @@ Explain WHEN the inventory becomes critical. Discuss the proximity of key struct
 
 ---
 
+## CRITICAL COMPLETION REQUIREMENT
+
+**CRITICAL: You MUST complete ALL sections fully. Do not leave any section incomplete or with placeholder text like "analysis pending."**
+
+**You MUST end your response with the SCENARIO TRACKING BLOCK containing the [SCENARIOS: {...}] JSON. This is MANDATORY for system integration. The analysis is considered FAILED if the JSON block is missing.**
+
+---
+
 END OF ANALYSIS REQUEST`;
 
     // Create abort controller with 55 second timeout (edge functions have 60s limit)
