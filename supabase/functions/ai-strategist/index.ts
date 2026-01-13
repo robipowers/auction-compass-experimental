@@ -640,8 +640,8 @@ END OF ANALYSIS REQUEST`;
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "openai/gpt-5-mini",
-          max_completion_tokens: 8000,
+          model: "openai/gpt-5",
+          max_completion_tokens: 10000,
           messages: [
             { role: "system", content: SYSTEM_PROMPT },
             { role: "user", content: userPrompt }
