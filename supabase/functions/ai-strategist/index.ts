@@ -148,14 +148,14 @@ These combinations are CONFLICTS, not alignments:
 async function searchAMTKnowledge(query: string, apiKey: string, supabaseUrl: string, supabaseKey: string): Promise<string> {
   try {
     // Generate embedding for the query
-    const embeddingResponse = await fetch("https://ai.gateway.lovable.dev/v1/embeddings", {
+    const embeddingResponse = await fetch("https://api.openai.com/v1/embeddings", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/text-embedding-004",
+        model: "text-embedding-3-small",
         input: query,
       }),
     });
@@ -221,9 +221,9 @@ serve(async (req) => {
 
     console.log("AI Strategist request received:", plan);
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY is not configured');
+    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
+    if (!OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY is not configured');
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -242,7 +242,7 @@ serve(async (req) => {
 
     // Execute all knowledge queries in parallel
     const knowledgeResults = await Promise.all(
-      knowledgeQueries.map(query => searchAMTKnowledge(query, LOVABLE_API_KEY, supabaseUrl, supabaseServiceKey))
+      knowledgeQueries.map(query => searchAMTKnowledge(query, OPENAI_API_KEY, supabaseUrl, supabaseServiceKey))
     );
 
     // Combine and deduplicate knowledge
@@ -523,15 +523,15 @@ This JSON block is required for system integration. Do not omit it.
 
 END OF ANALYSIS REQUEST`;
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "openai/gpt-5",
-        max_completion_tokens: 8000,
+        model: "gpt-5.2",
+        max_completion_tokens: 16000,
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: userPrompt }

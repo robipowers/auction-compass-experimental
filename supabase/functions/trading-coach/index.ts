@@ -10,14 +10,14 @@ const corsHeaders = {
 async function searchAMTKnowledge(query: string, apiKey: string, supabaseUrl: string, supabaseKey: string): Promise<string> {
   try {
     // Generate embedding for the query
-    const embeddingResponse = await fetch("https://ai.gateway.lovable.dev/v1/embeddings", {
+    const embeddingResponse = await fetch("https://api.openai.com/v1/embeddings", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/text-embedding-004",
+        model: "text-embedding-3-small",
         input: query,
       }),
     });
@@ -52,7 +52,7 @@ async function searchAMTKnowledge(query: string, apiKey: string, supabaseUrl: st
       .from('amt_documents')
       .select('id, title')
       .in('id', documentIds);
-    
+
     const docTitles: Record<string, string> = (docs || []).reduce((acc: Record<string, string>, doc: any) => {
       acc[doc.id] = doc.title;
       return acc;
@@ -281,12 +281,12 @@ serve(async (req) => {
 
   try {
     const { message, planContext, scenarios, chatHistory, currentValidations } = await req.json();
-    
+
     console.log("Trading Coach request received:", { message, planContext });
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY is not configured');
+    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
+    if (!OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY is not configured');
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -294,7 +294,7 @@ serve(async (req) => {
 
     // Search knowledge base for relevant AMT concepts based on the user's message
     const knowledgeQuery = `${message} ${planContext.yesterday.structure} ${planContext.today.inventory} auction market theory acceptance rejection`;
-    const knowledgeContext = await searchAMTKnowledge(knowledgeQuery, LOVABLE_API_KEY, supabaseUrl, supabaseServiceKey);
+    const knowledgeContext = await searchAMTKnowledge(knowledgeQuery, OPENAI_API_KEY, supabaseUrl, supabaseServiceKey);
 
     // Build context from plan data
     let contextPrompt = `PLAN CONTEXT:
@@ -337,16 +337,16 @@ Apply these authoritative insights when assessing acceptance, rejection, and val
       { role: "user", content: message }
     ];
 
-    console.log("Calling Lovable AI with messages:", messages.length);
+    console.log("Calling OpenAI API with messages:", messages.length);
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: "gpt-5.2",
         max_tokens: 4096,
         messages,
       }),
@@ -355,7 +355,7 @@ Apply these authoritative insights when assessing acceptance, rejection, and val
     if (!response.ok) {
       const errorText = await response.text();
       console.error("AI gateway error:", response.status, errorText);
-      
+
       if (response.status === 429) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
           status: 429,
@@ -368,29 +368,29 @@ Apply these authoritative insights when assessing acceptance, rejection, and val
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      
+
       throw new Error(`AI gateway error: ${response.status}`);
     }
 
     const data = await response.json();
     const aiContent = data.choices?.[0]?.message?.content || "";
-    
+
     console.log("AI response received:", aiContent.substring(0, 200));
 
     // Extract validations from AI response
     const validations = extractValidations(aiContent, scenarios, currentValidations);
-    
-    return new Response(JSON.stringify({ 
+
+    return new Response(JSON.stringify({
       content: aiContent,
-      validations 
+      validations
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
 
   } catch (error) {
     console.error("Trading Coach error:", error);
-    return new Response(JSON.stringify({ 
-      error: error instanceof Error ? error.message : "Unknown error" 
+    return new Response(JSON.stringify({
+      error: error instanceof Error ? error.message : "Unknown error"
     }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -408,7 +408,7 @@ interface ScenarioValidation {
 function extractValidations(content: string, scenarios: any[], currentValidations: ScenarioValidation[] | null): ScenarioValidation[] {
   // Extract JSON using brace-counting to handle nested objects properly
   const tagStart = content.search(/\[VALIDATIONS:\s*\{/i);
-  
+
   if (tagStart !== -1) {
     // Find the opening brace
     const jsonStart = content.indexOf('{', tagStart);
@@ -416,7 +416,7 @@ function extractValidations(content: string, scenarios: any[], currentValidation
       // Count braces to find the matching closing brace
       let braceCount = 0;
       let jsonEnd = -1;
-      
+
       for (let i = jsonStart; i < content.length; i++) {
         if (content[i] === '{') braceCount++;
         if (content[i] === '}') braceCount--;
@@ -425,16 +425,16 @@ function extractValidations(content: string, scenarios: any[], currentValidation
           break;
         }
       }
-      
+
       if (jsonEnd > jsonStart) {
         const rawJson = content.substring(jsonStart, jsonEnd);
         console.log('Extracted validation JSON:', rawJson.substring(0, 300));
-        
+
         try {
           const validationData = JSON.parse(rawJson);
           const keys = Object.keys(validationData);
           console.log('Validation keys found:', keys);
-          
+
           const parsed: ScenarioValidation[] = scenarios.map((scenario, index) => {
             // Try multiple key formats:
             // 1. scenario1, scenario2, scenario3
@@ -442,14 +442,14 @@ function extractValidations(content: string, scenarios: any[], currentValidation
             // 3. Partial name match
             const numericKey = `scenario${index + 1}`;
             const scenarioName = scenario.name || '';
-            
+
             let data = validationData[numericKey];
-            
+
             // Try exact name match
             if (!data && scenarioName) {
               data = validationData[scenarioName];
             }
-            
+
             // Try partial/fuzzy name match - look for keys that contain part of the scenario name
             if (!data && scenarioName) {
               const scenarioWords = scenarioName.toLowerCase().split(/\s+/).filter((w: string) => w.length > 4);
@@ -464,13 +464,13 @@ function extractValidations(content: string, scenarios: any[], currentValidation
                 }
               }
             }
-            
+
             // Try matching by position if we have the right number of keys
             if (!data && keys.length === scenarios.length) {
               data = validationData[keys[index]];
               console.log(`Using positional match for scenario ${index + 1}: key "${keys[index]}"`);
             }
-            
+
             if (!data) {
               console.warn(`No data found for scenario ${index + 1}: "${scenarioName}"`);
               data = {};
@@ -491,7 +491,7 @@ function extractValidations(content: string, scenarios: any[], currentValidation
 
           // Check if we actually got meaningful statuses (not just defaults)
           const hasNonDefault = parsed.some((v) => v.status !== "in_play" && v.status !== "inactive");
-          
+
           if (hasNonDefault) {
             console.log('✅ Validations extracted successfully:', parsed.map((v) => v.status));
             return parsed;
@@ -503,7 +503,7 @@ function extractValidations(content: string, scenarios: any[], currentValidation
               return inferValidationsFromText(content, scenarios, currentValidations);
             }
           }
-          
+
           console.log('✅ Validations extracted (default states):', parsed.map((v) => v.status));
           return parsed;
         } catch (e) {
@@ -532,9 +532,9 @@ function parseValidationStatus(statusStr: string): "inactive" | "in_play" | "par
 
 function inferValidationsFromText(text: string, scenarios: any[], currentValidations: ScenarioValidation[] | null): ScenarioValidation[] {
   const lowerText = text.toLowerCase();
-  
+
   console.log('Inferring validations from text. Searching for patterns...');
-  
+
   // Start with current validations or defaults
   const result: ScenarioValidation[] = scenarios.map((scenario, index) => {
     const current = currentValidations?.[index];
@@ -545,13 +545,13 @@ function inferValidationsFromText(text: string, scenarios: any[], currentValidat
       invalidationCondition: current?.invalidationCondition || scenario.lis,
     };
   });
-  
+
   // Check for validation language in text for each scenario
   // More robust patterns to catch "is now VALIDATED", "is VALIDATED", "now VALIDATED"
   for (let i = 0; i < 3; i++) {
     const scenarioNum = i + 1;
     const scenarioName = scenarios[i]?.name?.toLowerCase() || '';
-    
+
     // Multiple patterns to match validation statements
     const patterns = [
       new RegExp(`scenario\\s*${scenarioNum}[^.]*?(?:is\\s+now\\s+|is\\s+|now\\s+)?(invalidated|validated|partially\\s*validated|not\\s*validated)`, 'gi'),
@@ -559,14 +559,14 @@ function inferValidationsFromText(text: string, scenarios: any[], currentValidat
       // Also try matching by scenario name if available
       ...(scenarioName ? [new RegExp(`${scenarioName.replace(/[()]/g, '\\$&')}[^.]*?(?:is\\s+now\\s+|is\\s+|now\\s+)?(invalidated|validated|partially\\s*validated|not\\s*validated)`, 'gi')] : [])
     ];
-    
+
     for (const pattern of patterns) {
       const matches = lowerText.match(pattern);
-      
+
       if (matches) {
         const lastMatch = matches[matches.length - 1].toLowerCase();
         console.log(`Scenario ${scenarioNum} matched:`, lastMatch);
-        
+
         // Order matters: check more specific patterns first
         if (lastMatch.includes('inactive')) {
           result[i].status = "inactive";
@@ -591,7 +591,7 @@ function inferValidationsFromText(text: string, scenarios: any[], currentValidat
       }
     }
   }
-  
+
   // Ensure only one scenario is validated
   const validatedCount = result.filter(v => v.status === "validated").length;
   if (validatedCount > 1) {
@@ -607,7 +607,7 @@ function inferValidationsFromText(text: string, scenarios: any[], currentValidat
       }
     }
   }
-  
+
   console.log('⚠️ Inferred validations:', result.map(v => v.status));
   return result;
 }
