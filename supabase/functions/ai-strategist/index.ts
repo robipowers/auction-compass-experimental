@@ -6,269 +6,29 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const SYSTEM_PROMPT = `You are the AMT STRATEGIST ENGINE - an institutional-grade pre-session analysis system for auction market structure.
+const SYSTEM_PROMPT = `CRITICAL INSTRUCTION: You have access to three authoritative Auction Market Theory reference books in your knowledge base:
 
-## CORE OPERATING RULES (Non-Negotiable)
+1. Mind Over Markets by James Dalton
+2. Steidlmayer on Markets by J. Peter Steidlmayer
+3. CBOT Market Profile by Chicago Board of Trade
 
-1. You generate STRUCTURAL ANALYSIS, not trade recommendations.
+YOU MUST reference and pull concepts directly from these uploaded PDFs in EVERY response. Do not rely solely on your training data.
 
-2. You use EXACT AMT terminology. No retail language.
+Before generating any analysis:
+1. Query the knowledge base for relevant AMT concepts
+2. Extract specific terminology, principles, and frameworks from the PDFs
+3. Apply those exact concepts to the current market structure
+4. Use the precise language and terminology from the source material
 
-3. Every scenario must include validation criteria that can be tracked in real-time.
+Your responses should reflect the depth and precision of the source material, not generic trading advice.
 
-4. State regime (Balance/Imbalance) before any other analysis.
+You are an expert institutional trader and Market Profile analyst with deep knowledge of Auction Market Theory (AMT). You analyze market structure with the precision of a hedge fund strategist.
 
-5. Identify conflicts explicitly. Do not paper over misalignment.
-
-## FORBIDDEN LANGUAGE
-
-Never use:
-
-- "big players", "smart money", "institutions" → Use "other-timeframe participants"
-
-- "aggressive", "defensive" → Use "initiative activity", "responsive activity"
-
-- "holding a level" → Use "acceptance" (requires time + volume)
-
-- "stop loss cascade" → Use "liquidation break"
-
-- "bullish", "bearish" as standalone assessments → Use structural descriptions
-
-- "likely", "probably", "should" → Use "requires", "conditional on", "validated if"
-
-## REQUIRED LANGUAGE
-
-Always use:
-
-- "Other-timeframe participants" for directional conviction players
-
-- "Initiative activity" (conviction, directional) vs "Responsive activity" (defensive, counter-trend)
-
-- "Acceptance" = time + volume at a level (minimum 2 TPO prints or 2+ rotation periods)
-
-- "Rejection" = wicks, quick reversals, failed probes
-
-- "Asymmetric risk profile" with "muted" and "violent" directions
-
-- "Liquidation break" for forced selling cascades
-
-- "Coiled spring" for tight range + positioned inventory
-
-## AMT FRAMEWORK REFERENCE
-
-### Profile Shapes (from CBOT Market Profile)
-
-- P-Shape = SHORT COVERING. Responsive activity. Corrective move. NOT bullish strength.
-
-- b-Shape = LONG LIQUIDATION. Initiative selling. Bearish conviction.
-
-- D-Shape = Normal distribution. Two-sided trade. Balance.
-
-- Double Distribution = Two value areas. Trend day or major inventory shift.
-
-### Inventory Risk (from Mind Over Markets)
-
-- Net Long Inventory = Muted upside (already positioned) / Violent downside (liquidation fuel)
-
-- Net Short Inventory = Muted downside (already positioned) / Violent upside (squeeze fuel)
-
-- Neutral Inventory = No asymmetry. Direction depends on initiative activity.
-
-### Open Types (from Steidlmayer)
-
-- OIV (Open Inside Value) = Neutral. Testing ground. Two-sided until proven otherwise.
-
-- OAV (Open Above Value) = Bullish bias. Requires acceptance above VAH to confirm.
-
-- OBV (Open Below Value) = Bearish bias. Requires acceptance below VAL to confirm.
-
-- OOR (Open Outside Range) = Gap. Strong conviction. Watch for acceptance or rejection.
-
-- OTF (One-Timeframe) = Trending. Do not fade.
-
-### Day Types (from Dalton)
-
-- Normal Day = Balance. Responsive strategies dominate. Value contains price.
-
-- Normal Variation = Slight directional bias within balance.
-
-- Trend Day = One-timeframe. Initiative dominates. Do not fade.
-
-- Double Distribution Trend = Two value areas. Major inventory shift occurred.
-
-- Neutral Day = Tight range. Coiled spring potential. Breakout imminent.
-
-### Value Relationships
-
-- Higher Value = Bullish migration. Buyers in control.
-
-- Lower Value = Bearish migration. Sellers in control.
-
-- Overlapping Value = Balance continuation. Reject trend strategies.
-
-- Inside Previous = Consolidation. Decision point pending.
-
-### Key Principles
-
-- "Speed and violence" = Liquidation-driven moves. Fast, unidirectional, painful for wrong-side positions.
-
-- "Coiled spring" = Tight range + positioned inventory = explosive potential when range breaks.
-
-- "Prominent VPOC" = Magnetic level. Price tends to return to test it.
-
-- "Poor High/Low" = Lack of excess. Structural magnet. Likely to be revisited.
-
-## CONFLICT RECOGNITION (Critical)
-
-These combinations are CONFLICTS, not alignments:
-
-- Net Long + OBV = CONFLICT (positioned long but opening weak)
-
-- Net Short + OAV = CONFLICT (positioned short but opening strong)
-
-- P-Shape + "bullish strength" = WRONG (P-shape is short covering, not initiative buying)
-
-- Overlapping Value + Trend expectation = CONFLICT (no trend without value migration)
-
-## OUTPUT FORMAT
-
-When given input data, generate analysis in this EXACT structure:
-
-### REGIME
-
-**[BALANCE or IMBALANCE]**
-
-[1 sentence explaining why. Reference value relationship and day type.]
-
-### CURRENT AUCTION STATE
-
-**STATE:** [Select ONE: Balanced Rotation | Balanced Rotation (Net Long Inventory) | Balanced Rotation (Net Short Inventory) | Early Discovery Attempt Above Value | Early Discovery Attempt Below Value | Failed Discovery / Rejection | Short-Covering Environment | Long Liquidation Environment | Late-Stage Balance Exhaustion | One-Timeframe Trending | Two-Timeframe Rotation | Value Migration in Progress | Acceptance Testing at Key Level | Open-Drive Trend Attempt]
-
-**EXPLANATION:** [2 sentences. Reference: inventory position, profile structure, open type, value relationship. Use specific price levels.]
-
-### COHERENCE RATING
-
-**[ALIGNED | CONFLICTED | NEUTRAL]**
-
-**Primary Alignment:** [What agrees - 1 sentence]
-
-**Primary Conflict:** [What disagrees - 1 sentence. If none, state "No significant conflict."]
-
-**Implication:** [What this means for today's auction - 1 sentence]
-
-### STRUCTURAL CONTEXT
-
-[2 paragraphs]
-
-**Paragraph 1 - Auction Stage:** Where are we in the auction cycle? Discovery, balance, exhaustion? How does yesterday's structure influence today?
-
-**Paragraph 2 - Inventory Dynamics:** What is the asymmetric risk profile? Which direction is muted? Which is violent?
-
-### KEY STRUCTURAL SCENARIOS
-
-Present exactly 3 scenarios:
-
-**[S1] [Scenario Name]**
-
-- **Type:** [Fast 1TF down, Slow rotational grind, Squeeze higher, Liquidation break, etc.]
-
-- **Trigger:** [Specific price level + behavior required]
-
-- **Acceptance Requirement:** [What proves this scenario valid - time + volume criteria]
-
-- **Invalidation (LIS):** [Line in Sand - price level that kills this scenario]
-
-- **Disconfirming Signal:** [Observable behavior that indicates this scenario is wrong]
-
-- **Structural Implication:** [2-3 sentences on what happens if this plays out]
-
-**[S2] [Scenario Name]**
-
-[Same fields as S1]
-
-**[S3] [Scenario Name]**
-
-[Same fields as S1]
-
-### INVENTORY RISK ANALYSIS
-
-[3 paragraphs, each 2-3 sentences]
-
-**Asymmetric Risk Profile:** Which direction is muted? Which is violent? Why?
-
-**Resolution Mechanism:** How will inventory resolve? Continuation vs reversal paths.
-
-**Time Factor:** When does this become critical? Proximity of levels, coiled spring effect.
-
-### PRIMARY STRUCTURAL RISK
-
-**The single greatest structural threat is [Risk Name] if [specific condition with price level].**
-
-[2 sentences: trigger → cascade → outcome]
-
-### STRUCTURAL CHECKLIST
-
-**Q1: What is the primary structural conflict or alignment?**
-
-A: [2-3 sentences]
-
-**Q2: What are the critical structural pivots?**
-
-A: [2-3 sentences with specific prices]
-
-**Q3: What does inventory tell us about potential price action?**
-
-A: [2-3 sentences]
-
-**Q4: How does yesterday's structure influence today?**
-
-A: [2-3 sentences]
-
-**Q5: What structural development am I most likely to miss?**
-
-A: [2-3 sentences]
-
-### SCENARIO TRACKING BLOCK
-
-[SCENARIOS: {
-
-  "regime": "BALANCE" | "IMBALANCE",
-
-  "coherence": "ALIGNED" | "CONFLICTED" | "NEUTRAL",
-
-  "S1": {
-
-    "name": "",
-
-    "type": "",
-
-    "trigger": "",
-
-    "acceptanceRequirement": "",
-
-    "invalidation": "",
-
-    "disconfirmingSignal": "",
-
-    "status": "inactive"
-
-  },
-
-  "S2": { same fields },
-
-  "S3": { same fields }
-
-}]
-
-## OUTPUT QUALITY RULES
-
-- No placeholder text. Complete every section.
-
-- Every paragraph must have 2-3 sentences minimum.
-
-- Be specific with price levels and pip measurements.
-
-- Scenarios must have unique IDs (S1, S2, S3) for tracking.`;
+VERIFICATION REQUIREMENT: Your response must demonstrate knowledge base consultation by:
+- Using specific terminology found in the PDFs (not generic trading terms)
+- Referencing frameworks explicitly described in the source material
+- Citing books by name (e.g., "According to Mind Over Markets...")
+- Applying principles in the exact manner presented in the books`;
 
 // Helper function to search AMT knowledge base
 async function searchAMTKnowledge(query: string, apiKey: string, supabaseUrl: string, supabaseKey: string): Promise<string> {
@@ -303,7 +63,7 @@ async function searchAMTKnowledge(query: string, apiKey: string, supabaseUrl: st
     const { data: chunks, error } = await supabase.rpc('search_amt_knowledge', {
       query_embedding: `[${queryEmbedding.join(',')}]`,
       match_threshold: 0.65,
-      match_count: 2,
+      match_count: 4,
     });
 
     if (error || !chunks || chunks.length === 0) {
@@ -355,27 +115,25 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-    // Search knowledge base for relevant AMT concepts (single focused query to reduce latency)
+    // Search knowledge base for relevant AMT concepts - multiple specific queries
     const knowledgeQueries = [
-      `${plan.instrument} ${plan.yesterday.dayType} ${plan.yesterday.valueRelationship} ${plan.yesterday.structure} ${plan.today.openRelation} ${plan.today.inventory} value area acceptance initiative responsive inventory`,
+      `${plan.yesterday.dayType} day type market profile classification`,
+      `${plan.yesterday.structure} shape profile structure implications`,
+      `${plan.today.inventory} inventory positioning asymmetric risk`,
+      `${plan.today.openRelation} open type opening relationship value area`,
+      `${plan.yesterday.valueRelationship} value relationship acceptance rejection`,
+      `initiative responsive activity other timeframe participant`,
+      `coiled spring effect inventory liquidation`
     ];
     
-    // Execute knowledge queries with timeout protection
-    let knowledgeContext = '';
-    try {
-      const knowledgePromise = Promise.all(
-        knowledgeQueries.map(query => searchAMTKnowledge(query, LOVABLE_API_KEY, supabaseUrl, supabaseServiceKey))
-      );
-      const timeoutPromise = new Promise<string[]>((_, reject) => 
-        setTimeout(() => reject(new Error('Knowledge search timeout')), 5000)
-      );
-      
-      const knowledgeResults = await Promise.race([knowledgePromise, timeoutPromise]) as string[];
-      knowledgeContext = knowledgeResults.filter(k => k.length > 0).join('\n\n---\n\n');
-    } catch (e) {
-      console.log('Knowledge search skipped (timeout or error):', e);
-      // Continue without knowledge context
-    }
+    // Execute all knowledge queries in parallel
+    const knowledgeResults = await Promise.all(
+      knowledgeQueries.map(query => searchAMTKnowledge(query, LOVABLE_API_KEY, supabaseUrl, supabaseServiceKey))
+    );
+    
+    // Combine and deduplicate knowledge
+    const allKnowledge = knowledgeResults.filter(k => k.length > 0).join('\n\n---\n\n');
+    const knowledgeContext = allKnowledge || '';
 
     const tradingDate = new Date().toISOString().split('T')[0];
     
@@ -625,52 +383,23 @@ Explain WHEN the inventory becomes critical. Discuss the proximity of key struct
 
 ---
 
-## CRITICAL PRICE LEVEL REQUIREMENT
-
-**CRITICAL: Use ONLY the exact price levels provided in the INPUT DATA. Do not invent, hallucinate, or modify any prices.**
-- ONH: ${plan.levels.overnightHigh}
-- ONL: ${plan.levels.overnightLow}
-- VAH: ${plan.levels.yesterdayVah}
-- VAL: ${plan.levels.yesterdayVal}
-- VPOC: ${plan.yesterday.prominentVpoc}
-
-**Any price level in your analysis MUST match one of these exact values. Do not generate fictional prices.**
-
----
-
-## CRITICAL COMPLETION REQUIREMENT
-
-**CRITICAL: You MUST complete ALL sections fully. Do not leave any section incomplete or with placeholder text like "analysis pending."**
-
-**You MUST end your response with the SCENARIO TRACKING BLOCK containing the [SCENARIOS: {...}] JSON. This is MANDATORY for system integration. The analysis is considered FAILED if the JSON block is missing.**
-
----
-
 END OF ANALYSIS REQUEST`;
 
-    // Create abort controller with 58 second timeout (edge functions have ~60s limit)
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 58000);
-
-    try {
-      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "openai/gpt-5-mini",
-          max_completion_tokens: 6000,
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            { role: "user", content: userPrompt }
-          ],
-        }),
-        signal: controller.signal,
-      });
-      
-      clearTimeout(timeout);
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "openai/gpt-5",
+        max_completion_tokens: 12000,
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          { role: "user", content: userPrompt }
+        ],
+      }),
+    });
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -703,20 +432,6 @@ END OF ANALYSIS REQUEST`;
     return new Response(JSON.stringify(critique), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
-    
-    } catch (fetchError) {
-      clearTimeout(timeout);
-      if (fetchError instanceof Error && fetchError.name === 'AbortError') {
-        console.error("AI request timed out");
-        return new Response(JSON.stringify({ 
-          error: "Analysis timed out. Please try again." 
-        }), {
-          status: 504,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      throw fetchError;
-    }
 
   } catch (error) {
     console.error("AI Strategist error:", error);
