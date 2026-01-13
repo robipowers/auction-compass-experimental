@@ -303,7 +303,7 @@ async function searchAMTKnowledge(query: string, apiKey: string, supabaseUrl: st
     const { data: chunks, error } = await supabase.rpc('search_amt_knowledge', {
       query_embedding: `[${queryEmbedding.join(',')}]`,
       match_threshold: 0.65,
-      match_count: 4,
+      match_count: 2,
     });
 
     if (error || !chunks || chunks.length === 0) {
@@ -355,10 +355,9 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-    // Search knowledge base for relevant AMT concepts - simplified to 2 focused queries
+    // Search knowledge base for relevant AMT concepts (single focused query to reduce latency)
     const knowledgeQueries = [
-      `${plan.yesterday.dayType} ${plan.yesterday.structure} market profile structure inventory`,
-      `${plan.today.openRelation} ${plan.today.inventory} value area acceptance initiative responsive`
+      `${plan.instrument} ${plan.yesterday.dayType} ${plan.yesterday.valueRelationship} ${plan.yesterday.structure} ${plan.today.openRelation} ${plan.today.inventory} value area acceptance initiative responsive inventory`,
     ];
     
     // Execute knowledge queries with timeout protection
@@ -649,9 +648,9 @@ Explain WHEN the inventory becomes critical. Discuss the proximity of key struct
 
 END OF ANALYSIS REQUEST`;
 
-    // Create abort controller with 55 second timeout (edge functions have 60s limit)
+    // Create abort controller with 58 second timeout (edge functions have ~60s limit)
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 55000);
+    const timeout = setTimeout(() => controller.abort(), 58000);
 
     try {
       const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -662,7 +661,7 @@ END OF ANALYSIS REQUEST`;
         },
         body: JSON.stringify({
           model: "openai/gpt-5-mini",
-          max_completion_tokens: 10000,
+          max_completion_tokens: 6000,
           messages: [
             { role: "system", content: SYSTEM_PROMPT },
             { role: "user", content: userPrompt }
