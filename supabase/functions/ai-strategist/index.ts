@@ -56,7 +56,7 @@ Always use:
 
 ## AMT FRAMEWORK REFERENCE
 
-### Profile Shapes (from CBOT Market Profile)
+### Profile Shapes 
 
 - P-Shape = SHORT COVERING. Responsive activity. Corrective move. NOT bullish strength.
 
@@ -66,7 +66,7 @@ Always use:
 
 - Double Distribution = Two value areas. Trend day or major inventory shift.
 
-### Inventory Risk (from Mind Over Markets)
+### Inventory Risk 
 
 - Net Long Inventory = Muted upside (already positioned) / Violent downside (liquidation fuel)
 
@@ -74,7 +74,7 @@ Always use:
 
 - Neutral Inventory = No asymmetry. Direction depends on initiative activity.
 
-### Open Types (from Steidlmayer)
+### Open Types 
 
 - OIV (Open Inside Value) = Neutral. Testing ground. Two-sided until proven otherwise.
 
@@ -86,7 +86,7 @@ Always use:
 
 - OTF (One-Timeframe) = Trending. Do not fade.
 
-### Day Types (from Dalton)
+### Day Types 
 
 - Normal Day = Balance. Responsive strategies dominate. Value contains price.
 
@@ -200,7 +200,7 @@ async function searchAMTKnowledge(query: string, apiKey: string, supabaseUrl: st
     // Format knowledge context
     const knowledgeContext = chunks.map((chunk: any) => {
       const source = docTitles[chunk.document_id] || 'AMT Reference';
-      return `[From "${source}"]: ${chunk.content}`;
+      return chunk.content;
     }).join('\n\n---\n\n');
 
     console.log(`Found ${chunks.length} relevant knowledge chunks`);
@@ -257,16 +257,16 @@ serve(async (req) => {
 AUTHORITATIVE AMT REFERENCE MATERIAL (MANDATORY CONSULTATION):
 ═══════════════════════════════════════════════════════════════
 
-The following passages are from Mind Over Markets, Steidlmayer on Markets, and CBOT Market Profile.
+The following passages are from established auction market theory principles.
 You MUST use these exact concepts, terminology, and frameworks in your analysis.
 
 ${knowledgeContext}
 
 VERIFICATION REQUIREMENT: Your response must demonstrate that you consulted this knowledge base by:
 - Using specific terminology found in these passages (not generic trading terms)
-- Referencing frameworks explicitly described in the source material
-- Applying principles in the exact manner presented in the books
-- Citing source material where applicable (e.g., "According to Mind Over Markets...")
+- Applying the frameworks and principles described above
+
+- 
 
 ` : ``;
 
@@ -370,15 +370,15 @@ You MUST structure your response EXACTLY as follows with complete paragraphs (no
 - Auction stage (discovery vs. balance)
 - Positional overextension (inventory implications)
 - Structural imbalance (yesterday's influence on today)
-- Reference specific concepts from the PDFs and cite by book name
+- Reference established AMT principles
 
 ---
 
 ### Structural Observations
 
 [Write 2-3 complete paragraphs covering:]
-- P/b-Shape implications (cite CBOT Market Profile)
-- Inventory vulnerability (cite Mind Over Markets)
+- P/b-Shape implications 
+- Inventory vulnerability 
 - Convergence/Divergence (alignment vs. conflict analysis)
 - Yesterday's influence on today's auction
 - Use exact AMT terminology from the knowledge base
@@ -426,10 +426,10 @@ YOU MUST INCLUDE this section BEFORE "Primary Structural Risk" (do not skip it):
 [Write 2-3 complete paragraphs covering:]
 
 **Paragraph 1 - Asymmetric Risk Profile:**
-Explain the asymmetric risk created by the current inventory position using the exact framework from Mind Over Markets: identify which direction is "muted" (already positioned) and which direction is "violent" (liquidation/squeeze fuel). Be specific about why the positioned direction has limited upside and why the opposite direction has explosive potential. Cite the book by name.
+Explain the asymmetric risk created by the current inventory position by identifying which direction is "muted" (already positioned) and which direction is "violent" (liquidation/squeeze fuel). Be specific about why the positioned direction has limited upside and why the opposite direction has explosive potential. 
 
 **Paragraph 2 - Resolution Mechanism:**
-Explain HOW the inventory will resolve. Describe the two possible paths: (1) continuation in the positioned direction (requires strong initiative activity and acceptance), or (2) reversal/liquidation in the opposite direction (occurs if positioned participants fail to achieve acceptance). Use terms like "liquidation break", "squeeze", "forced covering", "speed and violence". Reference Steidlmayer's concepts.
+Explain HOW the inventory will resolve. Describe the two possible paths: (1) continuation in the positioned direction (requires strong initiative activity and acceptance), or (2) reversal/liquidation in the opposite direction (occurs if positioned participants fail to achieve acceptance). Use terms like "liquidation break", "squeeze", "forced covering", "speed and violence". 
 
 **Paragraph 3 - Time Factor & Proximity:**
 Explain WHEN the inventory becomes critical. Discuss the proximity of key structural levels (how tight is the range?), the coiled spring effect if applicable, and the urgency of the structural decision. Use specific pip measurements if relevant. Explain that the longer the market stays in this configuration without resolution, the more explosive the eventual move.
@@ -447,16 +447,16 @@ Explain WHEN the inventory becomes critical. Discuss the proximity of key struct
 ### Structural Checklist
 
 **Q1: What is the primary structural conflict or alignment in this setup?**  
-**A:** [Write 2-3 sentences. First sentence: identify the primary alignment (what agrees - inventory + open relation + value relationship). Second sentence: identify the primary conflict (what disagrees). Third sentence: explain the implication of this conflict/alignment for today's auction. Be specific with concepts and cite a book if relevant.]
+**A:** [Write 2-3 sentences. First sentence: identify the primary alignment (what agrees - inventory + open relation + value relationship). Second sentence: identify the primary conflict (what disagrees). Third sentence: explain the implication of this conflict/alignment for today's auction. Be specific with concepts and .]
 
 **Q2: What are the critical structural pivots and what do they represent?**  
 **A:** [Write 2-3 sentences. List each level (ONH, ONL, VAH, VAL, VPOC) with specific prices. Explain what each represents structurally (breakout confirmation, breakdown confirmation, value boundary, fair value magnet, etc.). Mention the pip range between key levels if relevant (e.g., "The 15.6-pip value area between VAL and VAH..." or "The 24-pip overnight range from ONL to ONH..."). Identify which level is the most critical decision point.]
 
 **Q3: What does the inventory position tell us about potential price action?**  
-**A:** [Write 2-3 sentences. First sentence: state the asymmetric risk profile (muted direction vs violent direction). Second sentence: explain the liquidation/squeeze fuel concept and cite Mind Over Markets. Third sentence: describe the coiled spring effect if the range is tight, or explain the resolution mechanism if the range is wide.]
+**A:** [Write 2-3 sentences. First sentence: state the asymmetric risk profile (muted direction vs violent direction). Second sentence: explain the liquidation/squeeze fuel concept . Third sentence: describe the coiled spring effect if the range is tight, or explain the resolution mechanism if the range is wide.]
 
 **Q4: How does yesterday's structure influence today's auction?**  
-**A:** [Write 2-3 sentences. First sentence: explain yesterday's day type and what it means (trend day = one-time framing, normal day = balance, etc.). Second sentence: explain yesterday's structure (P-shape = short covering, b-shape = long liquidation, normal = two-sided) and cite CBOT Market Profile. Third sentence: connect yesterday's value relationship to today's setup and explain the cause-and-effect relationship.]
+**A:** [Write 2-3 sentences. First sentence: explain yesterday's day type and what it means (trend day = one-time framing, normal day = balance, etc.). Second sentence: explain yesterday's structure (P-shape = short covering, b-shape = long liquidation, normal = two-sided) . Third sentence: connect yesterday's value relationship to today's setup and explain the cause-and-effect relationship.]
 
 **Q5: What structural development am I most likely to miss?**  
 **A:** [Write 2-3 sentences. Identify the blind spot or hidden risk that's easy to overlook. Common examples: coiled spring effect in tight ranges, speed and violence of liquidation moves, trap setups where initial direction fails quickly, prominent VPOC as magnet, time-based urgency (decision must happen soon). Be specific with levels and pip ranges. Use phrases like "tight proximity", "structural decision point is imminent", "easy to miss the speed and violence".]
@@ -467,7 +467,7 @@ Explain WHEN the inventory becomes critical. Discuss the proximity of key struct
 
 1. **NO PLACEHOLDER TEXT:** Do not write "analysis pending", "to be determined", or similar phrases. Write complete analysis.
 
-2. **CITE BOOKS BY NAME:** Reference at least 2 of the 3 books explicitly (e.g., "According to Mind Over Markets...", "Steidlmayer describes...", "The CBOT Market Profile framework...")
+2. **USE ESTABLISHED AMT PRINCIPLES:** Apply auction market concepts directly without explicit source attribution. NEVER mention author names (e.g. Steidlmayer, Dalton), book titles (e.g. Mind Over Markets, Steidlmayer on Markets), or "CBOT Market Profile framework." Present all concepts as established AMT principles without citing any person, book, or institution by name.
 
 3. **USE EXACT AMT TERMINOLOGY:**
    - "Other-timeframe participants" (NOT "big players" or "institutions")
@@ -493,7 +493,7 @@ Explain WHEN the inventory becomes critical. Discuss the proximity of key struct
 - Be specific with measurements: "8.7-pip zone", "26-pip overnight range"
 - Use active voice: "The market needs..." not "It would be needed..."
 - Be precise: "structural decision point is imminent" not "something might happen soon"
-- Cite books by name throughout the analysis
+- 
 
 ---
 

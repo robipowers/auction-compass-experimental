@@ -169,7 +169,7 @@ export default function AdminKnowledge() {
                 <Label htmlFor="title">Document Title</Label>
                 <Input
                   id="title"
-                  placeholder="e.g., Mind Over Markets - Chapter 3"
+                  placeholder="e.g., AMT Reference - Chapter 3"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                 />

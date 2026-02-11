@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,25 +36,43 @@ interface AuctionPlanFormProps {
   isLoading: boolean;
 }
 
+const DRAFT_KEY = "auction-plan-draft";
+
+function loadDraft() {
+  try {
+    const saved = localStorage.getItem(DRAFT_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch {}
+  return null;
+}
+
 export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
-  const [yesterday, setYesterday] = useState<YesterdayContext>({
+  const draft = loadDraft();
+
+  const [yesterday, setYesterday] = useState<YesterdayContext>(draft?.yesterday ?? {
     dayType: "normal",
     valueRelationship: "inside_previous",
     structure: "balanced",
     prominentVpoc: "",
   });
 
-  const [today, setToday] = useState<TodayContext>({
+  const [today, setToday] = useState<TodayContext>(draft?.today ?? {
     inventory: "neutral",
     openRelation: "oiv",
   });
 
-  const [levels, setLevels] = useState<ReferenceLevels>({
+  const [levels, setLevels] = useState<ReferenceLevels>(draft?.levels ?? {
     overnightHigh: "",
     overnightLow: "",
     yesterdayVah: "",
     yesterdayVal: "",
   });
+
+  // Auto-save draft to localStorage on every change
+  useEffect(() => {
+    const draft = { yesterday, today, levels, savedAt: new Date().toISOString() };
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+  }, [yesterday, today, levels]);
 
   const handleSave = async () => {
     await onSave({ yesterday, today, levels });

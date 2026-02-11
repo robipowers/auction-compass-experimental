@@ -200,7 +200,7 @@ export default function History() {
                           {getOutcomeLabel(entry.outcome)}
                         </Badge>
                       ) : (
-                        <span className="text-muted-foreground">—</span>
+                        <span className="text-muted-foreground">-</span>
                       )}
                     </TableCell>
                     <TableCell className="text-right">
@@ -214,7 +214,7 @@ export default function History() {
                           {entry.pnl.toFixed(1)}
                         </span>
                       ) : (
-                        <span className="text-muted-foreground">—</span>
+                        <span className="text-muted-foreground">-</span>
                       )}
                     </TableCell>
                     <TableCell className="text-right">
