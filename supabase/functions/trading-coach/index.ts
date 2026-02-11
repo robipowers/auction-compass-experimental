@@ -280,9 +280,14 @@ serve(async (req) => {
   }
 
   try {
-    const { message, planContext, scenarios, chatHistory, currentValidations } = await req.json();
+    const body = await req.json();
+    const message = body.message || '';
+    const planContext = body.planContext || null;
+    const scenarios = body.scenarios || [];
+    const chatHistory = body.chatHistory || [];
+    const currentValidations = body.currentValidations || null;
 
-    console.log("Trading Coach request received:", { message, planContext });
+    console.log("Trading Coach request received:", { message, hasPlanContext: !!planContext });
 
     const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
     if (!OPENAI_API_KEY) {
@@ -293,19 +298,28 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
     // Search knowledge base for relevant AMT concepts based on the user's message
-    const knowledgeQuery = `${message} ${planContext.yesterday.structure} ${planContext.today.inventory} auction market theory acceptance rejection`;
+    const knowledgeParts = [message];
+    if (planContext?.yesterday?.structure) knowledgeParts.push(planContext.yesterday.structure);
+    if (planContext?.today?.inventory) knowledgeParts.push(planContext.today.inventory);
+    knowledgeParts.push('auction market theory acceptance rejection');
+    const knowledgeQuery = knowledgeParts.join(' ');
     const knowledgeContext = await searchAMTKnowledge(knowledgeQuery, OPENAI_API_KEY, supabaseUrl, supabaseServiceKey);
 
     // Build context from plan data
-    let contextPrompt = `PLAN CONTEXT:
-- Yesterday: ${planContext.yesterday.dayType}, ${planContext.yesterday.valueRelationship}, ${planContext.yesterday.structure}, VPOC ${planContext.yesterday.prominentVpoc}
-- Today: ${planContext.today.inventory}, ${planContext.today.openRelation}
-- Levels: VAH ${planContext.levels.yesterdayVah}, VAL ${planContext.levels.yesterdayVal}, ONH ${planContext.levels.overnightHigh}, ONL ${planContext.levels.overnightLow}
+    let contextPrompt = '';
+    if (planContext) {
+      contextPrompt = `PLAN CONTEXT:
+- Yesterday: ${planContext.yesterday?.dayType || 'N/A'}, ${planContext.yesterday?.valueRelationship || 'N/A'}, ${planContext.yesterday?.structure || 'N/A'}, VPOC ${planContext.yesterday?.prominentVpoc || 'N/A'}
+- Today: ${planContext.today?.inventory || 'N/A'}, ${planContext.today?.openRelation || 'N/A'}
+- Levels: VAH ${planContext.levels?.yesterdayVah || 'N/A'}, VAL ${planContext.levels?.yesterdayVal || 'N/A'}, ONH ${planContext.levels?.overnightHigh || 'N/A'}, ONL ${planContext.levels?.overnightLow || 'N/A'}`;
+    }
 
-SCENARIOS TO VALIDATE:
+    if (scenarios.length >= 3) {
+      contextPrompt += `\n\nSCENARIOS TO VALIDATE:
 1. ${scenarios[0].name}: In Play at ${scenarios[0].inPlay} → Invalidates at ${scenarios[0].lis}
 2. ${scenarios[1].name}: In Play at ${scenarios[1].inPlay} → Invalidates at ${scenarios[1].lis}
 3. ${scenarios[2].name}: In Play at ${scenarios[2].inPlay} → Invalidates at ${scenarios[2].lis}`;
+    }
 
     // Add current validation states if available
     if (currentValidations && currentValidations.length > 0) {
@@ -346,7 +360,7 @@ Apply these authoritative insights when assessing acceptance, rejection, and val
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-5.2",
+        model: "gpt-4o",
         max_tokens: 4096,
         messages,
       }),
@@ -378,7 +392,7 @@ Apply these authoritative insights when assessing acceptance, rejection, and val
     console.log("AI response received:", aiContent.substring(0, 200));
 
     // Extract validations from AI response
-    const validations = extractValidations(aiContent, scenarios, currentValidations);
+    const validations = scenarios.length >= 3 ? extractValidations(aiContent, scenarios, currentValidations) : [];
 
     return new Response(JSON.stringify({
       content: aiContent,
