@@ -1,3 +1,4 @@
+import { PasswordGate } from "@/components/PasswordGate";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -43,7 +44,7 @@ function AlertToasts() {
 }
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
+  <PasswordGate><QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <MarketDataProvider>
         <KnowledgeProvider>
@@ -82,7 +83,7 @@ const App = () => (
         </KnowledgeProvider>
       </MarketDataProvider>
     </ThemeProvider>
-  </QueryClientProvider>
+  </QueryClientProvider></PasswordGate>
 );
 
 export default App;
