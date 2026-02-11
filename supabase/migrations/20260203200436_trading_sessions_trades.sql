@@ -3,9 +3,9 @@
 
 -- 1. Trading Sessions table
 CREATE TABLE IF NOT EXISTS trading_sessions (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users NOT NULL,
-  auction_plan_id UUID REFERENCES auction_plans,
+  auction_plan_id UUID,
   start_time TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   end_time TIMESTAMPTZ,
   session_phase TEXT CHECK (session_phase IN ('pre-market', 'open', 'mid-session', 'close')),
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS trading_sessions (
 
 -- 2. Trades table
 CREATE TABLE IF NOT EXISTS trades (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users NOT NULL,
   session_id UUID REFERENCES trading_sessions ON DELETE SET NULL,
   direction TEXT NOT NULL CHECK (direction IN ('long', 'short')),
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS trades (
 
 -- 3. Session Notes table
 CREATE TABLE IF NOT EXISTS session_notes (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users NOT NULL,
   session_id UUID REFERENCES trading_sessions ON DELETE CASCADE NOT NULL,
   content TEXT NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS session_notes (
 
 -- 4. Scenario Validations table
 CREATE TABLE IF NOT EXISTS scenario_validations (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   session_id UUID REFERENCES trading_sessions ON DELETE CASCADE NOT NULL,
   scenario_id UUID NOT NULL,
   validation_state TEXT NOT NULL CHECK (validation_state IN ('inactive', 'in_play', 'validated', 'invalidated')),

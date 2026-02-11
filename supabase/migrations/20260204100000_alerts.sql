@@ -3,7 +3,7 @@
 
 -- Alerts table: Alert definitions
 CREATE TABLE IF NOT EXISTS alerts (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) NOT NULL,
   plan_id UUID NULL, -- NULL for manual alerts, references auction_plans if linked
   name TEXT NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS alerts (
 
 -- Alert history: Log of triggered alerts
 CREATE TABLE IF NOT EXISTS alert_history (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   alert_id UUID REFERENCES alerts(id) ON DELETE SET NULL,
   user_id UUID REFERENCES auth.users(id) NOT NULL,
   alert_name TEXT NOT NULL, -- Denormalized for history

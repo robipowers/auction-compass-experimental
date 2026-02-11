@@ -6,7 +6,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Knowledge topics (categories)
 CREATE TABLE knowledge_topics (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
   icon TEXT,
@@ -19,7 +19,7 @@ CREATE INDEX idx_knowledge_topics_sort ON knowledge_topics(sort_order);
 
 -- Knowledge articles
 CREATE TABLE knowledge_articles (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
   topic_id UUID REFERENCES knowledge_topics(id) ON DELETE SET NULL,
@@ -36,7 +36,7 @@ CREATE INDEX idx_knowledge_articles_slug ON knowledge_articles(slug);
 
 -- User reading history
 CREATE TABLE knowledge_reading_history (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   article_id UUID REFERENCES knowledge_articles(id) ON DELETE CASCADE,
   article_version INTEGER,
@@ -49,7 +49,7 @@ CREATE INDEX idx_knowledge_reading_history_article ON knowledge_reading_history(
 
 -- User bookmarks
 CREATE TABLE knowledge_bookmarks (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   article_id UUID REFERENCES knowledge_articles(id) ON DELETE CASCADE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -60,7 +60,7 @@ CREATE INDEX idx_knowledge_bookmarks_user ON knowledge_bookmarks(user_id);
 
 -- User notes on articles
 CREATE TABLE knowledge_notes (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   article_id UUID REFERENCES knowledge_articles(id) ON DELETE CASCADE,
   note_text TEXT NOT NULL,
@@ -73,7 +73,7 @@ CREATE INDEX idx_knowledge_notes_article ON knowledge_notes(article_id);
 
 -- AMT glossary terms
 CREATE TABLE amt_glossary (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   term TEXT UNIQUE NOT NULL,
   definition TEXT NOT NULL,
   article_id UUID REFERENCES knowledge_articles(id) ON DELETE SET NULL,

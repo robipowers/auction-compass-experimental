@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS journal_entries (
   lesson_learned TEXT,
   
   -- Plan Connection (Phase 2)
-  auction_plan_id UUID REFERENCES auction_plans(id) ON DELETE SET NULL,
+  auction_plan_id UUID,
   scenario_traded TEXT,
   followed_plan BOOLEAN,
   plan_deviation_reason TEXT,
