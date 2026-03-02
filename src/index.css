@@ -5,170 +5,175 @@
 @tailwind utilities;
 
 @layer base {
-  /* Light Theme - Professional Trading */
+  /* Light Theme — Refined Institutional Trading
+     Cooler, sharper foundation. Slate-blue undertone replaces the warm wash.
+     Higher contrast text hierarchy. Cards pop with cleaner borders. */
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222 47% 11%;
+    --background: 220 16% 96%;
+    --foreground: 224 71% 4%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 224 71% 4%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 224 71% 4%;
 
-    --primary: 217 91% 50%;
+    --primary: 221 83% 53%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222 47% 20%;
+    --secondary: 220 14% 92%;
+    --secondary-foreground: 224 71% 8%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 220 14% 92%;
+    --muted-foreground: 220 9% 43%;
 
-    --accent: 187 85% 43%;
+    --accent: 173 80% 36%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 50%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    --input-background: 210 40% 98%;
-    --input: 214 32% 75%;
-    --ring: 217 91% 50%;
+    --border: 220 13% 87%;
+    --input-background: 220 16% 96%;
+    --input: 220 13% 71%;
+    --ring: 221 83% 53%;
 
-    --radius: 0.5rem;
+    --radius: 0.625rem;
 
-    /* Trading-specific semantic tokens - light theme */
-    --success: 160 84% 35%;
+    /* Trading-specific semantic tokens */
+    --success: 152 69% 31%;
     --success-foreground: 0 0% 100%;
-    --warning: 32 95% 44%;
+    --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
-    --danger: 0 84% 50%;
+    --danger: 0 72% 51%;
     --danger-foreground: 0 0% 100%;
-    --info: 217 91% 50%;
+    --info: 221 83% 53%;
     --info-foreground: 0 0% 100%;
     
-    /* Text hierarchy tokens - light theme */
-    --text-primary: 222 47% 11%;
-    --text-secondary: 215 25% 35%;
-    --text-muted: 215 16% 47%;
-    --text-placeholder: 215 16% 57%;
+    /* Text hierarchy */
+    --text-primary: 224 71% 4%;
+    --text-secondary: 220 9% 30%;
+    --text-muted: 220 9% 43%;
+    --text-placeholder: 220 9% 56%;
 
-    /* Status states for scenario tracking */
-    --prob-confirmed: 160 84% 35%;
-    --prob-strengthening: 38 92% 44%;
-    --prob-balanced: 217 91% 50%;
-    --prob-weakening: 25 95% 48%;
-    --prob-invalidated: 0 84% 50%;
+    /* Scenario tracking status */
+    --prob-confirmed: 152 69% 31%;
+    --prob-strengthening: 38 92% 50%;
+    --prob-balanced: 221 83% 53%;
+    --prob-weakening: 25 95% 53%;
+    --prob-invalidated: 0 72% 51%;
 
-    /* Premium gradient tokens - light theme */
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(210 40% 98%) 100%);
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 50%) 0%, hsl(187 85% 43%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(187 85% 43%) 0%, hsl(160 84% 35%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(210 40% 98%) 0%, hsl(210 40% 96%) 100%);
-    --gradient-premium: linear-gradient(135deg, hsl(217 91% 50%) 0%, hsl(280 60% 50%) 100%);
+    /* Premium gradients */
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(220 16% 97%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(173 80% 36%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(173 80% 36%) 0%, hsl(152 69% 31%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(220 16% 96%) 0%, hsl(220 14% 92%) 100%);
+    --gradient-premium: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(263 70% 50%) 100%);
 
-    /* Glass morphism - light variant */
-    --glass-bg: hsl(0 0% 100% / 0.8);
-    --glass-border: hsl(214 32% 91% / 0.5);
+    /* Glass morphism */
+    --glass-bg: hsl(0 0% 100% / 0.85);
+    --glass-border: hsl(220 13% 87% / 0.6);
 
-    /* Premium shadows - light theme */
-    --shadow-sm: 0 1px 2px 0 hsl(222 47% 11% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(222 47% 11% / 0.1), 0 2px 4px -1px hsl(222 47% 11% / 0.06);
-    --shadow-lg: 0 10px 15px -3px hsl(222 47% 11% / 0.1), 0 4px 6px -2px hsl(222 47% 11% / 0.05);
-    --shadow-xl: 0 20px 25px -5px hsl(222 47% 11% / 0.1), 0 10px 10px -5px hsl(222 47% 11% / 0.04);
-    --shadow-glow: 0 0 40px hsl(217 91% 50% / 0.15);
-    --shadow-success-glow: 0 0 30px hsl(160 84% 35% / 0.2);
-    --shadow-warning-glow: 0 0 30px hsl(38 92% 44% / 0.2);
-    --shadow-danger-glow: 0 0 30px hsl(0 84% 50% / 0.2);
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(224 71% 4% / 0.04);
+    --shadow-md: 0 4px 6px -1px hsl(224 71% 4% / 0.07), 0 2px 4px -2px hsl(224 71% 4% / 0.05);
+    --shadow-lg: 0 10px 15px -3px hsl(224 71% 4% / 0.08), 0 4px 6px -4px hsl(224 71% 4% / 0.04);
+    --shadow-xl: 0 20px 25px -5px hsl(224 71% 4% / 0.08), 0 8px 10px -6px hsl(224 71% 4% / 0.04);
+    --shadow-glow: 0 0 30px hsl(221 83% 53% / 0.12);
+    --shadow-success-glow: 0 0 24px hsl(152 69% 31% / 0.15);
+    --shadow-warning-glow: 0 0 24px hsl(38 92% 50% / 0.15);
+    --shadow-danger-glow: 0 0 24px hsl(0 72% 51% / 0.15);
 
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 217 91% 50%;
+    --sidebar-foreground: 224 71% 4%;
+    --sidebar-primary: 221 83% 53%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 40% 96%;
-    --sidebar-accent-foreground: 222 47% 11%;
-    --sidebar-border: 214 32% 91%;
-    --sidebar-ring: 217 91% 50%;
+    --sidebar-accent: 220 14% 92%;
+    --sidebar-accent-foreground: 224 71% 4%;
+    --sidebar-border: 220 13% 87%;
+    --sidebar-ring: 221 83% 53%;
   }
 
-  /* Dark Theme - Professional Institutional Trading */
+  /* Dark Theme — Institutional Terminal
+     Deep navy-charcoal base. Very low saturation surfaces.
+     Crisp text layers. Accent colors pop harder against the dark base.
+     Think Bloomberg Terminal meets Linear. */
   .dark {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
+    --background: 225 25% 6%;
+    --foreground: 210 20% 93%;
 
-    --card: 222 47% 14%;
-    --card-foreground: 0 0% 100%;
+    --card: 225 20% 10%;
+    --card-foreground: 210 20% 93%;
 
-    --popover: 222 47% 14%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 225 20% 10%;
+    --popover-foreground: 210 20% 93%;
 
-    --primary: 217 92% 70%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 217 92% 65%;
+    --primary-foreground: 225 25% 6%;
 
-    --secondary: 222 47% 11%;
-    --secondary-foreground: 220 14% 96%;
+    --secondary: 225 18% 14%;
+    --secondary-foreground: 210 20% 88%;
 
-    --muted: 222 47% 11%;
-    --muted-foreground: 220 13% 69%;
+    --muted: 225 18% 14%;
+    --muted-foreground: 215 15% 55%;
 
-    --accent: 187 96% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 173 80% 44%;
+    --accent-foreground: 225 25% 6%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 222 47% 25%;
-    --input-background: 222 47% 11%;
-    --input: 215 25% 35%;
-    --ring: 217 91% 60%;
+    --border: 225 15% 18%;
+    --input-background: 225 18% 12%;
+    --input: 215 15% 30%;
+    --ring: 217 92% 65%;
 
-    --success: 160 84% 45%;
-    --success-foreground: 0 0% 100%;
-    --warning: 32 95% 60%;
-    --warning-foreground: 0 0% 0%;
-    --danger: 0 84% 65%;
+    --success: 152 69% 42%;
+    --success-foreground: 225 25% 6%;
+    --warning: 38 92% 56%;
+    --warning-foreground: 225 25% 6%;
+    --danger: 0 72% 60%;
     --danger-foreground: 0 0% 100%;
-    --info: 217 92% 70%;
-    --info-foreground: 0 0% 100%;
+    --info: 217 92% 65%;
+    --info-foreground: 225 25% 6%;
     
-    --text-primary: 0 0% 100%;
-    --text-secondary: 220 14% 85%;
-    --text-muted: 220 13% 69%;
-    --text-placeholder: 220 9% 46%;
+    --text-primary: 210 20% 93%;
+    --text-secondary: 215 15% 72%;
+    --text-muted: 215 15% 55%;
+    --text-placeholder: 215 12% 38%;
 
-    --prob-confirmed: 160 84% 39%;
-    --prob-strengthening: 38 92% 50%;
-    --prob-balanced: 217 91% 60%;
-    --prob-weakening: 25 95% 53%;
-    --prob-invalidated: 0 84% 60%;
+    --prob-confirmed: 152 69% 42%;
+    --prob-strengthening: 38 92% 56%;
+    --prob-balanced: 217 92% 65%;
+    --prob-weakening: 25 95% 58%;
+    --prob-invalidated: 0 72% 60%;
 
-    --gradient-card: linear-gradient(180deg, hsl(222 47% 11%) 0%, hsl(222 47% 9%) 100%);
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(187 96% 42%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(187 96% 42%) 0%, hsl(160 84% 39%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(0 0% 0%) 0%, hsl(222 47% 6%) 100%);
-    --gradient-premium: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(280 60% 55%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(225 20% 10%) 0%, hsl(225 22% 8%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(217 92% 65%) 0%, hsl(173 80% 44%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(173 80% 44%) 0%, hsl(152 69% 42%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(225 25% 6%) 0%, hsl(225 22% 4%) 100%);
+    --gradient-premium: linear-gradient(135deg, hsl(217 92% 65%) 0%, hsl(263 70% 58%) 100%);
 
-    --glass-bg: hsl(222 47% 11% / 0.8);
-    --glass-border: hsl(222 47% 25% / 0.5);
+    --glass-bg: hsl(225 20% 10% / 0.85);
+    --glass-border: hsl(225 15% 20% / 0.6);
 
-    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
-    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.4), 0 2px 4px -1px hsl(0 0% 0% / 0.3);
-    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.5), 0 4px 6px -2px hsl(0 0% 0% / 0.3);
-    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.6), 0 10px 10px -5px hsl(0 0% 0% / 0.3);
-    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.25);
-    --shadow-success-glow: 0 0 30px hsl(160 84% 39% / 0.3);
-    --shadow-warning-glow: 0 0 30px hsl(38 92% 50% / 0.3);
-    --shadow-danger-glow: 0 0 30px hsl(0 84% 60% / 0.3);
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.25);
+    --shadow-md: 0 4px 8px -1px hsl(0 0% 0% / 0.35), 0 2px 4px -2px hsl(0 0% 0% / 0.2);
+    --shadow-lg: 0 10px 20px -3px hsl(0 0% 0% / 0.4), 0 4px 8px -4px hsl(0 0% 0% / 0.2);
+    --shadow-xl: 0 20px 30px -5px hsl(0 0% 0% / 0.5), 0 8px 12px -6px hsl(0 0% 0% / 0.25);
+    --shadow-glow: 0 0 36px hsl(217 92% 65% / 0.2);
+    --shadow-success-glow: 0 0 28px hsl(152 69% 42% / 0.25);
+    --shadow-warning-glow: 0 0 28px hsl(38 92% 56% / 0.25);
+    --shadow-danger-glow: 0 0 28px hsl(0 72% 60% / 0.25);
 
-    --sidebar-background: 222 47% 8%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 217 91% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 47% 14%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 222 47% 18%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-background: 225 22% 8%;
+    --sidebar-foreground: 210 20% 93%;
+    --sidebar-primary: 217 92% 65%;
+    --sidebar-primary-foreground: 225 25% 6%;
+    --sidebar-accent: 225 18% 14%;
+    --sidebar-accent-foreground: 210 20% 93%;
+    --sidebar-border: 225 15% 15%;
+    --sidebar-ring: 217 92% 65%;
   }
 }
 
@@ -214,21 +219,19 @@
     font-weight: 600;
   }
 
-  /* Premium scrollbar - adapts to theme */
+  /* Refined scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    background: hsl(var(--muted));
-    border-radius: 100px;
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
     background: hsl(var(--border));
     border-radius: 100px;
-    border: 2px solid hsl(var(--muted));
   }
 
   ::-webkit-scrollbar-thumb:hover {
@@ -250,7 +253,7 @@
 }
 
 @layer components {
-  /* Glass card - dark variant */
+  /* Glass card */
   .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(20px);
@@ -297,18 +300,18 @@
     box-shadow: var(--shadow-sm);
   }
 
-  /* Premium card hover effects */
+  /* Card hover — subtler lift, no scale to avoid layout shift */
   .card-hover {
-    transition: all 0.2s ease;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .card-hover:hover {
-    transform: scale(1.01) translateY(-2px);
+    transform: translateY(-1px);
     box-shadow: var(--shadow-lg);
-    border-color: hsl(var(--primary) / 0.3);
+    border-color: hsl(var(--primary) / 0.25);
   }
 
-  /* Status badges - institutional styling */
+  /* Status badges — institutional styling */
   .status-confirmed {
     @apply bg-success/20 text-success border border-success/30;
   }
@@ -361,8 +364,8 @@
   }
 
   .premium-input:focus {
-    box-shadow: var(--shadow-md), 0 0 0 3px hsl(var(--primary) / 0.15);
-    border-color: hsl(var(--primary) / 0.5);
+    box-shadow: var(--shadow-md), 0 0 0 3px hsl(var(--primary) / 0.12);
+    border-color: hsl(var(--primary) / 0.4);
   }
 
   /* Dividers */
@@ -396,7 +399,7 @@
     @apply bg-secondary/50;
   }
 
-  /* Glow effects for important states */
+  /* Glow effects */
   .glow-success {
     box-shadow: var(--shadow-success-glow);
   }
