@@ -64,7 +64,7 @@ const statusConfig: Record<ValidationStatus, {
 
 function ValidationLegend() {
   return (
-    <div className="mb-3 p-3 rounded-md bg-secondary/30 border border-white/10">
+    <div className="mb-3 p-3 rounded-md bg-secondary/30 border border-border/30">
       <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Status Legend</p>
       <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs">
         <span className="flex items-center gap-1.5">
@@ -147,7 +147,7 @@ export function ScenarioValidationTracker({
   };
 
   return (
-    <Card variant="glass" className="animate-fade-in border-white/10">
+    <Card variant="glass" className="animate-fade-in border-border/30">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2.5">
           <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/20 border border-primary/30">
@@ -232,7 +232,7 @@ export function ScenarioValidationTracker({
                       </div>
                       {collapsed && (
                         <p className="mt-1 ml-7 text-xs text-muted-foreground">
-                          {validation.status === "inactive" && "Not in play \u2013 price not near trigger levels"}
+                          {validation.status === "inactive" && "Not in play – price not near trigger levels"}
                           {validation.status === "invalidated" && `Invalidated at ${validation.invalidationCondition}`}
                         </p>
                       )}

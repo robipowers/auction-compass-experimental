@@ -403,7 +403,7 @@ function CreatePlanContent() {
       <div className="grid h-full" style={{ gridTemplateColumns: 'minmax(380px, 420px) 1fr minmax(380px, 420px)' }}>
 
         {/* ── Column 1: AI Strategist (left sidebar, independent scroll) ── */}
-        <aside className="border-r border-white/10 overflow-y-auto bg-background">
+        <aside className="border-r border-border/30 overflow-y-auto bg-background">
           {critique ? (
             <div className="p-5">
               {isPremarket ? (
@@ -469,7 +469,7 @@ function CreatePlanContent() {
 
             {/* Mode Indicator */}
             {critique && (
-              <div className="mb-6 rounded-lg border border-white/10 bg-secondary/20 px-4 py-3">
+              <div className="mb-6 rounded-lg border border-border/30 bg-secondary/20 px-4 py-3">
                 {isPremarket ? (
                   <div className="flex items-center gap-3">
                     <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
@@ -548,7 +548,7 @@ function CreatePlanContent() {
         </main>
 
         {/* ── Column 3: Coach's Corner (right sidebar, sticky) ── */}
-        <aside className="border-l border-white/10 bg-background flex flex-col">
+        <aside className="border-l border-border/30 bg-background flex flex-col">
           <div className="sticky top-0 h-full flex flex-col" style={{ maxHeight: 'calc(100vh - 64px)' }}>
             {critique ? (
               <TradingCoach
