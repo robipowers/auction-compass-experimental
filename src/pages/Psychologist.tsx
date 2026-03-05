@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 import { TRADING_PSYCH_SYSTEM_PROMPT, SUGGESTION_CATEGORIES } from "@/lib/tradingPsychSystemPrompt";
 import {
   Brain,
@@ -182,9 +183,18 @@ export default function Psychologist() {
       abortControllerRef.current?.abort();
       abortControllerRef.current = new AbortController();
 
-      const response = await fetch('/api/chat', {
+      // Call the Supabase edge function for AI Psychologist
+      const { data: { session } } = await supabase.auth.getSession();
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      
+      const response = await fetch(`${supabaseUrl}/functions/v1/ai-psychologist`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token || supabaseAnonKey}`,
+          'apikey': supabaseAnonKey,
+        },
         body: JSON.stringify({ messages: apiMessages }),
         signal: abortControllerRef.current.signal,
       });
