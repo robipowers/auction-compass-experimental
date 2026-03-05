@@ -64,28 +64,28 @@ const statusConfig: Record<ValidationStatus, {
 
 function ValidationLegend() {
   return (
-    <div className="mb-4 p-3 rounded-lg bg-secondary border border-border">
-      <p className="text-xs font-semibold text-foreground mb-2.5">How to use this:</p>
-      <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs">
-        <span className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-muted-foreground/50"></span>
-          <span className="text-secondary-foreground">Grey = Ignore</span>
+    <div className="mb-3 p-3 rounded-md bg-secondary/30 border border-white/10">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Status Legend</p>
+      <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs">
+        <span className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-muted-foreground/50"></span>
+          <span className="text-muted-foreground">Inactive</span>
         </span>
-        <span className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-info"></span>
-          <span className="text-secondary-foreground">Blue = Monitor</span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-info"></span>
+          <span className="text-muted-foreground">In Play</span>
         </span>
-        <span className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-warning"></span>
-          <span className="text-secondary-foreground">Orange = Developing</span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-warning"></span>
+          <span className="text-muted-foreground">Developing</span>
         </span>
-        <span className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-success"></span>
-          <span className="text-secondary-foreground">Green = Accepted</span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-success"></span>
+          <span className="text-muted-foreground">Validated</span>
         </span>
-        <span className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-danger"></span>
-          <span className="text-secondary-foreground">Red = Invalidated</span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-danger"></span>
+          <span className="text-muted-foreground">Invalidated</span>
         </span>
       </div>
     </div>
@@ -147,13 +147,15 @@ export function ScenarioValidationTracker({
   };
 
   return (
-    <Card variant="premium" className="animate-fade-in">
-      <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-[var(--shadow-lg)]">
-            <ClipboardCheck className="h-5 w-5 text-primary-foreground" />
+    <Card variant="glass" className="animate-fade-in border-white/10">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2.5">
+          <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/20 border border-primary/30">
+            <ClipboardCheck className="h-4 w-4 text-primary" />
           </span>
-          <span className="text-xl font-semibold">Scenario Validation Tracker</span>
+          <div className="flex flex-col">
+            <span className="text-base font-bold">Scenario Validation Tracker</span>
+          </div>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -230,7 +232,7 @@ export function ScenarioValidationTracker({
                       </div>
                       {collapsed && (
                         <p className="mt-1 ml-7 text-xs text-muted-foreground">
-                          {validation.status === "inactive" && "Not in play – price not near trigger levels"}
+                          {validation.status === "inactive" && "Not in play \u2013 price not near trigger levels"}
                           {validation.status === "invalidated" && `Invalidated at ${validation.invalidationCondition}`}
                         </p>
                       )}
