@@ -53,7 +53,7 @@ const App = () => (
               <Toaster />
               <Sonner />
               <BrowserRouter>
-                <div className="min-h-screen bg-background transition-colors duration-300 pb-16 md:pb-0">
+                <div className="min-h-screen bg-background transition-colors duration-300 pb-16 md:pb-0" style={{ backgroundColor: 'hsl(var(--background))' }}>
                   <Header />
                   <Routes>
                     <Route path="/" element={<Index />} />
