@@ -22,7 +22,7 @@ export function Header() {
   const { data: activeAlertCount = 0 } = useActiveAlertCount();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/80 backdrop-blur-md transition-colors duration-300" style={{ height: '64px' }}>
+    <header className="sticky top-0 z-50 w-full border-b border-border/30 bg-background/80 backdrop-blur-md transition-colors duration-300" style={{ height: '64px' }}>
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-3 group">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-[var(--shadow-md)] transition-transform group-hover:scale-105">

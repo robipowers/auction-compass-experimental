@@ -9,11 +9,11 @@ const cardVariants = cva(
     variants: {
       variant: {
         default: "bg-card border-border shadow-[var(--shadow-sm)]",
-        glass: "backdrop-blur-[8px] bg-[rgba(22,27,44,0.7)] border-[rgba(255,255,255,0.1)] shadow-[var(--shadow-md)]",
+        glass: "backdrop-blur-[8px] bg-[var(--glass-bg)] border-[var(--glass-border)] shadow-[var(--shadow-md)]",
         elevated: "bg-card border-border shadow-[var(--shadow-lg)]",
         feature: "bg-card border-border shadow-[var(--shadow-md)] hover:shadow-[var(--shadow-lg)] hover:border-primary/30",
         interactive: "bg-card border-border shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-lg)] hover:border-primary/40 hover:scale-[1.01] cursor-pointer",
-        premium: "bg-card border-white/10 shadow-[var(--shadow-lg)]",
+        premium: "bg-card border-border/30 shadow-[var(--shadow-lg)]",
       },
     },
     defaultVariants: {

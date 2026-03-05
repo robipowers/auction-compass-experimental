@@ -36,7 +36,7 @@ export default function Index() {
 
         <div className="container relative">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-md border border-white/10 bg-secondary/30 px-4 py-1.5 text-sm backdrop-blur-sm">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-md border border-border bg-secondary/30 px-4 py-1.5 text-sm backdrop-blur-sm">
               <div className="w-1.5 h-1.5 rounded-full bg-primary" />
               <span className="text-[11px] uppercase tracking-widest font-semibold text-muted-foreground">Institutional AMT Trading Tool</span>
             </div>
