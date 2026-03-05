@@ -40,13 +40,13 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
   return (
     <div className={cn("flex flex-col h-full glass-panel", disabled && "opacity-60")}>
       {/* Header */}
-      <div className="flex-shrink-0 border-b border-white/10 px-4 py-3">
+      <div className="flex-shrink-0 border-b border-border/30 px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className={cn(
               "flex h-8 w-8 items-center justify-center rounded-lg border",
               disabled 
-                ? "bg-secondary border-white/10" 
+                ? "bg-secondary border-border/30" 
                 : "bg-primary/20 border-primary/30"
             )}>
               <MessageSquare className={cn("h-4 w-4", disabled ? "text-muted-foreground" : "text-primary")} />
@@ -59,7 +59,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
             </div>
           </div>
           {disabled && (
-            <span className="rounded-full bg-secondary/50 border border-white/10 px-2.5 py-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">
+            <span className="rounded-full bg-secondary/50 border border-border/30 px-2.5 py-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">
               PREMARKET
             </span>
           )}
@@ -71,7 +71,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
         {disabled ? (
           <div className="flex h-full items-center justify-center">
             <div className="text-center max-w-[220px]">
-              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-secondary border border-white/10">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-secondary border border-border/30">
                 <Bot className="h-6 w-6 text-muted-foreground" />
               </div>
               <p className="text-sm font-semibold text-foreground">
@@ -85,7 +85,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
         ) : messages.length === 0 ? (
           <div className="flex h-full items-center justify-center">
             <div className="text-center max-w-[220px]">
-              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-secondary border border-white/10">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-secondary border border-border/30">
                 <Bot className="h-6 w-6 text-muted-foreground" />
               </div>
               <p className="text-sm font-semibold text-foreground">
@@ -113,7 +113,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
                   "flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md border",
                   message.role === "user"
                     ? "bg-primary/15 border-primary/25"
-                    : "bg-secondary border-white/10"
+                    : "bg-secondary border-border/30"
                 )}
               >
                 {message.role === "user" ? (
@@ -127,7 +127,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
                   "max-w-[78%] rounded-md px-3 py-2.5 text-sm",
                   message.role === "user"
                     ? "bg-primary text-white"
-                    : "bg-secondary/60 border border-white/10 text-foreground"
+                    : "bg-secondary/60 border border-border/30 text-foreground"
                 )}
               >
                 <div className="whitespace-pre-wrap leading-relaxed text-sm">{message.content}</div>
@@ -137,10 +137,10 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
         )}
         {isLoading && (
           <div className="flex gap-2.5 animate-fade-in">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md border bg-secondary border-white/10">
+            <div className="flex h-8 w-8 items-center justify-center rounded-md border bg-secondary border-border/30">
               <Bot className="h-3.5 w-3.5 text-muted-foreground" />
             </div>
-            <div className="rounded-md bg-secondary/60 border border-white/10 px-3 py-2.5">
+            <div className="rounded-md bg-secondary/60 border border-border/30 px-3 py-2.5">
               <div className="flex items-center gap-1">
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-muted-foreground/50 animate-bounce" style={{ animationDelay: '0ms' }} />
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-muted-foreground/50 animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -155,7 +155,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
       {/* Input Area */}
       <form
         onSubmit={handleSubmit}
-        className="flex-shrink-0 border-t border-white/10 p-3 bg-secondary/20"
+        className="flex-shrink-0 border-t border-border/30 p-3 bg-secondary/20"
       >
         <div className="flex gap-2">
           <Textarea
@@ -164,7 +164,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={disabled ? "Switch to Live Execution mode..." : "Describe the current price action..."}
-            className="min-h-[44px] max-h-28 resize-none rounded-md text-sm bg-background/60 border-white/10 placeholder:text-muted-foreground/50"
+            className="min-h-[44px] max-h-28 resize-none rounded-md text-sm bg-background/60 border-border/30 placeholder:text-muted-foreground/50"
             disabled={isLoading || disabled}
           />
           <Button

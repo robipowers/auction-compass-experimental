@@ -64,7 +64,7 @@ function AnalysisSection({
   className?: string;
 }) {
   const variantStyles = {
-    default: "border-white/10 bg-secondary/20",
+    default: "border-border/30 bg-secondary/20",
     primary: "border-primary/25 bg-primary/5",
     warning: "border-amber-500/25 bg-amber-500/5",
     danger: "border-red-500/25 bg-red-500/5",
@@ -137,7 +137,7 @@ function FormattedText({ text, className }: { text: string; className?: string }
 
 function ScenarioCard({ scenario, index }: { scenario: AICritiqueType['scenarios'][0]; index: number }) {
   return (
-    <div className="rounded-lg border border-white/10 bg-secondary/20 p-5 transition-all hover:border-primary/25">
+    <div className="rounded-lg border border-border/30 bg-secondary/20 p-5 transition-all hover:border-primary/25">
       {/* Header */}
       <div className="flex items-start gap-3 mb-4">
         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/20 border border-primary/30 text-sm font-bold text-primary">
@@ -166,7 +166,7 @@ function ScenarioCard({ scenario, index }: { scenario: AICritiqueType['scenarios
       
       {/* Behavior */}
       {scenario.behavior && (
-        <div className="rounded-md bg-background/50 border border-white/10 p-3">
+        <div className="rounded-md bg-background/50 border border-border/30 p-3">
           <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mb-1.5">Behavior</p>
           <p className="text-sm leading-relaxed text-foreground/90">
             {stripMarkdown(scenario.behavior)}
@@ -276,7 +276,7 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
           <AnalysisSection title="What Must Happen Next" icon={Target} variant="primary">
             <div className="space-y-2.5">
               {critique.scenarios.map((scenario, index) => (
-                <div key={index} className="flex items-start gap-2.5 rounded-md bg-secondary/30 border border-white/10 p-3">
+                <div key={index} className="flex items-start gap-2.5 rounded-md bg-secondary/30 border border-border/30 p-3">
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 border border-primary/30 text-[10px] font-bold text-primary">
                     {index + 1}
                   </span>
@@ -294,7 +294,7 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
 
           {/* Current Auction State - Compact */}
           {critique.currentAuctionState && (
-            <div className="rounded-lg border border-white/10 bg-secondary/20 p-3">
+            <div className="rounded-lg border border-border/30 bg-secondary/20 p-3">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Current State</span>
                 <Badge className="bg-primary/20 text-primary border-primary/30 font-bold">
@@ -326,7 +326,7 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
             variant="outline"
             size="sm"
             onClick={handleCopy}
-            className="gap-2 border-white/10 hover:bg-secondary/50 text-xs"
+            className="gap-2 border-border/30 hover:bg-secondary/50 text-xs"
           >
             {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
             {copied ? "Copied" : "Copy"}
@@ -372,7 +372,7 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
 
         {/* Key Structural Scenarios - Institutional Table */}
         <AnalysisSection title="Key Structural Scenarios" icon={Target}>
-          <div className="overflow-hidden rounded-lg border border-white/10">
+          <div className="overflow-hidden rounded-lg border border-border/30">
             <table className="w-full text-sm">
               <thead className="bg-secondary/50">
                 <tr>
@@ -382,7 +382,7 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
                   <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-danger">LIS</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/10">
+              <tbody className="divide-y divide-border/30">
                 {critique.scenarios.map((scenario, index) => (
                   <tr key={index} className="transition-colors hover:bg-secondary/30 group">
                     <td className="px-4 py-3 font-semibold text-foreground group-hover:text-primary transition-colors text-sm">{scenario.name}</td>
@@ -432,7 +432,7 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
             {critique.dailyChecklist.map((item, index) => (
               <div
                 key={index}
-                className="rounded-lg border border-white/10 bg-secondary/20 overflow-hidden transition-all duration-300 hover:border-primary/25"
+                className="rounded-lg border border-border/30 bg-secondary/20 overflow-hidden transition-all duration-300 hover:border-primary/25"
               >
                 <div className="p-4">
                   <div className="flex items-start gap-3">
@@ -444,7 +444,7 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
                     </p>
                   </div>
                 </div>
-                <div className="border-t border-white/10 bg-secondary/30 px-4 py-3">
+                <div className="border-t border-border/30 bg-secondary/30 px-4 py-3">
                   <p className="text-sm leading-relaxed text-foreground/80 pl-9">
                     {item.answer}
                   </p>
