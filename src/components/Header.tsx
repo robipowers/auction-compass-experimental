@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { BarChart3, History, Home, TrendingUp, Settings, BookOpen, Bell, Brain } from "lucide-react";
+import { History, Home, TrendingUp, Settings, BookOpen, Bell, Brain } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ConnectionStatus } from "@/components/ConnectionStatus";
@@ -22,20 +22,20 @@ export function Header() {
   const { data: activeAlertCount = 0 } = useActiveAlertCount();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-xl transition-colors duration-300">
+    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/80 backdrop-blur-md transition-colors duration-300" style={{ height: '64px' }}>
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-[var(--shadow-md)] transition-transform group-hover:scale-105">
-            <BarChart3 className="h-5 w-5 text-primary-foreground" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-[var(--shadow-md)] transition-transform group-hover:scale-105">
+            <span className="text-base font-extrabold text-white leading-none">A</span>
           </div>
           <div className="flex flex-col">
-            <span className="text-lg font-bold tracking-tight text-foreground">Auction Plan</span>
-            <span className="text-xs text-muted-foreground">AMT Trading Tool</span>
+            <span className="text-base font-extrabold tracking-tight text-foreground">Auction Plan</span>
+            <span className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground">AMT Trading Tool</span>
           </div>
         </Link>
 
         <div className="flex items-center gap-4">
-          <nav className="flex items-center gap-1">
+          <nav className="flex items-center gap-0.5">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path || 
                 (item.path === '/alerts' && location.pathname.startsWith('/alerts'));
@@ -44,10 +44,10 @@ export function Header() {
                   key={item.path}
                   to={item.path}
                   className={cn(
-                    "flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-all duration-200",
+                    "flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all duration-200 border-b-2",
                     isActive
-                      ? "bg-primary/15 text-primary"
-                      : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                      ? "text-white border-primary"
+                      : "text-slate-400 border-transparent hover:text-foreground hover:border-white/20"
                   )}
                 >
                   <item.icon className="h-4 w-4" />

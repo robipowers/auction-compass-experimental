@@ -395,58 +395,111 @@ function CreatePlanContent() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container max-w-7xl py-8 lg:py-12">
-        {/* Page Header with Mode Toggle */}
-        <header className="mb-10">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight lg:text-4xl">
-                Create Auction Plan
-              </h1>
-              <p className="mt-2 text-muted-foreground text-base">
-                Build your pre-market analysis for EURUSD
-              </p>
-            </div>
-            {critique && <ExecutionModeToggle />}
-          </div>
-        </header>
+    <div
+      className="bg-background"
+      style={{ height: 'calc(100vh - 64px)', overflow: 'hidden' }}
+    >
+      {/* ── 3-Column Grid Layout ── */}
+      <div className="grid h-full" style={{ gridTemplateColumns: '320px 1fr 320px' }}>
 
-        {/* Mode Labels */}
-        {critique && (
-          <div className="mb-8 rounded-xl border border-border bg-secondary/30 p-4">
-            {isPremarket ? (
-              <div className="flex items-center gap-3">
-                <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                <span className="text-sm font-medium text-foreground">
-                  Premarket Preparation – Context & Structure
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  Full analysis for building conviction before the session
-                </span>
+        {/* ── Column 1: AI Strategist (left sidebar, independent scroll) ── */}
+        <aside className="border-r border-white/10 overflow-y-auto bg-background">
+          {critique ? (
+            <div className="p-4">
+              {isPremarket ? (
+                <AICritique critique={critique} />
+              ) : (
+                <div className="space-y-4">
+                  {/* Primary Risk - Always visible in Live mode */}
+                  <AICritique critique={critique} mode="live" />
+
+                  {/* View Context Toggle */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowContextInLive(!showContextInLive)}
+                    className="w-full"
+                  >
+                    {showContextInLive ? "Hide Context" : "View Full Context"}
+                  </Button>
+
+                  {showContextInLive && (
+                    <div className="animate-fade-in">
+                      <AICritique critique={critique} mode="premarket" />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex h-full items-center justify-center p-6">
+              <div className="column-placeholder w-full p-8 text-center">
+                <div className="w-2 h-2 rounded-full bg-primary mx-auto mb-3" />
+                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  AI Strategist
+                </p>
+                <p className="mt-2 text-xs text-muted-foreground/60">
+                  Save your plan and run analysis to populate this panel
+                </p>
               </div>
-            ) : (
-              <div className="flex items-center gap-3">
-                <div className="h-2 w-2 rounded-full bg-accent animate-pulse" />
-                <span className="text-sm font-medium text-foreground">
-                  Live Execution – Conditions & Validation
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  Execution-critical elements only • Discipline & patience
-                </span>
+            </div>
+          )}
+        </aside>
+
+        {/* ── Column 2: Main Trading Canvas (center, scrollable) ── */}
+        <main className="overflow-y-auto bg-background">
+          <div className="p-8 max-w-3xl mx-auto">
+            {/* Page Header with Mode Toggle */}
+            <header className="mb-8">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-2 h-2 rounded-full bg-primary" />
+                    <h1 className="text-2xl font-extrabold tracking-tight text-foreground">
+                      Create Auction Plan
+                    </h1>
+                  </div>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Build your pre-market analysis for EURUSD
+                  </p>
+                </div>
+                {critique && <ExecutionModeToggle />}
+              </div>
+            </header>
+
+            {/* Mode Indicator */}
+            {critique && (
+              <div className="mb-6 rounded-lg border border-white/10 bg-secondary/20 px-4 py-3">
+                {isPremarket ? (
+                  <div className="flex items-center gap-3">
+                    <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                    <span className="text-xs font-semibold uppercase tracking-widest text-foreground">
+                      Premarket Preparation
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      Context & structure analysis
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3">
+                    <div className="h-2 w-2 rounded-full bg-accent animate-pulse" />
+                    <span className="text-xs font-semibold uppercase tracking-widest text-foreground">
+                      Live Execution
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      Execution-critical elements • Discipline & patience
+                    </span>
+                  </div>
+                )}
               </div>
             )}
-          </div>
-        )}
 
-        <div className="grid gap-10 xl:grid-cols-2">
-          {/* Left Column - Form and Analysis */}
-          <div className="space-y-8">
-            {/* Always show form */}
+            {/* Auction Plan Form */}
             <AuctionPlanForm onSave={handleSavePlan} isLoading={isSaving} />
 
+            {/* Analyze Button */}
             {plan && !critique && (
-              <div className="flex justify-center py-4">
+              <div className="flex justify-center py-6">
                 <Button
                   variant="hero"
                   size="xl"
@@ -469,66 +522,57 @@ function CreatePlanContent() {
               </div>
             )}
 
-            {/* AI Critique - Full in Premarket, Collapsible in Live */}
+            {/* Scenario Validation Tracker — stacks in center column after analysis */}
             {critique && (
-              <>
-                {isPremarket ? (
-                  <AICritique critique={critique} />
-                ) : (
-                  <div className="space-y-4">
-                    {/* Primary Risk - Always visible in Live mode */}
-                    <AICritique critique={critique} mode="live" />
-                    
-                    {/* View Context Toggle */}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setShowContextInLive(!showContextInLive)}
-                      className="w-full"
-                    >
-                      {showContextInLive ? "Hide Context" : "View Full Context"}
-                    </Button>
-                    
-                    {showContextInLive && (
-                      <div className="animate-fade-in">
-                        <AICritique critique={critique} mode="premarket" />
-                      </div>
-                    )}
+              <div className="mt-8">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-primary" />
+                    <span className="text-xs font-bold uppercase tracking-widest text-primary">
+                      Scenario Tracker
+                    </span>
                   </div>
-                )}
-              </>
-            )}
-          </div>
-
-          {/* Right Column - Validation Tracker and Coach */}
-          <div className="space-y-8">
-            {critique && (
-              <>
-                <div className="flex justify-end">
-                  <Button variant="outline" size="default" onClick={handleExportReport}>
-                    <Download className="mr-2 h-4 w-4" />
+                  <Button variant="outline" size="sm" onClick={handleExportReport}>
+                    <Download className="mr-2 h-3.5 w-3.5" />
                     Export Report
                   </Button>
                 </div>
-
-                {/* Scenario Validation Tracker - Always visible */}
                 <ScenarioValidationTracker
                   scenarios={critique.scenarios}
                   validations={validations}
                   previousValidations={previousValidations}
                 />
-
-                {/* Trading Coach - Only active in Live mode, disabled in Premarket */}
-                <TradingCoach
-                  messages={messages}
-                  onSendMessage={handleSendMessage}
-                  isLoading={isCoachLoading}
-                  disabled={isPremarket}
-                />
-              </>
+              </div>
             )}
           </div>
-        </div>
+        </main>
+
+        {/* ── Column 3: Coach's Corner (right sidebar, sticky) ── */}
+        <aside className="border-l border-white/10 bg-background flex flex-col">
+          <div className="sticky top-0 h-full flex flex-col" style={{ maxHeight: 'calc(100vh - 64px)' }}>
+            {critique ? (
+              <TradingCoach
+                messages={messages}
+                onSendMessage={handleSendMessage}
+                isLoading={isCoachLoading}
+                disabled={isPremarket}
+              />
+            ) : (
+              <div className="flex flex-1 items-center justify-center p-6">
+                <div className="column-placeholder w-full p-8 text-center">
+                  <div className="w-2 h-2 rounded-full bg-primary mx-auto mb-3" />
+                  <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                    Coach's Corner
+                  </p>
+                  <p className="mt-2 text-xs text-muted-foreground/60">
+                    Real-time AMT coaching available after analysis
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </aside>
+
       </div>
     </div>
   );

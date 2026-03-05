@@ -27,25 +27,25 @@ interface AICritiqueProps {
 
 const coherenceConfig: Record<
   Coherence,
-  { icon: React.ElementType; className: string; label: string; gradient: string }
+  { icon: React.ElementType; className: string; label: string; borderColor: string }
 > = {
   ALIGNED: {
     icon: CheckCircle,
     className: "bg-success/15 text-success border-success/25",
     label: "Aligned",
-    gradient: "from-green-500/20 to-emerald-500/10",
+    borderColor: "border-success/30",
   },
   CONFLICTED: {
     icon: AlertTriangle,
     className: "bg-danger/15 text-danger border-danger/25",
     label: "Conflicted",
-    gradient: "from-red-500/20 to-orange-500/10",
+    borderColor: "border-danger/30",
   },
   NEUTRAL: {
     icon: MinusCircle,
     className: "bg-muted text-muted-foreground border-border",
     label: "Neutral",
-    gradient: "from-slate-500/20 to-slate-400/10",
+    borderColor: "border-border",
   },
 };
 
@@ -64,11 +64,11 @@ function AnalysisSection({
   className?: string;
 }) {
   const variantStyles = {
-    default: "border-border/50 bg-gradient-to-br from-secondary/40 to-secondary/20",
-    primary: "border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent",
-    warning: "border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent",
-    danger: "border-red-500/30 bg-gradient-to-br from-red-500/10 via-red-500/5 to-transparent",
-    success: "border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-transparent",
+    default: "border-white/10 bg-secondary/20",
+    primary: "border-primary/25 bg-primary/5",
+    warning: "border-amber-500/25 bg-amber-500/5",
+    danger: "border-red-500/25 bg-red-500/5",
+    success: "border-emerald-500/25 bg-emerald-500/5",
   };
 
   const titleStyles = {
@@ -81,19 +81,15 @@ function AnalysisSection({
 
   return (
     <section className={cn(
-      "relative rounded-xl border p-6 backdrop-blur-sm transition-all duration-300",
-      "hover:shadow-lg hover:shadow-primary/5",
+      "relative rounded-lg border p-5 transition-all duration-300",
       variantStyles[variant],
       className
     )}>
-      {/* Decorative corner accent */}
-      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-white/5 to-transparent rounded-tr-xl pointer-events-none" />
-      
       <h4 className={cn(
-        "mb-4 flex items-center gap-2.5 text-xs font-bold uppercase tracking-widest",
+        "mb-4 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest",
         titleStyles[variant]
       )}>
-        {Icon && <Icon className="h-4 w-4" />}
+        {Icon && <Icon className="h-3.5 w-3.5" />}
         {title}
       </h4>
       {children}
@@ -139,40 +135,39 @@ function FormattedText({ text, className }: { text: string; className?: string }
   );
 }
 
-// Premium scenario card - Clean vertical layout
 function ScenarioCard({ scenario, index }: { scenario: AICritiqueType['scenarios'][0]; index: number }) {
   return (
-    <div className="rounded-xl border border-border/50 bg-gradient-to-br from-card to-secondary/20 p-6 transition-all hover:border-primary/30 hover:shadow-lg">
+    <div className="rounded-lg border border-white/10 bg-secondary/20 p-5 transition-all hover:border-primary/25">
       {/* Header */}
-      <div className="flex items-start gap-4 mb-5">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/70 text-base font-bold text-white shadow-lg shadow-primary/25">
+      <div className="flex items-start gap-3 mb-4">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/20 border border-primary/30 text-sm font-bold text-primary">
           {index + 1}
         </span>
-        <h4 className="font-bold text-xl text-foreground leading-tight pt-1">
+        <h4 className="font-bold text-base text-foreground leading-tight pt-0.5">
           {stripMarkdown(scenario.name)}
         </h4>
       </div>
       
-      {/* Key Details - Simple stacked layout */}
-      <div className="space-y-3 mb-5">
+      {/* Key Details */}
+      <div className="space-y-2.5 mb-4">
         <div className="flex items-baseline gap-3">
-          <span className="text-sm font-semibold text-muted-foreground uppercase tracking-wide w-20 shrink-0">Type</span>
+          <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest w-16 shrink-0">Type</span>
           <span className="text-sm text-foreground">{stripMarkdown(scenario.typeOfMove)}</span>
         </div>
         <div className="flex items-baseline gap-3">
-          <span className="text-sm font-semibold text-blue-400 uppercase tracking-wide w-20 shrink-0">In Play</span>
-          <span className="text-sm text-foreground">{stripMarkdown(scenario.inPlay)}</span>
+          <span className="text-[10px] font-semibold text-primary uppercase tracking-widest w-16 shrink-0">In Play</span>
+          <span className="text-sm font-mono text-foreground">{stripMarkdown(scenario.inPlay)}</span>
         </div>
         <div className="flex items-baseline gap-3">
-          <span className="text-sm font-semibold text-red-400 uppercase tracking-wide w-20 shrink-0">LIS</span>
-          <span className="text-sm text-foreground">{stripMarkdown(scenario.lis)}</span>
+          <span className="text-[10px] font-semibold text-danger uppercase tracking-widest w-16 shrink-0">LIS</span>
+          <span className="text-sm font-mono text-foreground">{stripMarkdown(scenario.lis)}</span>
         </div>
       </div>
       
-      {/* Behavior - Full width */}
+      {/* Behavior */}
       {scenario.behavior && (
-        <div className="rounded-lg bg-secondary/50 border border-border/30 p-4">
-          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2">Behavior</p>
+        <div className="rounded-md bg-background/50 border border-white/10 p-3">
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mb-1.5">Behavior</p>
           <p className="text-sm leading-relaxed text-foreground/90">
             {stripMarkdown(scenario.behavior)}
           </p>
@@ -256,25 +251,22 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
   // In Live mode, show only execution-critical sections
   if (isLiveMode) {
     return (
-      <Card className="relative overflow-hidden border-2 border-accent/30 bg-gradient-to-br from-background via-background to-accent/5 shadow-xl shadow-accent/10 animate-fade-in">
-        {/* Premium header glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-32 bg-gradient-to-b from-accent/20 to-transparent blur-3xl pointer-events-none" />
-        
-        <CardHeader className="relative pb-6">
+      <Card className="glass-panel animate-fade-in border-primary/20">
+        <CardHeader className="pb-4">
           <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-accent/70 shadow-xl shadow-accent/30">
-                <Sparkles className="h-6 w-6 text-white" />
+            <div className="flex items-center gap-3">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/20 border border-primary/30">
+                <Sparkles className="h-4 w-4 text-primary" />
               </span>
               <div className="flex flex-col">
-                <span className="text-2xl font-bold text-foreground">Execution Summary</span>
-                <span className="text-sm text-muted-foreground">What matters right now</span>
+                <span className="text-base font-bold text-foreground">Execution Summary</span>
+                <span className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground">What matters right now</span>
               </div>
             </div>
           </CardTitle>
         </CardHeader>
         
-        <CardContent className="relative space-y-6">
+        <CardContent className="space-y-4">
           {/* Primary Risk - Always visible */}
           <AnalysisSection title="Primary Risk" icon={AlertTriangle} variant="danger">
             <FormattedText text={critique.primaryRisk} />
@@ -282,17 +274,17 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
 
           {/* What Must Happen Next */}
           <AnalysisSection title="What Must Happen Next" icon={Target} variant="primary">
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {critique.scenarios.map((scenario, index) => (
-                <div key={index} className="flex items-start gap-3 rounded-lg bg-background/50 p-3">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
+                <div key={index} className="flex items-start gap-2.5 rounded-md bg-secondary/30 border border-white/10 p-3">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 border border-primary/30 text-[10px] font-bold text-primary">
                     {index + 1}
                   </span>
                   <div className="flex-1">
-                    <p className="font-medium text-foreground text-sm">{scenario.name}</p>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      <span className="font-medium text-blue-400">In Play:</span> {stripMarkdown(scenario.inPlay)} • 
-                      <span className="font-medium text-red-400 ml-2">LIS:</span> {stripMarkdown(scenario.lis)}
+                    <p className="font-semibold text-foreground text-sm">{scenario.name}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      <span className="font-semibold text-primary">In Play:</span> {stripMarkdown(scenario.inPlay)} · 
+                      <span className="font-semibold text-danger ml-1">LIS:</span> {stripMarkdown(scenario.lis)}
                     </p>
                   </div>
                 </div>
@@ -302,9 +294,9 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
 
           {/* Current Auction State - Compact */}
           {critique.currentAuctionState && (
-            <div className="rounded-xl border border-border/50 bg-secondary/30 p-4">
+            <div className="rounded-lg border border-white/10 bg-secondary/20 p-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Current State</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Current State</span>
                 <Badge className="bg-primary/20 text-primary border-primary/30 font-bold">
                   {critique.currentAuctionState.state}
                 </Badge>
@@ -316,42 +308,39 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
     );
   }
 
-  // Full Premarket mode - show everything with premium styling
+  // Full Premarket mode - show everything with institutional styling
   return (
-    <Card className="relative overflow-hidden border-2 border-purple-500/30 bg-gradient-to-br from-background via-background to-purple-500/5 shadow-xl shadow-purple-500/10 animate-fade-in">
-      {/* Premium header glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-32 bg-gradient-to-b from-purple-500/20 to-transparent blur-3xl pointer-events-none" />
-      
-      <CardHeader className="relative pb-6">
+    <Card className="glass-panel animate-fade-in border-primary/20">
+      <CardHeader className="pb-4">
         <CardTitle className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-xl shadow-purple-500/30">
-              <Sparkles className="h-6 w-6 text-white" />
+          <div className="flex items-center gap-3">
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/20 border border-primary/30">
+              <Sparkles className="h-4 w-4 text-primary" />
             </span>
             <div className="flex flex-col">
-              <span className="text-2xl font-bold text-foreground">AI Strategist Analysis</span>
-              <span className="text-sm text-muted-foreground">Full structural context</span>
+              <span className="text-base font-bold text-foreground">AI Strategist Analysis</span>
+              <span className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground">Full structural context</span>
             </div>
           </div>
           <Button
             variant="outline"
             size="sm"
             onClick={handleCopy}
-            className="gap-2 border-border/50 hover:bg-secondary/50"
+            className="gap-2 border-white/10 hover:bg-secondary/50 text-xs"
           >
-            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+            {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
             {copied ? "Copied" : "Copy"}
           </Button>
         </CardTitle>
       </CardHeader>
       
-      <CardContent className="relative space-y-6">
+      <CardContent className="space-y-4">
         {/* Current Auction State */}
         {critique.currentAuctionState && (
           <AnalysisSection title="Current Auction State" icon={Activity} variant="primary">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">State</span>
-              <Badge className="bg-primary/20 text-primary border-primary/30 font-bold px-3 py-1">
+            <div className="flex items-center gap-3 mb-3">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">State</span>
+              <Badge className="bg-primary/20 text-primary border-primary/30 font-bold">
                 {critique.currentAuctionState.state}
               </Badge>
             </div>
@@ -363,14 +352,13 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
         <AnalysisSection 
           title="Coherence Analysis" 
           icon={CoherenceIcon}
-          className={cn("bg-gradient-to-br", coherence.gradient)}
         >
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-3">
             <Badge
               variant="outline"
-              className={cn("gap-1.5 px-3 py-1.5 font-bold text-sm", coherence.className)}
+              className={cn("gap-1.5 px-2.5 py-1 font-bold text-xs", coherence.className)}
             >
-              <CoherenceIcon className="h-4 w-4" />
+              <CoherenceIcon className="h-3.5 w-3.5" />
               {coherence.label}
             </Badge>
           </div>
@@ -382,28 +370,28 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
           <FormattedText text={critique.structuralObservations} />
         </AnalysisSection>
 
-        {/* Key Structural Scenarios - Premium Table */}
+        {/* Key Structural Scenarios - Institutional Table */}
         <AnalysisSection title="Key Structural Scenarios" icon={Target}>
-          <div className="overflow-hidden rounded-xl border border-border/50">
+          <div className="overflow-hidden rounded-lg border border-white/10">
             <table className="w-full text-sm">
-              <thead className="bg-gradient-to-r from-secondary/80 to-secondary/60">
+              <thead className="bg-secondary/50">
                 <tr>
-                  <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-widest text-foreground">Scenario</th>
-                  <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-widest text-foreground">Type of Move</th>
-                  <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-widest text-foreground">In Play</th>
-                  <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-widest text-foreground">LIS</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-foreground">Scenario</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-foreground">Type of Move</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-primary">In Play</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-danger">LIS</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border/50">
+              <tbody className="divide-y divide-white/10">
                 {critique.scenarios.map((scenario, index) => (
                   <tr key={index} className="transition-colors hover:bg-secondary/30 group">
-                    <td className="px-5 py-4 font-semibold text-foreground group-hover:text-primary transition-colors">{scenario.name}</td>
-                    <td className="px-5 py-4 text-muted-foreground">{stripMarkdown(scenario.typeOfMove)}</td>
-                    <td className="px-5 py-4">
-                      <span className="font-semibold text-blue-400">{stripMarkdown(scenario.inPlay)}</span>
+                    <td className="px-4 py-3 font-semibold text-foreground group-hover:text-primary transition-colors text-sm">{scenario.name}</td>
+                    <td className="px-4 py-3 text-muted-foreground text-sm">{stripMarkdown(scenario.typeOfMove)}</td>
+                    <td className="px-4 py-3">
+                      <span className="font-mono font-semibold text-primary text-sm">{stripMarkdown(scenario.inPlay)}</span>
                     </td>
-                    <td className="px-5 py-4">
-                      <span className="font-semibold text-red-400">{stripMarkdown(scenario.lis)}</span>
+                    <td className="px-4 py-3">
+                      <span className="font-mono font-semibold text-danger text-sm">{stripMarkdown(scenario.lis)}</span>
                     </td>
                   </tr>
                 ))}
@@ -440,24 +428,24 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
 
         {/* Structural Checklist Q&A */}
         <AnalysisSection title="Structural Checklist">
-          <div className="space-y-4">
+          <div className="space-y-3">
             {critique.dailyChecklist.map((item, index) => (
               <div
                 key={index}
-                className="group rounded-xl border border-border/50 bg-gradient-to-r from-card to-secondary/20 overflow-hidden transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+                className="rounded-lg border border-white/10 bg-secondary/20 overflow-hidden transition-all duration-300 hover:border-primary/25"
               >
-                <div className="p-5">
+                <div className="p-4">
                   <div className="flex items-start gap-3">
-                    <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 text-sm font-bold text-primary">
+                    <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-primary/15 border border-primary/25 text-xs font-bold text-primary">
                       {index + 1}
                     </span>
-                    <p className="font-semibold text-foreground leading-relaxed pt-1">
+                    <p className="font-semibold text-foreground leading-relaxed text-sm pt-0.5">
                       {item.question}
                     </p>
                   </div>
                 </div>
-                <div className="border-t border-border/50 bg-secondary/30 p-5">
-                  <p className="text-sm leading-relaxed text-foreground/80 pl-11">
+                <div className="border-t border-white/10 bg-secondary/30 px-4 py-3">
+                  <p className="text-sm leading-relaxed text-foreground/80 pl-9">
                     {item.answer}
                   </p>
                 </div>

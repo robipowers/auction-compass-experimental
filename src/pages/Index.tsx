@@ -31,31 +31,27 @@ export default function Index() {
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20 lg:py-32">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-grid-pattern bg-grid-40 opacity-[0.02]" />
-        
-        {/* Gradient Orbs */}
-        <div className="absolute -left-40 top-20 h-96 w-96 rounded-full bg-primary/10 blur-[100px]" />
-        <div className="absolute -right-40 bottom-20 h-96 w-96 rounded-full bg-accent/10 blur-[100px]" />
+        {/* Subtle grid pattern only */}
+        <div className="absolute inset-0 bg-grid-pattern bg-grid-40 opacity-[0.015]" />
 
         <div className="container relative">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 text-sm backdrop-blur-sm">
-              <BarChart3 className="h-4 w-4 text-primary" />
-              <span className="text-foreground">Institutional AMT Trading Tool</span>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-md border border-white/10 bg-secondary/30 px-4 py-1.5 text-sm backdrop-blur-sm">
+              <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+              <span className="text-[11px] uppercase tracking-widest font-semibold text-muted-foreground">Institutional AMT Trading Tool</span>
             </div>
             
-            <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl text-foreground">
-              <span className="gradient-text">Auction Plan</span>
+            <h1 className="mb-6 text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-foreground">
+              Auction Plan
             </h1>
             
-            <p className="mb-10 text-lg text-muted-foreground sm:text-xl">
+            <p className="mb-10 text-base text-muted-foreground sm:text-lg max-w-xl mx-auto">
               Professional pre-market analysis using Auction Market Theory.
               Plan your trades, get AI-powered structural critiques, and receive
               real-time coaching during the session.
             </p>
 
-            <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+            <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
               <Button asChild variant="hero" size="xl">
                 <Link to="/plan">
                   <TrendingUp className="mr-2 h-5 w-5" />
@@ -75,41 +71,41 @@ export default function Index() {
 
       {/* Main Cards */}
       <section className="container pb-20">
-        <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
-          <Card variant="interactive" className="group">
+        <div className="mx-auto grid max-w-4xl gap-4 md:grid-cols-2">
+          <Card variant="glass" className="group hover:border-primary/25 transition-all">
             <Link to="/plan">
               <CardHeader>
-                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent shadow-[var(--shadow-lg)] transition-transform group-hover:scale-110">
-                  <TrendingUp className="h-7 w-7 text-primary-foreground" />
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 border border-primary/30">
+                  <TrendingUp className="h-5 w-5 text-primary" />
                 </div>
-                <CardTitle className="text-2xl">Create Auction Plan</CardTitle>
-                <CardDescription className="text-base">
+                <CardTitle className="text-xl">Create Auction Plan</CardTitle>
+                <CardDescription className="text-sm">
                   Build your pre-market analysis with Yesterday's Context, Today's
                   Context, and Reference Levels. Get AI-powered structural critique.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <span className="text-sm font-medium text-primary group-hover:underline">
+                <span className="text-xs font-semibold uppercase tracking-widest text-primary">
                   Start planning →
                 </span>
               </CardContent>
             </Link>
           </Card>
 
-          <Card variant="interactive" className="group">
+          <Card variant="glass" className="group hover:border-success/25 transition-all">
             <Link to="/history">
               <CardHeader>
-                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-success to-success/60 shadow-[var(--shadow-lg)] transition-transform group-hover:scale-110">
-                  <History className="h-7 w-7 text-success-foreground" />
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-success/20 border border-success/30">
+                  <History className="h-5 w-5 text-success" />
                 </div>
-                <CardTitle className="text-2xl">Trading History</CardTitle>
-                <CardDescription className="text-base">
+                <CardTitle className="text-xl">Trading History</CardTitle>
+                <CardDescription className="text-sm">
                   Review your past plans, trades, and performance analytics.
                   Export detailed reports for your trading journal.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <span className="text-sm font-medium text-success group-hover:underline">
+                <span className="text-xs font-semibold uppercase tracking-widest text-success">
                   View history →
                 </span>
               </CardContent>
@@ -121,10 +117,13 @@ export default function Index() {
       {/* Features Grid */}
       <section className="container pb-20">
         <div className="mx-auto max-w-4xl">
-          <h2 className="mb-12 text-center text-2xl font-semibold sm:text-3xl text-foreground">
-            Auction Market Theory Workflow
-          </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="flex items-center justify-center gap-2 mb-10">
+            <div className="w-2 h-2 rounded-full bg-primary" />
+            <h2 className="text-lg font-bold uppercase tracking-widest text-foreground">
+              Auction Market Theory Workflow
+            </h2>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
             {features.map((feature, index) => (
               <Card
                 key={index}
@@ -133,11 +132,11 @@ export default function Index() {
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <CardHeader>
-                  <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/15 border border-primary/20">
-                    <feature.icon className="h-5 w-5 text-primary" />
+                  <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-md bg-primary/15 border border-primary/20">
+                    <feature.icon className="h-4 w-4 text-primary" />
                   </div>
-                  <CardTitle className="text-lg">{feature.title}</CardTitle>
-                  <CardDescription>{feature.description}</CardDescription>
+                  <CardTitle className="text-base">{feature.title}</CardTitle>
+                  <CardDescription className="text-sm">{feature.description}</CardDescription>
                 </CardHeader>
               </Card>
             ))}
@@ -147,9 +146,12 @@ export default function Index() {
 
       {/* About Section */}
       <section className="container pb-20">
-        <Card variant="elevated" className="mx-auto max-w-4xl">
+        <Card variant="glass" className="mx-auto max-w-4xl">
           <CardHeader>
-            <CardTitle className="text-xl">About Auction Market Theory</CardTitle>
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-2 h-2 rounded-full bg-primary" />
+              <CardTitle className="text-base font-bold uppercase tracking-widest">About Auction Market Theory</CardTitle>
+            </div>
           </CardHeader>
           <CardContent className="space-y-4 text-sm text-muted-foreground">
             <p>
