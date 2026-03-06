@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { AICritique as AICritiqueType, Coherence } from "@/types/auction";
 import { cn } from "@/lib/utils";
+import { renderInlineMarkdown, renderMarkdownBlock } from "@/lib/markdown";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -97,40 +98,11 @@ function AnalysisSection({
   );
 }
 
-// Strip markdown formatting from text
-function stripMarkdown(text: string): string {
-  return text
-    .replace(/\*\*([^*]+)\*\*/g, "$1")
-    .replace(/\*([^*]+)\*/g, "$1")
-    .replace(/`([^`]+)`/g, "$1")
-    .trim();
-}
-
-// Premium formatted text with better typography
+// Premium formatted text with markdown rendering
 function FormattedText({ text, className }: { text: string; className?: string }) {
-  const paragraphs = text
-    .split(/(?:---|\\n\\n|(?=The \\d+[\\d.-]*pip))/gi)
-    .map(p => p.trim())
-    .filter(p => p.length > 0);
-
-  if (paragraphs.length <= 1) {
-    return (
-      <p className={cn(
-        "text-sm leading-relaxed text-foreground/80 font-normal",
-        className
-      )}>
-        {text}
-      </p>
-    );
-  }
-
   return (
-    <div className={cn("space-y-2", className)}>
-      {paragraphs.map((paragraph, index) => (
-        <p key={index} className="text-sm leading-relaxed text-foreground/80">
-          {paragraph}
-        </p>
-      ))}
+    <div className={className}>
+      {renderMarkdownBlock(text)}
     </div>
   );
 }
@@ -144,7 +116,7 @@ function ScenarioCard({ scenario, index }: { scenario: AICritiqueType['scenarios
           {index + 1}
         </span>
         <h4 className="font-bold text-base text-foreground leading-tight pt-0.5">
-          {stripMarkdown(scenario.name)}
+          {renderInlineMarkdown(scenario.name)}
         </h4>
       </div>
       
@@ -152,15 +124,15 @@ function ScenarioCard({ scenario, index }: { scenario: AICritiqueType['scenarios
       <div className="space-y-2.5 mb-4">
         <div className="flex items-baseline gap-3">
           <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest w-16 shrink-0">Type</span>
-          <span className="text-sm text-foreground">{stripMarkdown(scenario.typeOfMove)}</span>
+          <span className="text-sm text-foreground">{renderInlineMarkdown(scenario.typeOfMove)}</span>
         </div>
         <div className="flex items-baseline gap-3">
           <span className="text-[10px] font-semibold text-primary uppercase tracking-widest w-16 shrink-0">In Play</span>
-          <span className="text-sm font-mono text-foreground">{stripMarkdown(scenario.inPlay)}</span>
+          <span className="text-sm font-mono text-foreground">{renderInlineMarkdown(scenario.inPlay)}</span>
         </div>
         <div className="flex items-baseline gap-3">
           <span className="text-[10px] font-semibold text-danger uppercase tracking-widest w-16 shrink-0">LIS</span>
-          <span className="text-sm font-mono text-foreground">{stripMarkdown(scenario.lis)}</span>
+          <span className="text-sm font-mono text-foreground">{renderInlineMarkdown(scenario.lis)}</span>
         </div>
       </div>
       
@@ -169,7 +141,7 @@ function ScenarioCard({ scenario, index }: { scenario: AICritiqueType['scenarios
         <div className="rounded-md bg-background/50 border border-border/30 p-3">
           <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mb-1.5">Behavior</p>
           <p className="text-sm leading-relaxed text-foreground/90">
-            {stripMarkdown(scenario.behavior)}
+            {renderInlineMarkdown(scenario.behavior)}
           </p>
         </div>
       )}
@@ -283,8 +255,8 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
                   <div className="flex-1">
                     <p className="font-semibold text-foreground text-sm">{scenario.name}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      <span className="font-semibold text-primary">In Play:</span> {stripMarkdown(scenario.inPlay)} · 
-                      <span className="font-semibold text-danger ml-1">LIS:</span> {stripMarkdown(scenario.lis)}
+                      <span className="font-semibold text-primary">In Play:</span> {renderInlineMarkdown(scenario.inPlay)}{' · '}
+                      <span className="font-semibold text-danger ml-1">LIS:</span> {renderInlineMarkdown(scenario.lis)}
                     </p>
                   </div>
                 </div>
@@ -386,12 +358,12 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
                 {critique.scenarios.map((scenario, index) => (
                   <tr key={index} className="transition-colors hover:bg-secondary/30 group">
                     <td className="px-4 py-3 font-semibold text-foreground group-hover:text-primary transition-colors text-sm">{scenario.name}</td>
-                    <td className="px-4 py-3 text-muted-foreground text-sm">{stripMarkdown(scenario.typeOfMove)}</td>
+                    <td className="px-4 py-3 text-muted-foreground text-sm">{renderInlineMarkdown(scenario.typeOfMove)}</td>
                     <td className="px-4 py-3">
-                      <span className="font-mono font-semibold text-primary text-sm">{stripMarkdown(scenario.inPlay)}</span>
+                      <span className="font-mono font-semibold text-primary text-sm">{renderInlineMarkdown(scenario.inPlay)}</span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="font-mono font-semibold text-danger text-sm">{stripMarkdown(scenario.lis)}</span>
+                      <span className="font-mono font-semibold text-danger text-sm">{renderInlineMarkdown(scenario.lis)}</span>
                     </td>
                   </tr>
                 ))}
