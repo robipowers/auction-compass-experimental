@@ -3,6 +3,7 @@ import { Send, Bot, User, Loader2, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { renderMarkdownBlock } from "@/lib/markdown";
 import { CoachMessage } from "@/types/auction";
 
 interface TradingCoachProps {
@@ -130,7 +131,7 @@ export function TradingCoach({ messages, onSendMessage, isLoading, disabled = fa
                     : "bg-secondary/60 border border-border/30 text-foreground"
                 )}
               >
-                <div className="whitespace-pre-wrap leading-relaxed text-sm">{message.content}</div>
+                <div className="whitespace-pre-wrap leading-relaxed text-sm">{renderMarkdownBlock(message.content)}</div>
               </div>
             </div>
           ))
