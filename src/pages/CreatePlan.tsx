@@ -400,16 +400,16 @@ function CreatePlanContent() {
       style={{ height: 'calc(100vh - 64px)', overflow: 'hidden' }}
     >
       {/* ── 3-Column Grid Layout ── */}
-      <div className="grid h-full" style={{ gridTemplateColumns: 'minmax(380px, 420px) 1fr minmax(380px, 420px)' }}>
+      <div className="grid h-full" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
 
         {/* ── Column 1: AI Strategist (left sidebar, independent scroll) ── */}
         <aside className="border-r border-border/30 overflow-y-auto bg-background">
           {critique ? (
-            <div className="p-5">
+            <div className="p-3">
               {isPremarket ? (
                 <AICritique critique={critique} />
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-2">
                   {/* Primary Risk - Always visible in Live mode */}
                   <AICritique critique={critique} mode="live" />
 
