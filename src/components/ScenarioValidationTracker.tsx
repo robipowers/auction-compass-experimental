@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, Circle, XCircle, Clock, ClipboardCheck, Eye, EyeOff, ChevronDown, ChevronRight, Target, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { renderInlineMarkdown } from "@/lib/markdown";
 import { Scenario, ValidationStatus, ScenarioValidation, VALIDATION_STATUS_PRIORITY } from "@/types/auction";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -221,7 +222,7 @@ export function ScenarioValidationTracker({
                           validation.status === "invalidated" && "line-through text-muted-foreground",
                           validation.status === "inactive" && "text-muted-foreground"
                         )}>
-                          {scenario.name}
+                          {renderInlineMarkdown(scenario.name)}
                         </h4>
                         {isPrimaryFocus && (
                           <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/15 text-primary text-[10px] font-semibold uppercase tracking-wide border border-primary/30">
@@ -261,7 +262,7 @@ export function ScenarioValidationTracker({
                   <div className="px-4 pb-4">
                     {/* Type of Move */}
                     <p className="text-sm text-secondary-foreground mb-3 ml-7">
-                      {scenario.typeOfMove}
+                      {renderInlineMarkdown(scenario.typeOfMove)}
                     </p>
 
                     {/* Status-specific messaging */}
@@ -293,7 +294,7 @@ export function ScenarioValidationTracker({
                             {validation.validatedConditions.map((condition, i) => (
                               <li key={i} className="flex items-start gap-2 text-sm text-foreground">
                                 <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
-                                <span>{condition}</span>
+                                <span>{renderInlineMarkdown(condition)}</span>
                               </li>
                             ))}
                           </ul>
@@ -310,7 +311,7 @@ export function ScenarioValidationTracker({
                             {validation.pendingConditions.map((condition, i) => (
                               <li key={i} className="flex items-start gap-2 text-sm text-secondary-foreground">
                                 <Clock className="h-4 w-4 text-warning flex-shrink-0 mt-0.5" />
-                                <span>{condition}</span>
+                                <span>{renderInlineMarkdown(condition)}</span>
                               </li>
                             ))}
                           </ul>
@@ -324,7 +325,7 @@ export function ScenarioValidationTracker({
                         </span>
                         <div className="flex items-start gap-2 text-sm text-secondary-foreground">
                           <XCircle className="h-4 w-4 text-danger flex-shrink-0 mt-0.5" />
-                          <span>{validation.invalidationCondition}</span>
+                          <span>{renderInlineMarkdown(validation.invalidationCondition)}</span>
                         </div>
                       </div>
                     </div>
@@ -333,11 +334,11 @@ export function ScenarioValidationTracker({
                     <div className="flex gap-6 text-xs pt-3 mt-3 ml-7 border-t border-border/40">
                       <div className="flex items-center gap-1.5">
                         <span className="text-secondary-foreground">In Play:</span>
-                        <span className="font-semibold text-info">{scenario.inPlay}</span>
+                        <span className="font-semibold text-info">{renderInlineMarkdown(scenario.inPlay)}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <span className="text-secondary-foreground">LIS:</span>
-                        <span className="font-semibold text-danger">{scenario.lis}</span>
+                        <span className="font-semibold text-danger">{renderInlineMarkdown(scenario.lis)}</span>
                       </div>
                     </div>
                   </div>
