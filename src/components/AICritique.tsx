@@ -81,12 +81,12 @@ function AnalysisSection({
 
   return (
     <section className={cn(
-      "relative rounded-lg border p-5 transition-all duration-300",
+      "relative rounded-lg border p-3 transition-all duration-300",
       variantStyles[variant],
       className
     )}>
       <h4 className={cn(
-        "mb-4 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest",
+        "mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest",
         titleStyles[variant]
       )}>
         {Icon && <Icon className="h-3.5 w-3.5" />}
@@ -116,7 +116,7 @@ function FormattedText({ text, className }: { text: string; className?: string }
   if (paragraphs.length <= 1) {
     return (
       <p className={cn(
-        "text-[15px] leading-[1.9] text-foreground/80 font-normal",
+        "text-sm leading-relaxed text-foreground/80 font-normal",
         className
       )}>
         {text}
@@ -125,9 +125,9 @@ function FormattedText({ text, className }: { text: string; className?: string }
   }
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn("space-y-2", className)}>
       {paragraphs.map((paragraph, index) => (
-        <p key={index} className="text-[15px] leading-[1.9] text-foreground/80">
+        <p key={index} className="text-sm leading-relaxed text-foreground/80">
           {paragraph}
         </p>
       ))}
@@ -252,7 +252,7 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
   if (isLiveMode) {
     return (
       <Card className="glass-panel animate-fade-in border-primary/20">
-        <CardHeader className="pb-4">
+        <CardHeader className="pb-2">
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/20 border border-primary/30">
@@ -266,7 +266,7 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
           </CardTitle>
         </CardHeader>
         
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-2">
           {/* Primary Risk - Always visible */}
           <AnalysisSection title="Primary Risk" icon={AlertTriangle} variant="danger">
             <FormattedText text={critique.primaryRisk} />
@@ -274,9 +274,9 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
 
           {/* What Must Happen Next */}
           <AnalysisSection title="What Must Happen Next" icon={Target} variant="primary">
-            <div className="space-y-2.5">
+            <div className="space-y-1.5">
               {critique.scenarios.map((scenario, index) => (
-                <div key={index} className="flex items-start gap-2.5 rounded-md bg-secondary/30 border border-border/30 p-3">
+                <div key={index} className="flex items-start gap-2 rounded-md bg-secondary/30 border border-border/30 p-2.5">
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 border border-primary/30 text-[10px] font-bold text-primary">
                     {index + 1}
                   </span>
@@ -311,7 +311,7 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
   // Full Premarket mode - show everything with institutional styling
   return (
     <Card className="glass-panel animate-fade-in border-primary/20">
-      <CardHeader className="pb-4">
+      <CardHeader className="pb-2">
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/20 border border-primary/30">
@@ -334,7 +334,7 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
         </CardTitle>
       </CardHeader>
       
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-2">
         {/* Current Auction State */}
         {critique.currentAuctionState && (
           <AnalysisSection title="Current Auction State" icon={Activity} variant="primary">
