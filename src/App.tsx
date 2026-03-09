@@ -1,4 +1,4 @@
-import { PasswordGate } from "@/components/PasswordGate";
+import { WhopAuthGate } from "@/components/WhopAuthGate";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -36,15 +36,15 @@ const queryClient = new QueryClient();
 function AlertToasts() {
   const { triggeredAlerts, dismissTriggeredAlert } = useAlertContext();
   return (
-    <AlertToastContainer 
-      alerts={triggeredAlerts} 
-      onDismiss={dismissTriggeredAlert} 
+    <AlertToastContainer
+      alerts={triggeredAlerts}
+      onDismiss={dismissTriggeredAlert}
     />
   );
 }
 
 const App = () => (
-  <PasswordGate><QueryClientProvider client={queryClient}>
+  <WhopAuthGate><QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <MarketDataProvider>
         <KnowledgeProvider>
@@ -83,7 +83,7 @@ const App = () => (
         </KnowledgeProvider>
       </MarketDataProvider>
     </ThemeProvider>
-  </QueryClientProvider></PasswordGate>
+  </QueryClientProvider></WhopAuthGate>
 );
 
 export default App;
