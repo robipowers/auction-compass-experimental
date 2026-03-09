@@ -1,22 +1,63 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Auction Mentor</title>
-    <meta name="description" content="Institutional-grade AMT trading analysis and scenario validation" />
-    <meta name="author" content="Auction Mentor" />
 
-    <meta property="og:title" content="Auction Mentor" />
-    <meta property="og:description" content="Institutional-grade AMT trading analysis and scenario validation" />
-    <meta property="og:type" content="website" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auction Mentor</title>
+  <meta name="description" content="Institutional-grade AMT trading analysis and scenario validation" />
+  <meta name="author" content="Auction Mentor" />
 
-    <meta name="twitter:card" content="summary_large_image" />
-  </head>
+  <meta property="og:title" content="Auction Mentor" />
+  <meta property="og:description" content="Institutional-grade AMT trading analysis and scenario validation" />
+  <meta property="og:type" content="website" />
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+  <meta name="twitter:card" content="summary_large_image" />
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+  <script>
+    // Level 1: Anti-Copy & Anti-Inspect Deterrents
+    document.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (
+        e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+        (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+        (e.ctrlKey && e.key === 'U') ||
+        (e.metaKey && e.altKey && e.key === 'U') ||
+        (e.ctrlKey && e.key === 'S') ||
+        (e.metaKey && e.key === 'S') ||
+        (e.ctrlKey && e.key === 'P') ||
+        (e.metaKey && e.key === 'P') ||
+        (e.ctrlKey && e.key === 'C') ||
+        (e.metaKey && e.key === 'C')
+      ) {
+        e.preventDefault();
+        return false;
+      }
+    });
+  </script>
+  <style>
+    body {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    input,
+    textarea {
+      -webkit-user-select: auto;
+      -moz-user-select: auto;
+      -ms-user-select: auto;
+      user-select: auto;
+    }
+  </style>
+</body>
+
 </html>
-

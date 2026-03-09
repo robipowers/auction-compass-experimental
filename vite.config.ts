@@ -1,11 +1,12 @@
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react-swc";
+import obfuscatorPlugin from "vite-plugin-javascript-obfuscator";
 import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  
+
   return {
     server: {
       host: "::",
@@ -13,6 +14,22 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       react(),
+      obfuscatorPlugin({
+        include: ["src/**/*.ts", "src/**/*.tsx"],
+        exclude: [/node_modules/],
+        apply: "build",
+        debugger: false,
+        options: {
+          compact: true,
+          controlFlowFlattening: true,
+          controlFlowFlatteningThreshold: 0.75,
+          deadCodeInjection: true,
+          deadCodeInjectionThreshold: 0.4,
+          stringArray: true,
+          stringArrayEncoding: ['base64'],
+          stringArrayThreshold: 0.75
+        }
+      }),
       // OpenAI proxy plugin — handles /api/chat requests server-side
       {
         name: 'openai-proxy',
@@ -29,7 +46,7 @@ export default defineConfig(({ mode }) => {
             req.on('end', async () => {
               try {
                 const { messages } = JSON.parse(body);
-                
+
                 const openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
                   method: 'POST',
                   headers: {
