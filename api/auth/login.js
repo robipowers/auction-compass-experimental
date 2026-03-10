@@ -18,7 +18,7 @@ export default function handler(req, res) {
     res.setHeader('Set-Cookie', `cv=${codeVerifier}; Path=/; Max-Age=300; HttpOnly; Secure; SameSite=Lax`);
 
     const clientId = process.env.WHOP_CLIENT_ID;
-    const redirectUri = 'https://auction-mentor-app.vercel.app/api/auth/callback';
+    const redirectUri = 'https://app.auctionmentor.io/api/auth/callback';
 
     const authUrl = 'https://api.whop.com/oauth/authorize'
         + '?client_id=' + clientId

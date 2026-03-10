@@ -25,7 +25,7 @@ export default async function handler(req, res) {
 
         const client_id = process.env.WHOP_CLIENT_ID;
         const client_secret = process.env.WHOP_CLIENT_SECRET;
-        const redirect_uri = 'https://auction-mentor-app.vercel.app/api/auth/callback';
+        const redirect_uri = 'https://app.auctionmentor.io/api/auth/callback';
 
         const tokenResponse = await fetch('https://api.whop.com/oauth/token', {
             method: 'POST',
