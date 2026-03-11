@@ -10,6 +10,8 @@ export interface ScenarioTrigger {
   rejectedAt: Date | null;
 }
 
+export type ReferenceFrame = "yesterday_settled" | "today_developing";
+
 export interface Scenario {
   id: string;
   planId: string;
@@ -22,6 +24,8 @@ export interface Scenario {
   targets: number[];
   stopLoss: number | null;
   notes: string;
+  /** Which value area this scenario's levels reference */
+  referenceFrame?: ReferenceFrame;
   createdAt: Date;
   updatedAt: Date;
 }

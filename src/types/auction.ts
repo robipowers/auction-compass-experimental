@@ -38,6 +38,11 @@ export interface ReferenceLevels {
   overnightLow: string;
   yesterdayVah: string;
   yesterdayVal: string;
+  yesterdayPoc?: string;
+  // Today's Developing Value Area (dynamic — updated as session progresses)
+  todayDVAH?: string;
+  todayDVAL?: string;
+  todayDPOC?: string;
 }
 
 export interface AuctionPlan {
@@ -49,12 +54,16 @@ export interface AuctionPlan {
   createdAt: Date;
 }
 
+export type ReferenceFrame = "yesterday_settled" | "today_developing";
+
 export interface Scenario {
   name: string;
   typeOfMove: string;
   inPlay: string;
   lis: string;
   behavior: string;
+  /** Which value area this scenario's levels reference */
+  referenceFrame?: ReferenceFrame;
 }
 
 export interface ChecklistItem {

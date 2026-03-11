@@ -349,9 +349,21 @@ function CreatePlanContent() {
 
       report += `## Reference Levels\n\n`;
       report += `- **Overnight High:** ${plan.levels.overnightHigh}\n`;
-      report += `- **Overnight Low:** ${plan.levels.overnightLow}\n`;
+      report += `- **Overnight Low:** ${plan.levels.overnightLow}\n\n`;
+      report += `### Yesterday's Value Area (Static)\n\n`;
       report += `- **Yesterday VAH:** ${plan.levels.yesterdayVah}\n`;
-      report += `- **Yesterday VAL:** ${plan.levels.yesterdayVal}\n\n`;
+      report += `- **Yesterday VAL:** ${plan.levels.yesterdayVal}\n`;
+      if (plan.levels.yesterdayPoc) {
+        report += `- **Yesterday POC:** ${plan.levels.yesterdayPoc}\n`;
+      }
+      report += `\n`;
+      if (plan.levels.todayDVAH || plan.levels.todayDVAL || plan.levels.todayDPOC) {
+        report += `### Today's Developing Value Area (Dynamic)\n\n`;
+        if (plan.levels.todayDVAH) report += `- **Today dVAH:** ${plan.levels.todayDVAH}\n`;
+        if (plan.levels.todayDVAL) report += `- **Today dVAL:** ${plan.levels.todayDVAL}\n`;
+        if (plan.levels.todayDPOC) report += `- **Today dPOC:** ${plan.levels.todayDPOC}\n`;
+        report += `\n`;
+      }
     }
 
     if (critique) {
@@ -362,8 +374,14 @@ function CreatePlanContent() {
       report += `### Scenarios\n\n`;
       critique.scenarios.forEach((s, i) => {
         const validation = validations[i];
+        const frameLabel = s.referenceFrame === "today_developing"
+          ? "Today's Developing VA"
+          : s.referenceFrame === "yesterday_settled"
+          ? "Yesterday's Settled VA"
+          : "N/A";
         report += `**${i + 1}. ${s.name}**\n`;
         report += `- Status: ${validation?.status.toUpperCase().replace('_', ' ') || 'NOT VALIDATED'}\n`;
+        report += `- Reference Frame: ${frameLabel}\n`;
         report += `- Type: ${s.typeOfMove}\n`;
         report += `- In Play: ${s.inPlay}\n`;
         report += `- LIS: ${s.lis}\n`;

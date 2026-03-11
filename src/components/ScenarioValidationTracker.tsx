@@ -1,9 +1,9 @@
 import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Circle, XCircle, Clock, ClipboardCheck, Eye, EyeOff, ChevronDown, ChevronRight, Target, AlertCircle } from "lucide-react";
+import { CheckCircle2, Circle, XCircle, Clock, ClipboardCheck, Eye, EyeOff, ChevronDown, ChevronRight, Target, AlertCircle, History, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { renderInlineMarkdown } from "@/lib/markdown";
-import { Scenario, ValidationStatus, ScenarioValidation, VALIDATION_STATUS_PRIORITY } from "@/types/auction";
+import { Scenario, ValidationStatus, ScenarioValidation, VALIDATION_STATUS_PRIORITY, ReferenceFrame } from "@/types/auction";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
@@ -228,6 +228,19 @@ export function ScenarioValidationTracker({
                           <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/15 text-primary text-[10px] font-semibold uppercase tracking-wide border border-primary/30">
                             <Target className="h-3 w-3" />
                             Primary Focus
+                          </span>
+                        )}
+                        {scenario.referenceFrame && (
+                          <span className={cn(
+                            "flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide border",
+                            scenario.referenceFrame === "today_developing"
+                              ? "bg-info/10 text-info border-info/30"
+                              : "bg-warning/10 text-warning border-warning/30"
+                          )}>
+                            {scenario.referenceFrame === "today_developing"
+                              ? <><RefreshCw className="h-3 w-3" />Today's Developing VA</>
+                              : <><History className="h-3 w-3" />Yesterday's Settled VA</>
+                            }
                           </span>
                         )}
                       </div>

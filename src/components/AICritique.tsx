@@ -13,9 +13,11 @@ import {
   Shield,
   BarChart3,
   Crosshair,
-  Activity
+  Activity,
+  History,
+  RefreshCw
 } from "lucide-react";
-import { AICritique as AICritiqueType, Coherence } from "@/types/auction";
+import { AICritique as AICritiqueType, Coherence, ReferenceFrame } from "@/types/auction";
 import { cn } from "@/lib/utils";
 import { renderInlineMarkdown, renderMarkdownBlock } from "@/lib/markdown";
 import { useState } from "react";
@@ -98,6 +100,23 @@ function AnalysisSection({
   );
 }
 
+// Reference frame badge
+function ReferenceFrameBadge({ frame }: { frame?: ReferenceFrame }) {
+  if (!frame) return null;
+  const isToday = frame === "today_developing";
+  return (
+    <span className={cn(
+      "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide border",
+      isToday
+        ? "bg-info/10 text-info border-info/30"
+        : "bg-warning/10 text-warning border-warning/30"
+    )}>
+      {isToday ? <RefreshCw className="h-2.5 w-2.5" /> : <History className="h-2.5 w-2.5" />}
+      {isToday ? "Today's Developing VA" : "Yesterday's Settled VA"}
+    </span>
+  );
+}
+
 // Premium formatted text with markdown rendering
 function FormattedText({ text, className }: { text: string; className?: string }) {
   return (
@@ -115,9 +134,12 @@ function ScenarioCard({ scenario, index }: { scenario: AICritiqueType['scenarios
         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/20 border border-primary/30 text-sm font-bold text-primary">
           {index + 1}
         </span>
-        <h4 className="font-bold text-base text-foreground leading-tight pt-0.5">
-          {renderInlineMarkdown(scenario.name)}
-        </h4>
+        <div className="flex-1 min-w-0">
+          <h4 className="font-bold text-base text-foreground leading-tight mb-1.5">
+            {renderInlineMarkdown(scenario.name)}
+          </h4>
+          <ReferenceFrameBadge frame={scenario.referenceFrame} />
+        </div>
       </div>
       
       {/* Key Details */}
@@ -253,8 +275,11 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
                     {index + 1}
                   </span>
                   <div className="flex-1">
-                    <p className="font-semibold text-foreground text-sm">{scenario.name}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">
+                    <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                      <p className="font-semibold text-foreground text-sm">{scenario.name}</p>
+                      <ReferenceFrameBadge frame={scenario.referenceFrame} />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
                       <span className="font-semibold text-primary">In Play:</span> {renderInlineMarkdown(scenario.inPlay)}{' · '}
                       <span className="font-semibold text-danger ml-1">LIS:</span> {renderInlineMarkdown(scenario.lis)}
                     </p>
@@ -352,6 +377,7 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
                   <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-foreground">Type of Move</th>
                   <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-primary">In Play</th>
                   <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-danger">LIS</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Ref Frame</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/30">
@@ -364,6 +390,9 @@ export function AICritique({ critique, mode = "premarket" }: AICritiqueProps) {
                     </td>
                     <td className="px-4 py-3">
                       <span className="font-mono font-semibold text-danger text-sm">{renderInlineMarkdown(scenario.lis)}</span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <ReferenceFrameBadge frame={scenario.referenceFrame} />
                     </td>
                   </tr>
                 ))}

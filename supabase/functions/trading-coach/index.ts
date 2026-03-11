@@ -308,10 +308,22 @@ serve(async (req) => {
     // Build context from plan data
     let contextPrompt = '';
     if (planContext) {
+      const hasDevelopingVA = planContext.levels?.todayDVAH || planContext.levels?.todayDVAL || planContext.levels?.todayDPOC;
       contextPrompt = `PLAN CONTEXT:
 - Yesterday: ${planContext.yesterday?.dayType || 'N/A'}, ${planContext.yesterday?.valueRelationship || 'N/A'}, ${planContext.yesterday?.structure || 'N/A'}, VPOC ${planContext.yesterday?.prominentVpoc || 'N/A'}
 - Today: ${planContext.today?.inventory || 'N/A'}, ${planContext.today?.openRelation || 'N/A'}
-- Levels: VAH ${planContext.levels?.yesterdayVah || 'N/A'}, VAL ${planContext.levels?.yesterdayVal || 'N/A'}, ONH ${planContext.levels?.overnightHigh || 'N/A'}, ONL ${planContext.levels?.overnightLow || 'N/A'}`;
+- ONH: ${planContext.levels?.overnightHigh || 'N/A'}, ONL: ${planContext.levels?.overnightLow || 'N/A'}
+
+YESTERDAY'S SETTLED VALUE AREA (Static):
+- Yesterday VAH: ${planContext.levels?.yesterdayVah || 'N/A'}
+- Yesterday VAL: ${planContext.levels?.yesterdayVal || 'N/A'}
+- Yesterday POC: ${planContext.levels?.yesterdayPoc || 'N/A'}
+
+TODAY'S DEVELOPING VALUE AREA (Dynamic):
+- Today dVAH: ${planContext.levels?.todayDVAH || 'not yet provided'}
+- Today dVAL: ${planContext.levels?.todayDVAL || 'not yet provided'}
+- Today dPOC: ${planContext.levels?.todayDPOC || 'not yet provided'}
+${hasDevelopingVA ? '\nIMPORTANT: When referencing value area levels, ALWAYS specify "Yesterday\'s VAH/VAL/POC" or "Today\'s dVAH/dVAL/dPOC" explicitly. Never use bare "VAH" or "VAL".' : ''}`;
     }
 
     if (scenarios.length >= 3) {

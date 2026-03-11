@@ -270,6 +270,34 @@ VERIFICATION REQUIREMENT: Your response must demonstrate that you consulted this
 
 ` : ``;
 
+    // Build dual VA section for user prompt
+    const hasDevelopingVA = plan.levels.todayDVAH || plan.levels.todayDVAL || plan.levels.todayDPOC;
+    const dualVASection = `
+═══════════════════════════════════════════════════════════════
+CRITICAL — DUAL VALUE AREA FRAMEWORK:
+═══════════════════════════════════════════════════════════════
+
+You are provided two sets of value area levels:
+
+YESTERDAY'S SETTLED VALUE AREA (static):
+- Yesterday VAH: ${plan.levels.yesterdayVah || 'not provided'}
+- Yesterday VAL: ${plan.levels.yesterdayVal || 'not provided'}
+- Yesterday POC: ${plan.levels.yesterdayPoc || 'not provided'}
+
+TODAY'S DEVELOPING VALUE AREA (dynamic, updated by user):
+- Today dVAH: ${plan.levels.todayDVAH || 'not yet provided'}
+- Today dVAL: ${plan.levels.todayDVAL || 'not yet provided'}
+- Today dPOC: ${plan.levels.todayDPOC || 'not yet provided'}
+
+Rules for reference frame selection:
+1. If price action is occurring near today's developing value area boundaries, all acceptance/rejection/squeeze scenarios MUST reference today's developing VA levels.
+2. If price action is testing yesterday's settled value area from outside today's range, reference yesterday's VA levels.
+3. If a gap exists between yesterday's VA and today's developing VA, gap-fill scenarios reference yesterday's levels as the destination.
+4. ALWAYS explicitly state which value area you are referencing for each scenario. Never use ambiguous terms like "VAH" alone. Use "Yesterday's VAH" or "Today's dVAH."
+5. Validation conditions (acceptance criteria, time thresholds, rejection signals) must use the CORRECT corresponding levels.
+${!hasDevelopingVA ? '\nNOTE: Today\'s developing VA levels have not been provided yet. All scenarios should reference Yesterday\'s Settled VA. When developing levels become available, scenarios near today\'s developing VA should be updated.' : ''}
+`;
+
     const userPrompt = `You are the **AMT CRITIQUE ENGINE** - an institutional-grade analysis system for auction market structure.
 
 Your task is to analyze the following trading plan and provide a comprehensive structural critique using concepts from the uploaded PDF knowledge base.
@@ -304,6 +332,10 @@ ${knowledgeSection}
 
 ---
 
+${dualVASection}
+
+---
+
 ## INPUT DATA
 
 **Date:** ${tradingDate}
@@ -321,8 +353,16 @@ ${knowledgeSection}
 **Reference Levels:**
 - Overnight High (ONH): ${plan.levels.overnightHigh}
 - Overnight Low (ONL): ${plan.levels.overnightLow}
+
+**YESTERDAY'S SETTLED VALUE AREA (Static):**
 - Yesterday VAH: ${plan.levels.yesterdayVah}
 - Yesterday VAL: ${plan.levels.yesterdayVal}
+- Yesterday POC: ${plan.levels.yesterdayPoc || 'not provided'}
+
+**TODAY'S DEVELOPING VALUE AREA (Dynamic):**
+- Today dVAH: ${plan.levels.todayDVAH || 'not yet provided'}
+- Today dVAL: ${plan.levels.todayDVAL || 'not yet provided'}
+- Today dPOC: ${plan.levels.todayDPOC || 'not yet provided'}
 
 ---
 
@@ -389,11 +429,11 @@ You MUST structure your response EXACTLY as follows with complete paragraphs (no
 
 Present exactly 3 scenarios in this table format:
 
-| Scenario | Type of Move | In Play | LIS |
-|----------|--------------|---------|-----|
-| 1. [Context-specific name] | [Fast 1TF down/up, Trend type, Rotational, etc.] | [Trigger with specific price] | [Line in Sand with price] |
-| 2. [Context-specific name] | [Type] | [Trigger with price] | [Line in Sand with price] |
-| 3. [Context-specific name] | [Type] | [Trigger with price] | [Line in Sand with price] |
+| Scenario | Type of Move | In Play | LIS | Reference Frame |
+|----------|--------------|---------|-----|-----------------|
+| 1. [Context-specific name] | [Fast 1TF down/up, Trend type, Rotational, etc.] | [Trigger with specific price] | [Line in Sand with price] | [Yesterday's Settled VA / Today's Developing VA] |
+| 2. [Context-specific name] | [Type] | [Trigger with price] | [Line in Sand with price] | [Yesterday's Settled VA / Today's Developing VA] |
+| 3. [Context-specific name] | [Type] | [Trigger with price] | [Line in Sand with price] | [Yesterday's Settled VA / Today's Developing VA] |
 
 YOU MUST INCLUDE the following subsection immediately after the table (do not skip it):
 
@@ -403,18 +443,21 @@ YOU MUST INCLUDE the following subsection immediately after the table (do not sk
 **Type of Move:** [Type from table]  
 **In Play:** [Trigger from table]  
 **LIS:** [Line in Sand from table]  
-**Behavior:** [Write 2-3 complete sentences explaining what happens if this scenario plays out. Include: (1) specific price action and levels, (2) participant behavior (other-timeframe vs locals, initiative vs responsive), (3) expected speed/character of the move (fast/violent vs rotational/slow), and (4) cite relevant concepts from the knowledge base.]
+**Reference Frame:** [Yesterday's Settled VA / Today's Developing VA]  
+**Behavior:** [Write 2-3 complete sentences explaining what happens if this scenario plays out. Include: (1) specific price action and levels, explicitly naming which value area (Yesterday's VAH/VAL/POC or Today's dVAH/dVAL/dPOC) the scenario references, (2) participant behavior (other-timeframe vs locals, initiative vs responsive), (3) expected speed/character of the move (fast/violent vs rotational/slow), and (4) cite relevant concepts from the knowledge base.]
 
 **Scenario 2: [Name from table]**  
 **Type of Move:** [Type from table]  
 **In Play:** [Trigger from table]  
 **LIS:** [Line in Sand from table]  
+**Reference Frame:** [Yesterday's Settled VA / Today's Developing VA]  
 **Behavior:** [Write 2-3 complete sentences with the same level of detail as Scenario 1.]
 
 **Scenario 3: [Name from table]**  
 **Type of Move:** [Type from table]  
 **In Play:** [Trigger from table]  
 **LIS:** [Line in Sand from table]  
+**Reference Frame:** [Yesterday's Settled VA / Today's Developing VA]  
 **Behavior:** [Write 2-3 complete sentences with the same level of detail as Scenario 1.]
 
 ---
@@ -640,8 +683,20 @@ function parseAICritique(content: string, plan: any) {
 
   // Extract scenarios (Section 3) - new format
   const scenarios = [];
-  const scenarioRegex = /\*\*Scenario \d+:\s*([^*]+)\*\*[\s\S]*?Type of Move:\s*([^\n]+)[\s\S]*?In Play:\s*([^\n]+)[\s\S]*?LIS:\s*([^\n]+)[\s\S]*?Behavior:\s*([^\n]+(?:\n(?!\*\*Scenario)[^\n#]*)*)/gi;
+  const scenarioRegex = /\*\*Scenario \d+:\s*([^*]+)\*\*[\s\S]*?Type of Move:\s*([^\n]+)[\s\S]*?In Play:\s*([^\n]+)[\s\S]*?LIS:\s*([^\n]+)(?:[\s\S]*?Reference Frame:\s*([^\n]+))?[\s\S]*?Behavior:\s*([^\n]+(?:\n(?!\*\*Scenario)[^\n#]*)*)/gi;
   let scenarioMatch;
+
+  const parseReferenceFrame = (raw: string | undefined): "yesterday_settled" | "today_developing" | undefined => {
+    if (!raw) return undefined;
+    const lower = raw.toLowerCase();
+    if (lower.includes("today") || lower.includes("developing") || lower.includes("dvah") || lower.includes("dval") || lower.includes("dpoc")) {
+      return "today_developing";
+    }
+    if (lower.includes("yesterday") || lower.includes("settled")) {
+      return "yesterday_settled";
+    }
+    return undefined;
+  };
 
   while ((scenarioMatch = scenarioRegex.exec(content)) !== null) {
     scenarios.push({
@@ -649,7 +704,8 @@ function parseAICritique(content: string, plan: any) {
       typeOfMove: scenarioMatch[2].trim(),
       inPlay: scenarioMatch[3].trim(),
       lis: scenarioMatch[4].trim(),
-      behavior: scenarioMatch[5].trim().replace(/\n/g, ' ').substring(0, 300)
+      referenceFrame: parseReferenceFrame(scenarioMatch[5]),
+      behavior: scenarioMatch[6].trim().replace(/\n/g, ' ').substring(0, 300)
     });
   }
 
@@ -671,21 +727,24 @@ function parseAICritique(content: string, plan: any) {
         name: "Bullish Continuation",
         typeOfMove: "Trend type 1TF up",
         inPlay: `Acceptance above ONH ${onh}`,
-        lis: `VAH ${vah}`,
+        lis: `Yesterday's VAH ${vah}`,
+        referenceFrame: "yesterday_settled" as const,
         behavior: "Initiative buying continues, longs comfortable. Move accelerates as shorts cover."
       },
       {
         name: "Inventory Liquidation",
         typeOfMove: "Fast 1TF down",
-        inPlay: `Failure at ONH ${onh} with break below VAH ${vah}`,
+        inPlay: `Failure at ONH ${onh} with break below Yesterday's VAH ${vah}`,
         lis: `ONH ${onh}`,
+        referenceFrame: "yesterday_settled" as const,
         behavior: "Net Long inventory becomes liquidation fuel. Speed and violence to downside as positioned longs exit."
       },
       {
         name: "Rotational Acceptance",
         typeOfMove: "2TF ranging",
-        inPlay: `Rejection at ONH ${onh} but holding VAL ${val}`,
+        inPlay: `Rejection at ONH ${onh} but holding Yesterday's VAL ${val}`,
         lis: "Break of either overnight extreme with acceptance",
+        referenceFrame: "yesterday_settled" as const,
         behavior: "Market builds value, awaits catalyst. Trade edges of developing range."
       }
     ] : [
@@ -693,21 +752,24 @@ function parseAICritique(content: string, plan: any) {
         name: "Bearish Continuation",
         typeOfMove: "Trend type 1TF down",
         inPlay: `Acceptance below ONL ${onl}`,
-        lis: `VAL ${val}`,
+        lis: `Yesterday's VAL ${val}`,
+        referenceFrame: "yesterday_settled" as const,
         behavior: "Initiative selling resumes, shorts comfortable. Downside discovery accelerates."
       },
       {
         name: "Short Squeeze Rally",
         typeOfMove: "Fast 1TF up",
-        inPlay: `Failure at ONL ${onl} with break above VAH ${vah}`,
+        inPlay: `Failure at ONL ${onl} with break above Yesterday's VAH ${vah}`,
         lis: `ONL ${onl}`,
+        referenceFrame: "yesterday_settled" as const,
         behavior: "Net Short inventory becomes squeeze fuel. Speed and violence to upside as shorts cover."
       },
       {
         name: "Rotational Acceptance",
         typeOfMove: "2TF ranging",
-        inPlay: `Rejection at ONL ${onl} but capped at VAH ${vah}`,
+        inPlay: `Rejection at ONL ${onl} but capped at Yesterday's VAH ${vah}`,
         lis: "Break of either overnight extreme with acceptance",
+        referenceFrame: "yesterday_settled" as const,
         behavior: "Market builds value, awaits catalyst. Trade edges of developing range."
       }
     ];

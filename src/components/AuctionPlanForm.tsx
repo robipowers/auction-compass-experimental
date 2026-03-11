@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Save, Loader2, Calendar, TrendingUp, Target } from "lucide-react";
+import { Save, Loader2, Calendar, TrendingUp, Target, RefreshCw } from "lucide-react";
 import {
   YesterdayContext,
   TodayContext,
@@ -66,6 +66,10 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
     overnightLow: "",
     yesterdayVah: "",
     yesterdayVal: "",
+    yesterdayPoc: "",
+    todayDVAH: "",
+    todayDVAL: "",
+    todayDPOC: "",
   });
 
   // Auto-save draft to localStorage on every change
@@ -237,7 +241,7 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
         </CardContent>
       </Card>
 
-      {/* Reference Levels */}
+      {/* Reference Levels — Overnight */}
       <Card variant="feature" className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
@@ -245,9 +249,9 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
               <Target className="h-5 w-5 text-white" />
             </span>
             <div>
-              <div className="text-lg font-semibold">Reference Levels</div>
+              <div className="text-lg font-semibold">Overnight Levels</div>
               <div className="text-sm font-normal text-muted-foreground">
-                Key Structural Pivots
+                Overnight Session Extremes
               </div>
             </div>
           </CardTitle>
@@ -278,7 +282,25 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
               className="h-11 font-mono"
             />
           </div>
+        </CardContent>
+      </Card>
 
+      {/* Yesterday's Value Area (Static) */}
+      <Card variant="feature" className="animate-fade-in" style={{ animationDelay: "0.25s" }}>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-warning to-warning/70 shadow-lg shadow-warning/20">
+              <Target className="h-5 w-5 text-white" />
+            </span>
+            <div>
+              <div className="text-lg font-semibold">Yesterday's Value Area <span className="text-xs font-normal text-muted-foreground ml-1">(Static)</span></div>
+              <div className="text-sm font-normal text-muted-foreground">
+                Yesterday's levels are fixed — settled at RTH close
+              </div>
+            </div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-5 sm:grid-cols-3">
           <div className="space-y-2">
             <Label htmlFor="yesterdayVah" className="text-sm font-medium">Yesterday VAH</Label>
             <Input
@@ -302,6 +324,76 @@ export function AuctionPlanForm({ onSave, isLoading }: AuctionPlanFormProps) {
                 setLevels((prev) => ({ ...prev, yesterdayVal: e.target.value }))
               }
               className="h-11 font-mono"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="yesterdayPoc" className="text-sm font-medium">Yesterday POC</Label>
+            <Input
+              id="yesterdayPoc"
+              placeholder="e.g., 1.17285"
+              value={levels.yesterdayPoc ?? ""}
+              onChange={(e) =>
+                setLevels((prev) => ({ ...prev, yesterdayPoc: e.target.value }))
+              }
+              className="h-11 font-mono"
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Today's Developing Value Area (Dynamic) */}
+      <Card variant="feature" className="animate-fade-in border-info/30" style={{ animationDelay: "0.3s" }}>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-info to-info/70 shadow-lg shadow-info/20">
+              <RefreshCw className="h-5 w-5 text-white" />
+            </span>
+            <div>
+              <div className="text-lg font-semibold">Today's Developing Value Area <span className="text-xs font-normal text-muted-foreground ml-1">(Dynamic)</span></div>
+              <div className="text-sm font-normal text-muted-foreground">
+                Yesterday's levels are fixed. Today's developing levels should be updated as the session progresses.
+              </div>
+            </div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-5 sm:grid-cols-3">
+          <div className="space-y-2">
+            <Label htmlFor="todayDVAH" className="text-sm font-medium text-info">Today dVAH</Label>
+            <Input
+              id="todayDVAH"
+              placeholder="e.g., 1.17612"
+              value={levels.todayDVAH ?? ""}
+              onChange={(e) =>
+                setLevels((prev) => ({ ...prev, todayDVAH: e.target.value }))
+              }
+              className="h-11 font-mono border-info/30 focus-visible:ring-info/30"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="todayDVAL" className="text-sm font-medium text-info">Today dVAL</Label>
+            <Input
+              id="todayDVAL"
+              placeholder="e.g., 1.17180"
+              value={levels.todayDVAL ?? ""}
+              onChange={(e) =>
+                setLevels((prev) => ({ ...prev, todayDVAL: e.target.value }))
+              }
+              className="h-11 font-mono border-info/30 focus-visible:ring-info/30"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="todayDPOC" className="text-sm font-medium text-info">Today dPOC</Label>
+            <Input
+              id="todayDPOC"
+              placeholder="e.g., 1.17390"
+              value={levels.todayDPOC ?? ""}
+              onChange={(e) =>
+                setLevels((prev) => ({ ...prev, todayDPOC: e.target.value }))
+              }
+              className="h-11 font-mono border-info/30 focus-visible:ring-info/30"
             />
           </div>
         </CardContent>
