@@ -87,7 +87,7 @@ export default function LiveSession() {
         return (
           <div className="h-full flex flex-col">
             {/* Overlay Controls */}
-            <div className="flex gap-2 p-2 border-b border-border">
+            <div className="flex flex-wrap gap-2 p-2 border-b border-border">
               {[
                 { key: "volumeProfile", label: "Volume Profile" },
                 { key: "orderFlow", label: "Order Flow" },
@@ -229,21 +229,21 @@ export default function LiveSession() {
   };
 
   return (
-    <div className="h-[calc(100vh-64px)] flex flex-col">
+    <div className="md:h-[calc(100vh-64px)] flex flex-col">
       {/* Disconnection Banner */}
       {connectionStatus === "disconnected" && <DisconnectionBanner />}
       
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-background">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2 border-b border-border bg-background">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
           <Button variant="ghost" size="sm" onClick={() => navigate("/plan")}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Plan
+            <ArrowLeft className="h-4 w-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">Back to Plan</span>
           </Button>
-          <div className="h-4 w-px bg-border" />
-          <h1 className="text-lg font-semibold">Live Session</h1>
+          <div className="h-4 w-px bg-border hidden sm:block" />
+          <h1 className="text-base sm:text-lg font-semibold">Live Session</h1>
           {marketData && (
-            <span className="text-2xl font-bold">
+            <span className="text-lg sm:text-2xl font-bold">
               {marketData.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
           )}
@@ -253,8 +253,8 @@ export default function LiveSession() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
-                <Plus className="h-4 w-4 mr-2" />
-                Add Panel
+                <Plus className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Add Panel</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -275,38 +275,67 @@ export default function LiveSession() {
         </div>
       </div>
       
-      {/* Workspace */}
-      <div className="flex-1 overflow-hidden">
-        <ResizablePanelGroup direction="horizontal" className="h-full">
-          {panels.map((panel, index) => (
-            <div key={panel.id} className="contents">
-              {index > 0 && <ResizableHandle withHandle />}
-              <ResizablePanel defaultSize={100 / panels.length} minSize={20}>
-                <Card className="h-full rounded-none border-0 border-r border-border">
-                  <CardHeader className="py-2 px-3 flex-row items-center justify-between space-y-0 border-b border-border">
-                    <CardTitle className="text-sm font-medium">{panel.title}</CardTitle>
-                    <div className="flex items-center gap-1">
-                      <Button variant="ghost" size="icon" className="h-6 w-6">
-                        <Settings className="h-3 w-3" />
-                      </Button>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-6 w-6"
-                        onClick={() => removePanel(panel.id)}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-0 h-[calc(100%-41px)] overflow-auto">
-                    {renderPanelContent(panel)}
-                  </CardContent>
-                </Card>
-              </ResizablePanel>
-            </div>
+      {/* Workspace — horizontal resizable on md+, vertical stack on mobile */}
+      <div className="flex-1 overflow-auto md:overflow-hidden">
+        {/* Mobile: stacked panels */}
+        <div className="md:hidden flex flex-col">
+          {panels.map((panel) => (
+            <Card key={panel.id} className="rounded-none border-0 border-b border-border">
+              <CardHeader className="py-2 px-3 flex-row items-center justify-between space-y-0 border-b border-border">
+                <CardTitle className="text-sm font-medium">{panel.title}</CardTitle>
+                <div className="flex items-center gap-1">
+                  <Button variant="ghost" size="icon" className="h-6 w-6">
+                    <Settings className="h-3 w-3" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-6 w-6"
+                    onClick={() => removePanel(panel.id)}
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="p-0 min-h-[300px]">
+                {renderPanelContent(panel)}
+              </CardContent>
+            </Card>
           ))}
-        </ResizablePanelGroup>
+        </div>
+        {/* Desktop: resizable panels */}
+        <div className="hidden md:block h-full">
+          <ResizablePanelGroup direction="horizontal" className="h-full">
+            {panels.map((panel, index) => (
+              <div key={panel.id} className="contents">
+                {index > 0 && <ResizableHandle withHandle />}
+                <ResizablePanel defaultSize={100 / panels.length} minSize={20}>
+                  <Card className="h-full rounded-none border-0 border-r border-border">
+                    <CardHeader className="py-2 px-3 flex-row items-center justify-between space-y-0 border-b border-border">
+                      <CardTitle className="text-sm font-medium">{panel.title}</CardTitle>
+                      <div className="flex items-center gap-1">
+                        <Button variant="ghost" size="icon" className="h-6 w-6">
+                          <Settings className="h-3 w-3" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-6 w-6"
+                          onClick={() => removePanel(panel.id)}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="p-0 h-[calc(100%-41px)] overflow-auto">
+                      {renderPanelContent(panel)}
+                    </CardContent>
+                  </Card>
+                </ResizablePanel>
+              </div>
+            ))}
+          </ResizablePanelGroup>
+        </div>
       </div>
     </div>
   );

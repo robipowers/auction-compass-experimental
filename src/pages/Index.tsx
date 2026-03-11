@@ -28,9 +28,9 @@ const features = [
 
 export default function Index() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 md:pb-0">
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 lg:py-32">
+      <section className="relative overflow-hidden py-12 lg:py-32">
         {/* Subtle grid pattern only */}
         <div className="absolute inset-0 bg-grid-pattern bg-grid-40 opacity-[0.015]" />
 
@@ -41,7 +41,7 @@ export default function Index() {
               <span className="text-[11px] uppercase tracking-widest font-semibold text-muted-foreground">Institutional AMT Trading Tool</span>
             </div>
             
-            <h1 className="mb-6 text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-foreground">
+            <h1 className="mb-6 text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-foreground">
               Auction Plan
             </h1>
             

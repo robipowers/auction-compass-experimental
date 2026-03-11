@@ -42,20 +42,20 @@ export default function WorkspaceLive() {
   const nqData = priceData.get('NQ');
 
   return (
-    <div className="h-[calc(100vh-64px)] flex flex-col">
+    <div className="md:h-[calc(100vh-64px)] flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-background">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2 border-b border-border bg-background">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
           <Button variant="ghost" size="sm" onClick={() => navigate('/plan')}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Plan
+            <ArrowLeft className="h-4 w-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">Back to Plan</span>
           </Button>
-          <div className="h-4 w-px bg-border" />
-          <h1 className="text-lg font-semibold">Live Workspace</h1>
+          <div className="h-4 w-px bg-border hidden sm:block" />
+          <h1 className="text-base sm:text-lg font-semibold">Live Workspace</h1>
           
           {nqData && (
-            <div className="flex items-center gap-3">
-              <span className="text-2xl font-bold">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="text-lg sm:text-2xl font-bold">
                 {nqData.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
               </span>
               <span className={cn(

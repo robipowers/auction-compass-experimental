@@ -62,12 +62,12 @@ function SessionPhaseIndicator({ phase }: { phase: string }) {
   const currentIndex = phases.indexOf(phase);
   
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       {phases.map((p, i) => (
         <div key={p} className="flex items-center gap-1">
           <div
             className={cn(
-              "h-2 w-2 rounded-full",
+              "h-2 w-2 rounded-full flex-shrink-0",
               i < currentIndex && "bg-green-500",
               i === currentIndex && "bg-primary animate-pulse",
               i > currentIndex && "bg-muted"
@@ -87,7 +87,7 @@ function SessionPhaseIndicator({ phase }: { phase: string }) {
 
 function QuickStats({ stats }: { stats: typeof mockStats }) {
   return (
-    <div className="grid grid-cols-3 gap-3">
+    <div className="grid grid-cols-3 sm:grid-cols-3 gap-3">
       <Card className="bg-secondary/50">
         <CardContent className="p-4 text-center">
           <div className={cn(
@@ -160,14 +160,14 @@ function TodaysPlanCard({ plan }: { plan: typeof mockPlan }) {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3 pt-2">
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <Button asChild className="flex-1">
             <Link to="/live">
               <Play className="h-4 w-4 mr-2" />
               Start Live Session
             </Link>
           </Button>
-          <Button variant="outline" asChild>
+          <Button variant="outline" asChild className="sm:flex-none">
             <Link to="/plan">
               <FileText className="h-4 w-4 mr-2" />
               View Full Analysis
@@ -227,7 +227,7 @@ export default function Dashboard() {
   });
 
   return (
-    <main className="container mx-auto px-4 py-6 space-y-6">
+    <main className="container mx-auto px-4 py-6 pb-24 md:pb-6 space-y-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>

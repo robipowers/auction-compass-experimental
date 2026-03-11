@@ -123,8 +123,8 @@ function TradeTable({ trades, variant }: { trades: TradeRecord[]; variant: "best
           )}
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-0">
-        <table className="w-full">
+      <CardContent className="p-0 overflow-x-auto">
+        <table className="w-full min-w-[320px]">
           <thead>
             <tr className="border-b border-border">
               <th className="py-2 px-4 text-left text-xs uppercase text-muted-foreground">Date</th>
@@ -193,14 +193,14 @@ export default function Analytics() {
   ];
 
   return (
-    <main className="container mx-auto px-4 py-6 space-y-6">
+    <main className="container mx-auto px-4 py-6 pb-24 md:pb-6 space-y-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">Performance Analytics</h1>
           <p className="text-sm text-muted-foreground mt-1">Track your trading performance over time</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {timeRanges.map((range) => (
             <Button
               key={range.value}
@@ -215,7 +215,7 @@ export default function Analytics() {
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
         {mockMetrics.map((metric, i) => (
           <MetricCard key={i} metric={metric} />
         ))}

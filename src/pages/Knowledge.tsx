@@ -150,7 +150,7 @@ export default function Knowledge() {
                   Back to articles
                 </Button>
               ) : (
-                <h1 className="text-2xl font-bold">Knowledge Base</h1>
+                <h1 className="text-xl md:text-2xl font-bold">Knowledge Base</h1>
               )}
               
               {/* Progress Badge */}
@@ -187,8 +187,8 @@ export default function Knowledge() {
 
                 {/* Search + Filters (Articles only) */}
                 {mainTab === 'articles' && (
-                  <div className="flex items-center gap-4">
-                    <div className="relative flex-1 max-w-md">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <div className="relative flex-1 max-w-full sm:max-w-md">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         placeholder="Search articles..."
@@ -198,18 +198,18 @@ export default function Knowledge() {
                       />
                     </div>
                     <Tabs value={filterTab} onValueChange={(v) => setFilterTab(v as FilterTab)}>
-                      <TabsList>
-                        <TabsTrigger value="all" className="gap-1.5">
+                      <TabsList className="w-full sm:w-auto">
+                        <TabsTrigger value="all" className="gap-1 flex-1 sm:flex-none">
                           <BookOpen className="h-4 w-4" />
-                          All
+                          <span className="hidden sm:inline">All</span>
                         </TabsTrigger>
-                        <TabsTrigger value="bookmarked" className="gap-1.5">
+                        <TabsTrigger value="bookmarked" className="gap-1 flex-1 sm:flex-none">
                           <Bookmark className="h-4 w-4" />
-                          Bookmarked
+                          <span className="hidden sm:inline">Bookmarked</span>
                         </TabsTrigger>
-                        <TabsTrigger value="history" className="gap-1.5">
+                        <TabsTrigger value="history" className="gap-1 flex-1 sm:flex-none">
                           <History className="h-4 w-4" />
-                          History
+                          <span className="hidden sm:inline">History</span>
                         </TabsTrigger>
                       </TabsList>
                     </Tabs>
@@ -221,7 +221,7 @@ export default function Knowledge() {
 
           {/* Content Area */}
           <ScrollArea className="flex-1">
-            <div className="p-6">
+            <div className="p-3 md:p-6 pb-24 md:pb-6">
               {selectedArticle ? (
                 <PremiumArticleView article={selectedArticle} />
               ) : mainTab === 'glossary' ? (

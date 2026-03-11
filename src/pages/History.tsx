@@ -95,10 +95,10 @@ export default function History() {
     history.filter((e) => e.pnl !== undefined).length;
 
   return (
-    <div className="container py-8">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="container py-6 pb-24 md:pb-8 md:py-8">
+      <div className="mb-6 md:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Trading History</h1>
+          <h1 className="text-2xl md:text-3xl font-bold">Trading History</h1>
           <p className="mt-2 text-muted-foreground">
             Review your past plans and performance
           </p>
@@ -169,8 +169,8 @@ export default function History() {
           </Button>
         </CardHeader>
         <CardContent>
-          <div className="rounded-lg border border-border">
-            <Table>
+          <div className="rounded-lg border border-border overflow-x-auto">
+            <Table className="min-w-[600px]">
               <TableHeader>
                 <TableRow>
                   <TableHead>Date</TableHead>

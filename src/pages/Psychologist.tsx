@@ -262,10 +262,10 @@ export default function Psychologist() {
     date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
 
   return (
-    <main className="container mx-auto px-4 py-6 h-[calc(100vh-5rem)]">
-      <div className="flex flex-col md:flex-row gap-4 h-full">
-        {/* Sidebar - Conversation History */}
-        <div className="w-full md:w-72 md:flex-shrink-0">
+    <main className="container mx-auto px-4 py-6 pb-24 md:pb-6 md:h-[calc(100vh-5rem)]">
+      <div className="flex flex-col md:flex-row gap-4 md:h-full">
+        {/* Sidebar - Conversation History (hidden on mobile, shown on md+) */}
+        <div className="hidden md:block md:w-72 md:flex-shrink-0">
           <Card className="h-full border-border/50 flex flex-col">
             <CardHeader className="pb-3 flex-shrink-0 border-b border-border/50">
               <div className="flex items-center justify-between">

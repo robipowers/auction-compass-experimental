@@ -95,20 +95,20 @@ export default function Alerts() {
   };
 
   return (
-    <div className="container py-6">
+    <div className="container py-6 pb-24 md:pb-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold">Alerts</h1>
+          <h1 className="text-xl md:text-2xl font-bold">Alerts</h1>
           <Badge variant="secondary" className="bg-green-500/20 text-green-400">
             {activeCount} active
           </Badge>
         </div>
         <div className="flex items-center gap-3">
           <Link to="/alerts/history">
-            <Button variant="outline">View History</Button>
+            <Button variant="outline" size="sm">View History</Button>
           </Link>
-          <Button onClick={() => { setEditingAlert(null); setIsModalOpen(true); }} className="gap-2">
+          <Button onClick={() => { setEditingAlert(null); setIsModalOpen(true); }} className="gap-2" size="sm">
             <Plus className="h-4 w-4" />
             Create Alert
           </Button>
@@ -116,9 +116,9 @@ export default function Alerts() {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-3 mb-6 p-4 bg-card rounded-lg border border-border">
+      <div className="flex flex-wrap items-center gap-3 mb-6 p-4 bg-card rounded-lg border border-border">
         <Select value={statusFilter} onValueChange={(v: any) => setStatusFilter(v)}>
-          <SelectTrigger className="w-[140px]">
+          <SelectTrigger className="w-full sm:w-[140px]">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
@@ -129,7 +129,7 @@ export default function Alerts() {
         </Select>
 
         <Select value={instrumentFilter} onValueChange={setInstrumentFilter}>
-          <SelectTrigger className="w-[160px]">
+          <SelectTrigger className="w-full sm:w-[160px]">
             <SelectValue placeholder="Instrument" />
           </SelectTrigger>
           <SelectContent>
@@ -141,7 +141,7 @@ export default function Alerts() {
         </Select>
 
         <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-          <SelectTrigger className="w-[160px]">
+          <SelectTrigger className="w-full sm:w-[160px]">
             <SelectValue placeholder="Priority" />
           </SelectTrigger>
           <SelectContent>
@@ -153,7 +153,7 @@ export default function Alerts() {
         </Select>
 
         {selectedIds.size > 0 && (
-          <div className="flex items-center gap-2 ml-auto">
+          <div className="flex items-center gap-2 sm:ml-auto">
             <Button variant="outline" size="sm" onClick={() => handleBulkAction('enable')}>
               Enable
             </Button>
@@ -168,8 +168,8 @@ export default function Alerts() {
       </div>
 
       {/* Table */}
-      <div className="bg-card rounded-lg border border-border overflow-hidden">
-        <table className="w-full">
+      <div className="bg-card rounded-lg border border-border overflow-x-auto">
+        <table className="w-full min-w-[640px]">
           <thead className="bg-secondary/50">
             <tr>
               <th className="w-12 p-4">

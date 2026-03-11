@@ -413,15 +413,12 @@ function CreatePlanContent() {
   };
 
   return (
-    <div
-      className="bg-background"
-      style={{ height: 'calc(100vh - 64px)', overflow: 'hidden' }}
-    >
+    <div className="bg-background md:h-[calc(100vh-64px)] md:overflow-hidden">
       {/* ── 3-Column Grid Layout ── */}
-      <div className="grid h-full" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
+      <div className="flex flex-col md:grid md:h-full" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
 
         {/* ── Column 1: AI Strategist (left sidebar, independent scroll) ── */}
-        <aside className="border-r border-border/30 overflow-y-auto bg-background">
+        <aside className="border-b md:border-b-0 md:border-r border-border/30 overflow-y-auto bg-background">
           {critique ? (
             <div className="p-3">
               {isPremarket ? (
@@ -465,10 +462,10 @@ function CreatePlanContent() {
         </aside>
 
         {/* ── Column 2: Main Trading Canvas (center, scrollable) ── */}
-        <main className="overflow-y-auto bg-background">
-          <div className="p-8 max-w-3xl mx-auto">
+        <main className="overflow-y-auto bg-background order-first md:order-none">
+          <div className="p-4 md:p-8 max-w-3xl mx-auto">
             {/* Page Header with Mode Toggle */}
-            <header className="mb-8">
+            <header className="mb-6 md:mb-8">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
@@ -566,8 +563,8 @@ function CreatePlanContent() {
         </main>
 
         {/* ── Column 3: Coach's Corner (right sidebar, sticky) ── */}
-        <aside className="border-l border-border/30 bg-background flex flex-col">
-          <div className="sticky top-0 h-full flex flex-col" style={{ maxHeight: 'calc(100vh - 64px)' }}>
+        <aside className="border-t md:border-t-0 md:border-l border-border/30 bg-background flex flex-col min-h-[400px] md:min-h-0">
+          <div className="md:sticky md:top-0 h-full flex flex-col" style={{ maxHeight: 'calc(100vh - 64px)' }}>
             {critique ? (
               <TradingCoach
                 messages={messages}

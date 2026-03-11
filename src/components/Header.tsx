@@ -35,7 +35,7 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-4">
-          <nav className="flex items-center gap-0.5">
+          <nav className="hidden md:flex items-center gap-0.5">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path || 
                 (item.path === '/alerts' && location.pathname.startsWith('/alerts'));

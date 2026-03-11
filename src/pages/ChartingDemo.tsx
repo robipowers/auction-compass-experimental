@@ -33,28 +33,28 @@ export default function ChartingDemo() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container mx-auto px-4 py-6 space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Advanced Charting Demo</h1>
+      <main className="container mx-auto px-4 py-6 pb-24 md:pb-6 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h1 className="text-xl md:text-2xl font-bold">Advanced Charting Demo</h1>
           <p className="text-muted-foreground text-sm">
             Preview of all charting components
           </p>
         </div>
 
         <Tabs defaultValue="volume-profile" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="volume-profile">Volume Profile</TabsTrigger>
-            <TabsTrigger value="order-flow">Order Flow</TabsTrigger>
-            <TabsTrigger value="internals">Market Internals</TabsTrigger>
-            <TabsTrigger value="drawing">Drawing Tools</TabsTrigger>
-            <TabsTrigger value="amt">AMT Overlays</TabsTrigger>
+          <TabsList className="flex-wrap h-auto gap-1">
+            <TabsTrigger value="volume-profile" className="text-xs sm:text-sm">Volume Profile</TabsTrigger>
+            <TabsTrigger value="order-flow" className="text-xs sm:text-sm">Order Flow</TabsTrigger>
+            <TabsTrigger value="internals" className="text-xs sm:text-sm">Internals</TabsTrigger>
+            <TabsTrigger value="drawing" className="text-xs sm:text-sm">Drawing</TabsTrigger>
+            <TabsTrigger value="amt" className="text-xs sm:text-sm">AMT</TabsTrigger>
           </TabsList>
 
           {/* Volume Profile Tab */}
           <TabsContent value="volume-profile" className="space-y-4">
-            <div className="flex gap-4">
-              <Card className="flex-1 p-6 relative bg-background/50">
-                <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col md:flex-row gap-4">
+              <Card className="flex-1 p-4 md:p-6 relative bg-background/50">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
                   <h2 className="font-semibold">NQ Futures - Volume Profile</h2>
                   <Button
                     variant="outline"
@@ -125,7 +125,7 @@ export default function ChartingDemo() {
 
           {/* Drawing Tools Tab */}
           <TabsContent value="drawing">
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <DrawingToolbar
                 activeTool={activeTool}
                 onToolChange={setActiveTool}
@@ -173,7 +173,7 @@ export default function ChartingDemo() {
                   showPreviousSession={true}
                 />
               </div>
-              <div className="flex gap-4 mt-4 text-xs text-muted-foreground">
+              <div className="flex flex-wrap gap-4 mt-4 text-xs text-muted-foreground">
                 <span className="flex items-center gap-2">
                   <div className="w-4 h-3 bg-blue-500/30 border border-blue-500/50 rounded" />
                   Balance Zone

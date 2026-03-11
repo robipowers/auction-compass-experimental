@@ -51,7 +51,7 @@ export default function AlertHistory() {
   };
 
   return (
-    <div className="container py-6">
+    <div className="container py-6 pb-24 md:pb-6">
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
         <Link to="/alerts">
@@ -63,23 +63,23 @@ export default function AlertHistory() {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-3 mb-6 p-4 bg-card rounded-lg border border-border">
+      <div className="flex flex-wrap items-center gap-3 mb-6 p-4 bg-card rounded-lg border border-border">
         <Input
           type="date"
           value={dateFrom}
           onChange={(e) => setDateFrom(e.target.value)}
-          className="w-[150px]"
+          className="w-full sm:w-[150px]"
           placeholder="From"
         />
         <Input
           type="date"
           value={dateTo}
           onChange={(e) => setDateTo(e.target.value)}
-          className="w-[150px]"
+          className="w-full sm:w-[150px]"
           placeholder="To"
         />
         <Select value={instrumentFilter} onValueChange={setInstrumentFilter}>
-          <SelectTrigger className="w-[160px]">
+          <SelectTrigger className="w-full sm:w-[160px]">
             <SelectValue placeholder="Instrument" />
           </SelectTrigger>
           <SelectContent>
@@ -90,7 +90,7 @@ export default function AlertHistory() {
           </SelectContent>
         </Select>
         <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-          <SelectTrigger className="w-[160px]">
+          <SelectTrigger className="w-full sm:w-[160px]">
             <SelectValue placeholder="Priority" />
           </SelectTrigger>
           <SelectContent>
@@ -126,12 +126,12 @@ export default function AlertHistory() {
                 {group.alerts.map(alert => (
                   <div 
                     key={alert.id}
-                    className="flex items-center justify-between p-4 hover:bg-secondary/30 transition-colors cursor-pointer"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 hover:bg-secondary/30 transition-colors cursor-pointer gap-3"
                   >
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                        <span className={cn("w-2 h-2 rounded-full", priorityDots[alert.priority])} />
-                        <Clock className="h-3 w-3" />
+                        <span className={cn("w-2 h-2 rounded-full flex-shrink-0", priorityDots[alert.priority])} />
+                        <Clock className="h-3 w-3 flex-shrink-0" />
                         {formatTime(alert.triggered_at)}
                       </div>
                       <div className="font-medium mb-1">{alert.alert_name}</div>
@@ -145,13 +145,14 @@ export default function AlertHistory() {
                         </div>
                       )}
                     </div>
-                    <div className="flex items-center gap-4 ml-4">
+                    <div className="flex items-center gap-4">
                       <span className="text-lg font-semibold text-green-400">
                         {formatPrice(alert.trigger_price)}
                       </span>
                       <Button variant="outline" size="sm" className="gap-2">
                         <ExternalLink className="h-3 w-3" />
-                        View on Chart
+                        <span className="hidden sm:inline">View on Chart</span>
+                        <span className="sm:hidden">Chart</span>
                       </Button>
                     </div>
                   </div>
