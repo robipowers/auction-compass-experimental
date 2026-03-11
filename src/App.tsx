@@ -1,4 +1,4 @@
-import { WhopAuthGate } from "@/components/WhopAuthGate";
+import { MagicLinkGate } from "@/components/MagicLinkGate";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -44,7 +44,7 @@ function AlertToasts() {
 }
 
 const App = () => (
-  <WhopAuthGate><QueryClientProvider client={queryClient}>
+  <MagicLinkGate><QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <MarketDataProvider>
         <KnowledgeProvider>
@@ -83,7 +83,7 @@ const App = () => (
         </KnowledgeProvider>
       </MarketDataProvider>
     </ThemeProvider>
-  </QueryClientProvider></WhopAuthGate>
+  </QueryClientProvider></MagicLinkGate>
 );
 
 export default App;
